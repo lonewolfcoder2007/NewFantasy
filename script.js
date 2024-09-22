@@ -3,7 +3,7 @@ const roles = [
     "Necromancer", "Unknown", "Death Knight", "Farmer", "Demon King", "Swordman", "Magic Swordman",
     "Martial Artist", "Trader", "Archmage", "Slave", "Chef", "Rifleman", "Sapper", "Vampire",  
     "Berserker", "Bard", "Pirate", "Priest", "Alchemist", "Ranger", "Samurai", "Monk", "Vampire Lord", 
-    "Warlock", "Warrior", "Sorcerer", "Druid", "Templar", "Gladiator", "Summoner", "Witch Hunter", "Dark Knight", 
+    "Warrior", "Summoner", "Witch Hunter", "Dark Knight", 
     "Inquisitor", "Scout", "Lancer", "Runesmith", "Champion"
 ];
 const races = [
@@ -55,67 +55,55 @@ const roleSkills = {
     "Samurai": ["Total Immunity", "Katana Mastery", "Bushido Code", "Quick Draw", "Parry", "Iaijutsu", "Sword Stance", "Focused Strike", "Spiritual Resolve", "Deflect Arrows", "Blade of Honor", "Perfect Focus", "Kiai", "Dual Katana", "Swift Blade", "Martial Spirit", "Battle Discipline", "Zen Meditation", "Blade Fury", "Warrior's Patience", "Sacred Oath"],
     "Monk": ["Total Immunity", "Chi Mastery", "Meditation", "Palm Strike", "Iron Fist", "Serene Mind", "Tiger Claw", "Pressure Point", "Swift Movement", "Chi Shield", "Inner Strength", "Spiritual Awareness", "Energy Channeling", "Keen Reflexes", "Healing Meditation", "Chi Burst", "Mystic Harmony", "Whirling Kick", "Fist of Fury", "Evasion", "Focused Breathing"],
     "Vampire Lord": ["Total Immunity", "Blood Drain", "Bat Transformation", "Night Vision", "Immortal Presence", "Vampiric Aura", "Shadow Strike", "Dark Seduction", "Blood Pact", "Mist Form", "Blood Frenzy", "Summon Bats", "Night Stalker", "Immortal Regeneration", "Crimson Fury", "Charm of the Undead", "Blood Ritual", "Shadow Dash", "Nightwalker", "Hypnotic Gaze", "Vampire's Thrall"],
-    "Warlock": ["Total Immunity", "Curse of Agony", "Shadow Bolt", "Soul Harvest", "Summon Demon", "Dark Pact", "Fear", "Doom Bolt", "Life Drain", "Demonic Power", "Soulstone", "Curse of Weakness", "Hellfire", "Shadow Grasp", "Summon Imp", "Corruption", "Fel Flame", "Demonic Circle", "Nether Bind", "Chaos Bolt", "Unstable Affliction"],
-    "Sorcerer": ["Total Immunity", "Arcane Mastery", "Fireball", "Lightning Bolt", "Ice Spear", "Teleportation", "Mana Shield", "Spell Casting", "Elemental Fury", "Meteor Strike", "Summon Familiar", "Mana Drain", "Frost Nova", "Arcane Blast", "Conjure Elemental", "Chain Lightning", "Firestorm", "Mystic Shield", "Mana Surge", "Time Warp", "Arcane Torrent"],
     "Summoner": ["Total Immunity", "Summon Beast", "Arcane Summoning", "Summon Elemental", "Summon Golem", "Mana Channeling", "Familiar Mastery", "Summon Phoenix", "Spirit Bond", "Summon Doppelganger", "Ethereal Binding", "Summon Undead", "Mana Surge", "Summon Hydra", "Soul Link", "Summon Titan", "Elemental Convergence", "Arcane Familiar", "Conjure Guardian", "Planar Rift", "Summon Chimera"],
     "Witch Hunter": ["Total Immunity", "Dark Detection", "Purifying Flame", "Holy Shot", "Hunter's Mark", "Silver Bullets", "Dark Magic Nullification", "Curse Breaking", "Demonbane", "Vampire Slayer", "Purity of Will", "Mystic Ward", "Crossbow Mastery", "Exorcism", "Hunter’s Reflexes", "Witch’s Bane", "Trap Mastery", "Evil Scent", "Divine Smite", "Shadow Purge", "True Sight"],
-    "Psychic": ["Total Immunity", "Mind Control", "Telepathy", "Psychic Blast", "Mental Shield", "Mind Crush", "Telekinesis", "Precognitive Reflex", "Psionic Storm", "Empathic Link", "Psychic Scream", "Astral Projection", "Mind Fortress", "Psychic Wave", "Mental Assault", "Thought Probe", "Willpower Boost", "Mind Push", "Psionic Reflection", "Psychic Drain", "Psi Barrage"],
     "Dark Knight": ["Total Immunity", "Shadow Strike", "Death Blade", "Dark Aura", "Nightmare Slash", "Soul Corruption", "Void Edge", "Unholy Strength", "Vampiric Touch", "Fell Cleave", "Shadow Barrier", "Blackened Blade", "Dark Shield", "Abyssal Wrath", "Soul Drain", "Grim Resolve", "Spectral Slash", "Voidwalker", "Dread Charge", "Cursed Armor", "Siphon Life"],
     "Scout": ["Total Immunity", "Keen Eye", "Ambush", "Tracking", "Silent Step", "Sniper Shot", "Camouflage", "Hawk’s Vision", "Quick Shot", "Evasion", "Trap Mastery", "Trailblazer", "Agility Boost", "Escape Artist", "Deadly Aim", "Stealth Tactics", "Bow Mastery", "Terrain Mastery", "Survivalist", "Vantage Point", "Reconnaissance"],
-    "Lancer": ["Total Immunity", "Spear Mastery", "Shield Bash", "Charging Thrust", "Lunging Strike", "Deflect", "Piercing Blow", "Phalanx Formation", "Shield Wall", "Counter Thrust", "Skewer", "Javelin Throw", "Polearm Precision", "Battle Roar", "Shield Charge", "Sweeping Strike", "Tactical Stance", "Spartan Discipline", "Storm Thrust", "Rending Spear", "Unbreakable Defense"],
     "Runesmith": ["Total Immunity", "Rune Crafting", "Weapon Inscription", "Armor Engraving", "Rune Empowerment", "Magic Infusion", "Rune of Fire", "Rune of Frost", "Rune of Protection", "Mystic Inscription", "Arcane Engravings", "Rune of Lightning", "Rune of Life", "Stone Rune", "Empowered Glyphs", "Rune Channeling", "Spirit Binding", "Rune of Destruction", "Mystic Warding", "Rune of Clarity", "Enchantment Mastery"],
     "Champion": ["Total Immunity", "Heroic Strike", "Battle Charge", "Defensive Posture", "War Cry", "Shield Bash", "Mighty Cleave", "Roar of the Champ", "Battle Endurance", "Overpower", "Critical Blow", "Tactical Defense", "Rallying Cry", "Victory Rush", "Stalwart Defense", "Unyielding Strength", "Shield Mastery", "Battlefield Domination", "Power Slam", "Warrior's Wrath"]
 };
-const stage = ["Married", "Divorced", "Widowed", "Alone", "Engaged"];
 const ranks = ["F", "E", "D", "C", "B", "A", "S", "SS", "SSS"];
 const guilds = ["PSHT", "RHODES", "Silverthorn", "Dragonshade", "Shadowspire", "El Gasing", "Mariners"];
 const titles = {
-    "Knight": ["Champion of Light", "Guardian of the Realm", "Master of Arms", "Sword Guardian", "Defender of the Weak", "Anomaly", "Noob", "Great War Winner", "Great War Loser"],
-    "Mage": ["Master of Elements", "Arcane Scholar", "Stormcaller", "Elemental Weaver", "Mystic of the Arcane", "Anomaly", "Noob", "Great War Winner", "Great War Loser"],
+    "Knight": ["Champion of Light", "Guardian of the Realm", "Master of Arms", "Sword Guardian", "Defender of the Weak", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
+    "Mage": ["Master of Elements", "Arcane Scholar", "Stormcaller", "Elemental Weaver", "Mystic of the Arcane", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
     "Rogue": ["Adept of Shadows", "Silent Blade", "Shadow Stalker", "Master Thief", "Cloaked Avenger", "Anomaly", "Noob"],
-    "Archer": ["Eagle Eye", "Sharpshooter", "Bowmaster", "Hunter of the Wild", "Silent Marksman", "Anomaly", "Noob", "Great War Winner", "Great War Loser"],
-    "Paladin": ["Divine Protector", "Lightbringer", "Holy Crusader", "Guardian of the Faith", "Shield of Light", "Anomaly", "Noob", "Great War Winner", "Great War Loser"],
+    "Archer": ["Eagle Eye", "Sharpshooter", "Bowmaster", "Hunter of the Wild", "Silent Marksman", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
+    "Paladin": ["Divine Protector", "Lightbringer", "Holy Crusader", "Guardian of the Faith", "Shield of Light", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
     "Blacksmith": ["Master Blacksmith", "Forge Master", "Hammer of the Forge", "Steel Crafter", "Anvil Guardian", "Anomaly", "Noob"],
-    "Healer": ["Grand Healer", "Life Restorer", "Saint of Light", "Divine Medic", "Reviver of Souls", "Anomaly", "Noob", "Great War Winner", "Great War Loser"],
+    "Healer": ["Grand Healer", "Life Restorer", "Saint of Light", "Divine Medic", "Reviver of Souls", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
     "Assassin": ["Master Assassin", "Death's Whisper", "Silent Executioner", "Shadow's Edge", "Night Hunter", "Anomaly", "Noob"],
     "Saint": ["Blessed Savior", "Eternal Light", "Divine Speaker", "Holy Guardian", "Radiant Saint", "Anomaly", "Noob"],
-    "Tamer": ["Beast Master", "Wild Whisperer", "Rider of Beasts", "Nature's Bond", "Animal Sovereign", "Anomaly", "Noob", "Great War Winner", "Great War Loser"],
-    "Necromancer": ["Necromancer King", "Master of the Dead", "Soul Weaver", "Lord of Shadows", "Gravecaller", "Anomaly", "Noob", "Great War Winner", "Great War Loser"],
+    "Tamer": ["Beast Master", "Wild Whisperer", "Rider of Beasts", "Nature's Bond", "Animal Sovereign", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
+    "Necromancer": ["Necromancer King", "Master of the Dead", "Soul Weaver", "Lord of Shadows", "Gravecaller", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
     "Unknown": ["Enigma", "Fate Twister", "Seeker of the Unknown", "Wielder of Chaos", "Shifter of Realms", "Anomaly", "Noob"],
-    "Death Knight": ["Reaper of Souls", "Doombringer", "Knight of Death", "Grim Commander", "Bearer of Darkness", "Anomaly", "Noob", "Great War Winner", "Great War Loser"],
+    "Death Knight": ["Reaper of Souls", "Doombringer", "Knight of Death", "Grim Commander", "Bearer of Darkness", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
     "Farmer": ["Harvest Lord", "Master of Fields", "Crop Sovereign", "Tiller of the Earth", "Lord of the Land", "Anomaly", "Noob"],
-    "Demon King": ["Emperor of Flames", "Lord of Chaos", "Dark Overlord", "Hell's Ruler", "Master of Despair", "Anomaly", "Noob", "Great War Winner", "Great War Loser"],
-    "Swordman": ["Master Swordsman", "Blademaster", "Sword Sage", "Steel Tempest", "Blade Lord", "Anomaly", "Noob", "Great War Winner", "Great War Loser"],
-    "Magic Swordman": ["Arcane Blademaster", "Mystic Swordsman", "Elemental Bladesman", "Spellblade", "Mana Wielder", "Anomaly", "Noob", "Great War Winner", "Great War Loser"],
-    "Martial Artist": ["Master of Fists", "Chi Guardian", "Iron Fist", "Dragon Warrior", "Martial Master", "Anomaly", "Noob", "Great War Winner", "Great War Loser"],
+    "Demon King": ["Emperor of Flames", "Lord of Chaos", "Dark Overlord", "Hell's Ruler", "Master of Despair", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
+    "Swordman": ["Master Swordsman", "Blademaster", "Sword Sage", "Steel Tempest", "Blade Lord", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
+    "Magic Swordman": ["Arcane Blademaster", "Mystic Swordsman", "Elemental Bladesman", "Spellblade", "Mana Wielder", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
+    "Martial Artist": ["Master of Fists", "Chi Guardian", "Iron Fist", "Dragon Warrior", "Martial Master", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
     "Trader": ["Master Merchant", "Goldfinger", "Wealth Accumulator", "Lord of Trade", "Market King", "Anomaly", "Noob"],
-    "Archmage": ["Archmage Supreme", "Master of Magic", "Eternal Scholar", "Cosmic Magus", "Arcane Sovereign", "Anomaly", "Noob", "Great War Winner", "Great War Loser"],
+    "Archmage": ["Archmage Supreme", "Master of Magic", "Eternal Scholar", "Cosmic Magus", "Arcane Sovereign", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
     "Slave": ["Survivor", "Endurer of Chains", "Liberated Soul", "Unseen Warrior", "Silent Strength", "Anomaly", "Noob"],
     "Chef": ["Ultimate Chef", "Gourmet King", "Master of Flavors", "Grand Cook", "Sovereign of Taste", "Anomaly", "Noob"],
-    "Rifleman": ["Deadshot", "Precision Shooter", "Pistol Specialist", "Rifle Expert", "Marine for Life", "Black Baron", "Anomaly", "Noob", "Great War Winner", "Great War Loser"],
-    "Sapper": ["Bomb Defuser", "Field Repair Specialist", "Handyman", "Master of Engineering", "Nutcracker", "Anomaly", "Noob", "Codebreaker", "Great War Winner", "Great War Loser"],
-    "Berserker": ["Rage of the Battlefield", "Warrior of Fury", "Bloodthirsty Destroyer", "Wielder of Wrath", "Fury Unleashed", "Madman of Battle", "Bringer of Carnage", "The Frenzied", "Wrathbringer", "Destroyer of Foes"],
-    "Bard": ["Songweaver", "Master of Melody", "Minstrel of Legends", "Keeper of Tales", "Harmonious Singer", "Traveler's Song", "Poet of Ages", "Muse of the Realm", "Melody Maker", "Voice of the Ages"],
+    "Rifleman": ["Deadshot", "Precision Shooter", "Pistol Specialist", "Rifle Expert", "Marine for Life", "Black Baron", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
+    "Sapper": ["Bomb Defuser", "Field Repair Specialist", "Handyman", "Master of Engineering", "Nutcracker", "Anomaly", "Noob", "Codebreaker", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
+    "Berserker": ["Rage of the Battlefield", "Warrior of Fury", "Bloodthirsty Destroyer", "Wielder of Wrath", "Fury Unleashed", "Madman of Battle", "Bringer of Carnage", "The Frenzied", "Wrathbringer", "Destroyer of Foes", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
+    "Bard": ["Songweaver", "Master of Melody", "Minstrel of Legends", "Keeper of Tales", "Harmonious Singer", "Traveler's Song", "Poet of Ages", "Muse of the Realm", "Melody Maker", "Voice of the Ages", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
     "Pirate": ["Captain of the Seas", "Sea Rover", "Lord of the Ocean", "Buccaneer King", "Ruler of the Waves", "Master of the High Seas", "Ocean Raider", "Corsair Champion", "Scourge of the Waters", "Seafaring Marauder"],
     "Priest": ["Blessed Cleric", "Voice of the Divine", "Keeper of Faith", "Holy Shepherd", "Bearer of Grace", "Soul Keeper", "Divine Intercessor", "Servant of the Light", "Harbinger of the Sacred", "Guardian of the Faithful"],
     "Alchemist": ["Master of Transmutation", "Potion Master", "Crafter of Elixirs", "Herbalist of the Realms", "Arcane Chemist", "Wielder of Elements", "Mixer of Potions", "Catalyst of Change", "Enchanter of Potions", "Alchemical Sage"],
-    "Ranger": ["Warden of the Wilds", "Guardian of Nature", "Tracker of Beasts", "Forest Wanderer", "Nature’s Protector", "Hunter of the Wild", "Beast Seeker", "Woodsman of the Realm", "Pathfinder", "Wilds Keeper"],
-    "Samurai": ["Warrior of Honor", "Master of the Katana", "Bushido Blade", "Sword of Honor", "Lord of the Katana", "Disciple of Bushido", "Master of the Sword", "Ronin of Valor", "Keeper of the Code", "Blade of Honor"],
+    "Ranger": ["Warden of the Wilds", "Guardian of Nature", "Tracker of Beasts", "Forest Wanderer", "Nature’s Protector", "Hunter of the Wild", "Beast Seeker", "Woodsman of the Realm", "Pathfinder", "Wilds Keeper", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
+    "Samurai": ["Warrior of Honor", "Master of the Katana", "Bushido Blade", "Sword of Honor", "Lord of the Katana", "Disciple of Bushido", "Master of the Sword", "Ronin of Valor", "Keeper of the Code", "Blade of Honor", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
     "Monk": ["Disciple of Peace", "Master of Tranquility", "Fist of the Ancients", "Silent Guardian", "Wanderer of Virtue", "Keeper of Balance", "Mystic Warrior", "Guardian of Serenity", "Devout of the Spirit", "Master of Harmony"],
-    "Vampire Lord": ["Dark Blood King", "Lord of Night", "Sovereign of Shadows", "Ruler of the Undead", "Master of Vampires", "Night Stalker", "Bloodthirsty Monarch", "Shadow Emperor", "Darkblood Ruler", "Wraith of the Night"],
-    "Warrior": ["Warlord of Valor", "Master of Combat", "Champion of War", "Warblade", "Shieldbearer", "Warbringer", "Sword of Victory", "Warrior of Legends", "Battle-Hardened Hero", "Lord of the Battlefield"],
-    "Templar": ["Holy Crusader", "Sword of the Divine", "Shield of Righteousness", "Champion of Faith", "Knight of the Cross", "Protector of the Holy", "Defender of the Light", "Warrior of the Sacred", "Guardian of the Faith", "Sword of Virtue"],
-    "Gladiator": ["Champion of the Arena", "Master of the Colosseum", "Pit Fighter", "Warlord of the Sands", "Blood Champion", "Arena Warrior", "Battle-Hardened Fighter", "Lord of the Pit", "Sword of the Arena", "Colosseum Victor"],
-    "Summoner": ["Caller of Beasts", "Master of Summons", "Wielder of Creatures", "Invoker of Allies", "Summoner of Realms", "Creature Caller", "Beast Conjuror", "Spirit Summoner", "Master of Conjurations", "Herald of Creatures"],
-    "Witch Hunter": ["Hunter of Witches", "Bane of Sorcery", "Protector of Innocents", "Cleansing Flame", "Purger of Darkness", "Slayer of Magic", "Witchbane", "Champion of Light", "Shadow Purger", "Light's Retribution"],
-    "Sage": ["Master of Wisdom", "Keeper of Ancient Knowledge", "Seeker of Enlightenment", "Wise One", "Bearer of the Truth", "Mystic of the Ages", "Sage of the Realms", "Enlightened Master", "Wisdom Keeper", "Elder of the Realms"],
-    "Psychic": ["Mindbender", "Telepath of Power", "Wielder of the Mind", "Master of Thought", "Seer of Minds", "Psychic Conjuror", "Mindwalker", "Telekinetic Master", "Keeper of Thoughts", "Mentalist Sage"],
-    "Dark Knight": ["Knight of Shadows", "Bearer of Darkness", "Ruler of Night", "Wielder of the Void", "Shadowbringer", "Champion of Despair", "Harbinger of Night", "Darkblade", "Knight of the Abyss", "Warlord of the Void"],
-    "Inquisitor": ["Seeker of Truth", "Hunter of Heretics", "Purger of Sins", "Judge of the Damned", "Cleansing Light", "Heretic Slayer", "Wielder of Righteousness", "Judge of the Faithless", "Sword of the Inquisition", "Righteous Flame"],
-    "Scout": ["Pathfinder of the Wild", "Master Tracker", "Seeker of Secrets", "Ranger of the Unknown", "Warden of the Wilds", "Lightfoot", "Silent Watcher", "Tracker of Beasts", "Explorer of Realms", "Wilderness Wanderer"],
-    "Lancer": ["Spear Wielder", "Master of the Lance", "Knight of the Spear", "Piercer of Shields", "Spear of the Skies", "Spear Champion", "Knight of the Lance", "Lancebearer", "Wielder of the Spear", "Lancer of Legends"],
+    "Vampire Lord": ["Dark Blood King", "Lord of Night", "Sovereign of Shadows", "Ruler of the Undead", "Master of Vampires", "Night Stalker", "Bloodthirsty Monarch", "Shadow Emperor", "Darkblood Ruler", "Wraith of the Night", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
+    "Summoner": ["Caller of Beasts", "Master of Summons", "Wielder of Creatures", "Invoker of Allies", "Summoner of Realms", "Creature Caller", "Beast Conjuror", "Spirit Summoner", "Master of Conjurations", "Herald of Creatures", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
+    "Witch Hunter": ["Hunter of Witches", "Bane of Sorcery", "Protector of Innocents", "Cleansing Flame", "Purger of Darkness", "Slayer of Magic", "Witchbane", "Champion of Light", "Shadow Purger", "Light's Retribution", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
+    "Dark Knight": ["Knight of Shadows", "Bearer of Darkness", "Ruler of Night", "Wielder of the Void", "Shadowbringer", "Champion of Despair", "Harbinger of Night", "Darkblade", "Knight of the Abyss", "Warlord of the Void", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
+    "Scout": ["Pathfinder of the Wild", "Master Tracker", "Seeker of Secrets", "Ranger of the Unknown", "Warden of the Wilds", "Lightfoot", "Silent Watcher", "Tracker of Beasts", "Explorer of Realms", "Wilderness Wanderer", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
     "Runesmith": ["Master of Runes", "Carver of Magic", "Wielder of Ancient Symbols", "Runewright", "Smith of Power", "Crafter of Enchantment", "Runescribe", "Bearer of Magical Symbols", "Runeforge Master", "Lord of the Runes"],
-    "Champion": ["Hero of the People", "Guardian of the Realm", "Sword of Victory", "Master of the Arena", "Warlord of Glory", "Victor of the Colosseum", "Lord of Triumph", "Conqueror of Realms", "Battle Champion", "Champion of Legends"]
+    "Champion": ["Hero of the People", "Guardian of the Realm", "Sword of Victory", "Master of the Arena", "Warlord of Glory", "Victor of the Colosseum", "Lord of Triumph", "Conqueror of Realms", "Battle Champion", "Champion of Legends", "Great War Participant - Winning Side"]
 };
 const roleWeapon = {
     "Knight": ["Heavy Sword", "Short Sword", "Sword and Shield", "Spear", "Club", "Bat"],
@@ -151,7 +139,12 @@ const roleWeapon = {
     "Ranger": ["Longbow", "Quick-fire Bow", "Elemental Bow", "Crossbow", "Daggers", "Short Sword", "Submachine Gun", "Revolver", "Pistol"],
     "Samurai": ["Bajō-zutsu", "Bo-hiya", "Daishō", "Tanegashima", "Wakizashi", "Shuriken"],
     "Monk": ["Fists"],
-    "Vampire Lord": ["Fangs", "Claws"]
+    "Vampire Lord": ["Fangs", "Claws"],
+    "Summoner": ["Iron Golem", "Diamond Golem", "Warden", "Snow Warden", "Ender Dragon", "Ghast", "Lava Warden"],
+    "Witch Hunter": ["Stake", "Revolver", "Axe", "Lighter", "Torch", "Pitchfork", "Counterspell"],
+    "Dark Knight": ["Dark Heavy Sword", "Dark Short Sword", "Spear", "Club", "Bat", "Quickslash Sword of Darkness"],
+    "Scout": ["Rifle", "Submachine Gun", "Pistol", "Dagger", "Short Sword", "Smoke Grenade", "Flare Gun"],
+    "Runesmith": ["None"]
 };
 function getRandomElement(arr) {
     return arr[Math.floor(Math.random()*arr.length)];
@@ -162,7 +155,8 @@ function getRandomNumber(min, max) {
 }
 function submitName() {
     const name = document.getElementById("nameInput").value;
-    if (name) {
+    const gender = document.querySelector('input[name="gender"]:checked').value;
+    if (name && gender) {
         const race = getRandomElement(races);
 
         let role;
@@ -195,9 +189,22 @@ function submitName() {
         const characterSkills = [];
         const numberOfSkills = getRandomNumber(3, 5);
         const age = getRandomNumber(22, 60);
-        const situation = getRandomElement(stage);
         const skillList = document.getElementById("charSkill");
+        const dex = getRandomNumber(20, 100);
+        const luck = getRandomNumber(1, 100);
+        const endurance = Math.floor((strength * 0.5) + 9);
         let ra = "";
+        var secondary_role = "";
+        if(role == "Champion"){
+            do{
+                secondary_role = getRandomElement(roles);
+            }
+            while(secondary_role == "Champion");
+            document.getElementById("SecondRole").style.display = "block";
+        }
+        else{
+            document.getElementById("SecondRole").style.display = "none";
+        }
 
         //Band score for ability and title
         const F_score = 1;
@@ -210,6 +217,10 @@ function submitName() {
         const SS_score = 500;
         const SSS_score = 1000;
         //End of band score
+
+        //Random score if rank = ???
+        var random_score = [];
+        random_score.push(F_score, E_score, D_score, C_score, B_score, A_score, S_score, SS_score, SSS_score);
 
         //Total band score for overall ranking
         const F_overall = 10;
@@ -291,18 +302,18 @@ function submitName() {
             var title = getRandomElement(availableTitles);
             var titleRank = getRandomElement(ranks);
             if (GreatWar == 1000) {
-                title = "Great War Loser";
+                title = "Great War Participant - Losing Side";
             } else if (GreatWar == 0) {
-                title = "Great War Winner";
+                title = "Great War Participant - Winning Side";
             }
             if(NoobChances == 50){
                 title = "Noob"
             }
-            if(title == "Black Baron" || title == "Great War Winner"){
+            if(title == "Black Baron" || title == "Great War Participant - Winning Side"){
                 titleRank = "SSS";
                 totalscore = totalscore + SSS_score;
             }
-            else if(title == "Great War Loser" || title == "Noob"){
+            else if(title == "Great War Participant - Losing Side" || title == "Noob"){
                 titleRank = "F";
                 totalscore = totalscore + F_score
             }
@@ -346,9 +357,13 @@ function submitName() {
 
         for (let i = 0; i <WeaponNumber; i++){
             const weapon = getRandomElement(availableWeapons);
-            const rank = getRandomElement(ranks);
+            var rank = getRandomElement(ranks);
             if(weapon == "None"){
                 characterWeapon.push(`${weapon}`)
+            }
+            else if(weapon == "Unknown"){
+                rank = "???";
+                totalscore = totalscore + getRandomElement(random_score);
             }
             else{
                 if(rank == "F"){
@@ -450,8 +465,11 @@ function submitName() {
         document.getElementById("charGuild").textContent = guild;
         document.getElementById("charRegion").textContent = region;
         document.getElementById("charAge").textContent = age;
-        document.getElementById("charStatus").textContent = situation;
         document.getElementById("charWeapon").textContent = characterWeapon;
+        document.getElementById("charDexterity").textContent = dex;
+        document.getElementById("charLuck").textContent = luck;
+        document.getElementById("charEndurance").textContent = endurance;
+        document.getElementById("charGender").textContent = gender;
 
         if (["Healer", "Paladin", "Saint"].includes(role)) {
             const divinePower = getRandomNumber(50, 100);
@@ -466,7 +484,10 @@ function submitName() {
         }
 
         document.getElementById("characterDisplay").style.display = "block";
-    } else {
-        alert("Please enter a name.");
+    } else if(!gender){
+        alert("Please choose a gender.");
+    }
+    else if(!name){
+        alert("Please type in your name.")
     }
 }

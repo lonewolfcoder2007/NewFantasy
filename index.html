@@ -20,8 +20,22 @@
 
     <div id="inputForm" class="text-center">
         <p class="fw-bold text-light fs-3">WELCOME TO THE WORLD OF <span class="fw-bold text-info">ELDORIA</span></p>
-        <input type="text" autocomplete="off" class="form-control bg-transparent text-light my-2 text-center" id="nameInput"
+        <div id="inputField">
+            <input type="text" autocomplete="off" class="form-control bg-transparent text-light my-2 text-center" id="nameInput"
             placeholder="Enter Your Name" />
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="inlineRadio1" value="Male" autocomplete="off">
+                <label class="form-check-label" for="inlineRadio1">Male</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="inlineRadio2" value="Female" autocomplete="off">
+                <label class="form-check-label" for="inlineRadio2">Female</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="inlineRadio3" value="Non-binary" autocomplete="off">
+                <label class="form-check-label" for="inlineRadio3">Non-binary</label>
+              </div>
+        </div>
         <div class="row">
             <div class="col-12">
                 <button onclick="submitName()" class="btn btn-info w-100 text-light fw-medium">Start</button>
@@ -39,6 +53,7 @@
                     <div class="col-6">
                         <p class="text-light"><strong>Name:</strong> <span id="charName"></span></p>
                         <p class="text-light"><strong>Race:</strong> <span id="charRace"></span></p>
+                        <p class="text-light"><strong>Gender:</strong> <span id="charGender"></span></p>
                         <p class="text-light"><strong>Role:</strong> <span id="charRole"></span></p>
                         <p class="text-light"><strong>Age:</strong> <span id="charAge"></span></p>
                         <p class="text-light"><strong>Weapon:</strong> <span id="charWeapon"></span></p>
@@ -47,7 +62,7 @@
                         <p class="text-light"><strong>Level:</strong> <span id="charLev"></span></p>
                         <p class="text-light"><strong>Guild:</strong> <span id="charGuild"></span></p>
                         <p class="text-light"><strong>Region:</strong> <span id="charRegion"></span></p>
-                        <p class="text-light"><strong>Love Status:</strong> <span id="charStatus"></span></p>
+                        <p class="text-light" id="SecondRole"><strong>Secondary Role:</strong> <span id="charSecondRole"></span></p>
                         <p class="text-light"><strong>Rank</strong> <span id="charRank"></span></p>
                     </div>
                 </div>
