@@ -1,15 +1,24 @@
 const roles = [
     "Knight", "Mage", "Rogue", "Archer", "Paladin", "Blacksmith", "Healer", "Assassin", "Saint", "Tamer",
     "Necromancer", "Unknown", "Death Knight", "Farmer", "Demon King", "Swordman", "Magic Swordman",
-    "Martial Artist", "Trader", "Archmage", "Slave", "Chef", "Rifleman"
+    "Martial Artist", "Trader", "Archmage", "Slave", "Chef", "Rifleman", "Sapper", 
+    "Berserker", "Bard", "Pirate", "Priest", "Alchemist", "Ranger", "Samurai", "Monk", "Vampire Lord", 
+    "Warlock", "Warrior", "Sorcerer", "Druid", "Templar", "Gladiator", "Summoner", "Witch Hunter", "Dark Knight", 
+    "Inquisitor", "Scout", "Lancer", "Runesmith", "Champion"
 ];
 const races = [
     "Human", "Elf", "Dwarf", "Orc", "Beast", "Dark Elf", "Dragon", "Half Dragon", "Half Elf", "Demon",
     "Werewolf", "Succubus", "Divine Being", "Feline", "Frogman", "Lizardman", "Slime", "Jawir",
-    "Sarkaz", "Liberi", "Sankta", "Deer", "Fishman", "Unknown", "Vampire"
+    "Sarkaz", "Liberi", "Sankta", "Deer", "Fishman", "Unknown", "Vampire", "Phoenix", "Giant", "Fairy", "Merfolk", "Gnome", "Troll", "Gargoyle", "Zombie", "Skeleton", "Harpy", "Minotaur", "Djinn", "Centaur", "Cyclops", "Satyr", "Dryad", "Spirit", "Naga", "Undead", 
+    "Goblin", "Elemental", "Chimera", "Griffin", "Treant", "Yeti", "Ogre"
 ];
 const regions = [
-    "LowRess Kingdom", "Liberia", "Great Forest", "Heavenhold", "Kingdom of Erusea", "Soviet Republics"
+    "LowRess Kingdom", "Liberia", "Great Forest", "Heavenhold", "Kingdom of Erusea", "Soviet Republics",
+    "Drakenfell Mountains", "Evershade Isles", "Frostspire Tundra", "Ashenmoor Wastes", "Valoria", 
+    "Silverpeak Highlands", "Thornwood Vale", "Eldergrove", "Blackwater Marsh", "Suncrest Plains", 
+    "Ironcliff Bastion", "Whispering Sands", "Starlight Hollow", "Glimmerfall Cove", "Shadowfen Swamp", 
+    "Stormveil Coast", "Crimson Hollow", "Verdantwild", "Obsidian Flats", "Azurelake Shores", 
+    "Emberstone Citadel", "Duskmire Reach", "Wildthorn Expanse", "Goldenleaf Glade", "Ivoryspire City"
 ];
 const roleSkills = {
     "Knight": ["Sword Mastery", "Shield Mastery", "Mounted Combat", "War Cry", "Heavy Armor", "Tactical Strategy", "Battle Charge", "Shield Bash", "Combat Reflexes", "Defensive Stance", "Sword Block", "Battlefield Awareness", "Parry", "Shield Slam", "Armor Reinforcement", "Toughness", "Sword Precision", "Holy Vow", "Defender's Resolve", "Battle Endurance", "Total Immunity"],
@@ -35,7 +44,26 @@ const roleSkills = {
     "Slave": ["Endurance", "Survival Instinct", "Pain Tolerance", "Obedience", "Escape Artist", "Servitude Mastery", "Submission", "Silent Endurance", "Servant's Will", "Willpower", "Stealth Work", "Escape Plan", "Unseen Movement", "Rebellious Mind", "Survival Expert", "Hidden Talent", "Chained Strength", "Mental Resilience", "Resistance", "Hidden Strength", "Total Immunity"],
     "Chef": ["Cooking", "Ingredient Sourcing", "Flavor Mastery", "Knife Skills", "Heat Control", "Herb Knowledge", "Food Presentation", "Recipe Creation", "Gourmet Crafting", "Culinary Expertise", "Meal Preparation", "Food Preservation", "Baking Mastery", "Herb Infusion", "Ingredient Substitution", "Food Safety", "Multitasking", "Culinary Innovation", "Taste Testing", "Plating Expertise", "Total Immunity"],
     "Rifleman": ["Precise Aim", "Wind Estimation", "Critical Strike", "Lethality", "Mass Shooting", "Bayonet Fight", "Multishot", "Dead Eye", "Overload", "Suppresive Fire", "Close Air Support", "Guerrilla", "Artillery Strike", "Iron Clad", "Dual Welding", "Bullseye", "Total Focus", "Eyes In The Sky", "Infinite Mazagine", "Bulletproof", "Limit Break", "Two Birds One Stone", "APHE Shots", "Total Immunity", "Elemental Bullets"],
-    "Sapper": ["Suppressive Fire", "Field Repair", "Bomb Defuse", "Sabotage", "Limit Break", "Iron Clad", "Marvelous Engineering", "Excavation", "Minesweeping", "Multitasking", "Confrontation", "No Retreat", "Demolition Expert", "Unconventional Warfare", "Eagle Eyes", "Damage Reduction", "Total Immunity", "Front Line Defense"]
+    "Sapper": ["Suppressive Fire", "Field Repair", "Bomb Defuse", "Sabotage", "Limit Break", "Iron Clad", "Marvelous Engineering", "Excavation", "Minesweeping", "Multitasking", "Confrontation", "No Retreat", "Demolition Expert", "Unconventional Warfare", "Eagle Eyes", "Damage Reduction", "Total Immunity", "Front Line Defense"],
+    "Berserker": ["Rage Unleashed", "Bloodlust", "Frenzied Strikes", "Battle Roar", "Relentless Assault", "Fearless Charge", "Savage Blow", "Battle Frenzy", "Bloodthirst", "Weapon Smash", "War Cry", "Unstoppable Force", "Rampage", "Critical Strike", "Battlefield Fury", "Rage Recovery", "Adrenaline Surge", "Destruction Wave", "Uncontrolled Rage", "Death Rage"],
+    "Bard": ["Song of Valor", "Melodic Healing", "Inspiring Anthem", "Lute Mastery", "Song of Protection", "Charming Tune", "Magical Melody", "Harmonic Harmony", "Ballad of Bravery", "Rhythmic Defense", "Melody of Recovery", "Tune of Tranquility", "Battle Hymn", "Sonic Burst", "Hymn of Power", "Lullaby of Sleep", "Musical Shield", "Soundwave Shock", "Note of Clarity", "Inspiration Aura"],
+    "Pirate": ["Swordplay", "Navigation", "Pistol Mastery", "Rum Drinking", "Sea Tactics", "Ship Management", "Plundering", "Treasure Hunting", "Cannon Operation", "Sea Combat", "Boarding Mastery", "Anchor Toss", "Sea Legs", "Whirlwind Slash", "Jolly Roger Spirit", "Oceanic Maneuvering", "Sail Mastery", "Rope Swing", "Pirate's Code", "Storm Riding"],
+    "Priest": ["Holy Prayer", "Purify", "Healing Light", "Divine Intervention", "Blessing of Protection", "Resurrection", "Smite", "Holy Aura", "Faith Shield", "Prayer of Hope", "Restoration", "Spiritual Guidance", "Divine Judgment", "Miracle Healing", "Aura of Devotion", "Sermon of Light", "Benediction", "Martyrdom", "Prayer of Salvation", "Divine Grace"],
+    "Alchemist": ["Potion Crafting", "Transmutation", "Herb Knowledge", "Elemental Infusion", "Elixir Mastery", "Alchemy Circle", "Catalyst Expertise", "Mana Elixirs", "Poison Brewing", "Stone Transmutation", "Antidote Creation", "Explosive Concoctions", "Potion of Speed", "Regeneration Brew", "Flame Essence", "Alchemy Enhancement", "Mana Restoration", "Resilience Brew", "Healing Elixirs", "Elemental Fusion"],
+    "Ranger": ["Bow Mastery", "Tracking", "Stealth", "Hunting", "Nature Knowledge", "Animal Companion", "Cloak of Shadows", "Precision Shot", "Silent Kill", "Trap Setting", "Camouflage", "Survival Instinct", "Arrow Mastery", "Rapid Fire", "Animal Bond", "Foraging", "Evasion", "Swift Movements", "Lethal Arrow", "Wilderness Navigation"],
+    "Samurai": ["Katana Mastery", "Bushido Code", "Quick Draw", "Parry", "Iaijutsu", "Sword Stance", "Focused Strike", "Spiritual Resolve", "Deflect Arrows", "Blade of Honor", "Perfect Focus", "Kiai", "Dual Katana", "Swift Blade", "Martial Spirit", "Battle Discipline", "Zen Meditation", "Blade Fury", "Warrior's Patience", "Sacred Oath"],
+    "Monk": ["Chi Mastery", "Meditation", "Palm Strike", "Iron Fist", "Serene Mind", "Tiger Claw", "Pressure Point", "Swift Movement", "Chi Shield", "Inner Strength", "Spiritual Awareness", "Energy Channeling", "Keen Reflexes", "Healing Meditation", "Chi Burst", "Mystic Harmony", "Whirling Kick", "Fist of Fury", "Evasion", "Focused Breathing"],
+    "Vampire Lord": ["Blood Drain", "Bat Transformation", "Night Vision", "Immortal Presence", "Vampiric Aura", "Shadow Strike", "Dark Seduction", "Blood Pact", "Mist Form", "Blood Frenzy", "Summon Bats", "Night Stalker", "Immortal Regeneration", "Crimson Fury", "Charm of the Undead", "Blood Ritual", "Shadow Dash", "Nightwalker", "Hypnotic Gaze", "Vampire's Thrall"],
+    "Warlock": ["Curse of Agony", "Shadow Bolt", "Soul Harvest", "Summon Demon", "Dark Pact", "Fear", "Doom Bolt", "Life Drain", "Demonic Power", "Soulstone", "Curse of Weakness", "Hellfire", "Shadow Grasp", "Summon Imp", "Corruption", "Fel Flame", "Demonic Circle", "Nether Bind", "Chaos Bolt", "Unstable Affliction"],
+    "Sorcerer": ["Arcane Mastery", "Fireball", "Lightning Bolt", "Ice Spear", "Teleportation", "Mana Shield", "Spell Casting", "Elemental Fury", "Meteor Strike", "Summon Familiar", "Mana Drain", "Frost Nova", "Arcane Blast", "Conjure Elemental", "Chain Lightning", "Firestorm", "Mystic Shield", "Mana Surge", "Time Warp", "Arcane Torrent"],
+    "Summoner": ["Summon Beast", "Arcane Summoning", "Summon Elemental", "Summon Golem", "Mana Channeling", "Familiar Mastery", "Summon Phoenix", "Spirit Bond", "Summon Doppelganger", "Ethereal Binding", "Summon Undead", "Mana Surge", "Summon Hydra", "Soul Link", "Summon Titan", "Elemental Convergence", "Arcane Familiar", "Conjure Guardian", "Planar Rift", "Summon Chimera"],
+    "Witch Hunter": ["Dark Detection", "Purifying Flame", "Holy Shot", "Hunter's Mark", "Silver Bullets", "Dark Magic Nullification", "Curse Breaking", "Demonbane", "Vampire Slayer", "Purity of Will", "Mystic Ward", "Crossbow Mastery", "Exorcism", "Hunter’s Reflexes", "Witch’s Bane", "Trap Mastery", "Evil Scent", "Divine Smite", "Shadow Purge", "True Sight"],
+    "Psychic": ["Mind Control", "Telepathy", "Psychic Blast", "Mental Shield", "Mind Crush", "Telekinesis", "Precognitive Reflex", "Psionic Storm", "Empathic Link", "Psychic Scream", "Astral Projection", "Mind Fortress", "Psychic Wave", "Mental Assault", "Thought Probe", "Willpower Boost", "Mind Push", "Psionic Reflection", "Psychic Drain", "Psi Barrage"],
+    "Dark Knight": ["Shadow Strike", "Death Blade", "Dark Aura", "Nightmare Slash", "Soul Corruption", "Void Edge", "Unholy Strength", "Vampiric Touch", "Fell Cleave", "Shadow Barrier", "Blackened Blade", "Dark Shield", "Abyssal Wrath", "Soul Drain", "Grim Resolve", "Spectral Slash", "Voidwalker", "Dread Charge", "Cursed Armor", "Siphon Life"],
+    "Scout": ["Keen Eye", "Ambush", "Tracking", "Silent Step", "Sniper Shot", "Camouflage", "Hawk’s Vision", "Quick Shot", "Evasion", "Trap Mastery", "Trailblazer", "Agility Boost", "Escape Artist", "Deadly Aim", "Stealth Tactics", "Bow Mastery", "Terrain Mastery", "Survivalist", "Vantage Point", "Reconnaissance"],
+    "Lancer": ["Spear Mastery", "Shield Bash", "Charging Thrust", "Lunging Strike", "Deflect", "Piercing Blow", "Phalanx Formation", "Shield Wall", "Counter Thrust", "Skewer", "Javelin Throw", "Polearm Precision", "Battle Roar", "Shield Charge", "Sweeping Strike", "Tactical Stance", "Spartan Discipline", "Storm Thrust", "Rending Spear", "Unbreakable Defense"],
+    "Runesmith": ["Rune Crafting", "Weapon Inscription", "Armor Engraving", "Rune Empowerment", "Magic Infusion", "Rune of Fire", "Rune of Frost", "Rune of Protection", "Mystic Inscription", "Arcane Engravings", "Rune of Lightning", "Rune of Life", "Stone Rune", "Empowered Glyphs", "Rune Channeling", "Spirit Binding", "Rune of Destruction", "Mystic Warding", "Rune of Clarity", "Enchantment Mastery"],
+    "Champion": ["Heroic Strike", "Battle Charge", "Defensive Posture", "War Cry", "Shield Bash", "Mighty Cleave", "Roar of the Champ", "Battle Endurance", "Overpower", "Critical Blow", "Tactical Defense", "Rallying Cry", "Victory Rush", "Stalwart Defense", "Unyielding Strength", "Shield Mastery", "Battlefield Domination", "Power Slam", "Warrior's Wrath"]
 };
 const stage = ["Married", "Divorced", "Widowed", "Alone", "Engaged"];
 const ranks = ["F", "E", "D", "C", "B", "A", "S", "SS", "SSS"];
@@ -64,7 +92,29 @@ const titles = {
     "Slave": ["Survivor", "Endurer of Chains", "Liberated Soul", "Unseen Warrior", "Silent Strength", "Anomaly", "Noob"],
     "Chef": ["Ultimate Chef", "Gourmet King", "Master of Flavors", "Grand Cook", "Sovereign of Taste", "Anomaly", "Noob"],
     "Rifleman": ["Deadshot", "Precision Shooter", "Pistol Specialist", "Rifle Expert", "Marine for Life", "Black Baron", "Anomaly", "Noob", "Great War Winner", "Great War Loser"],
-    "Sapper": ["Bomb Defuser", "Field Repair Specialist", "Handyman", "Master of Engineering", "Nutcracker", "Anomaly", "Noob", "Codebreaker", "Great War Winner", "Great War Loser"]
+    "Sapper": ["Bomb Defuser", "Field Repair Specialist", "Handyman", "Master of Engineering", "Nutcracker", "Anomaly", "Noob", "Codebreaker", "Great War Winner", "Great War Loser"],
+    "Bard": ["Songweaver", "Master of Melody", "Minstrel of Legends", "Keeper of Tales", "Harmonious Singer", "Traveler's Song", "Poet of Ages", "Muse of the Realm", "Melody Maker", "Voice of the Ages"],
+    "Pirate": ["Captain of the Seas", "Sea Rover", "Lord of the Ocean", "Buccaneer King", "Ruler of the Waves", "Master of the High Seas", "Ocean Raider", "Corsair Champion", "Scourge of the Waters", "Seafaring Marauder"],
+    "Priest": ["Blessed Cleric", "Voice of the Divine", "Keeper of Faith", "Holy Shepherd", "Bearer of Grace", "Soul Keeper", "Divine Intercessor", "Servant of the Light", "Harbinger of the Sacred", "Guardian of the Faithful"],
+    "Alchemist": ["Master of Transmutation", "Potion Master", "Crafter of Elixirs", "Herbalist of the Realms", "Arcane Chemist", "Wielder of Elements", "Mixer of Potions", "Catalyst of Change", "Enchanter of Potions", "Alchemical Sage"],
+    "Ranger": ["Warden of the Wilds", "Guardian of Nature", "Tracker of Beasts", "Forest Wanderer", "Nature’s Protector", "Hunter of the Wild", "Beast Seeker", "Woodsman of the Realm", "Pathfinder", "Wilds Keeper"],
+    "Samurai": ["Warrior of Honor", "Master of the Katana", "Bushido Blade", "Sword of Honor", "Lord of the Katana", "Disciple of Bushido", "Master of the Sword", "Ronin of Valor", "Keeper of the Code", "Blade of Honor"],
+    "Monk": ["Disciple of Peace", "Master of Tranquility", "Fist of the Ancients", "Silent Guardian", "Wanderer of Virtue", "Keeper of Balance", "Mystic Warrior", "Guardian of Serenity", "Devout of the Spirit", "Master of Harmony"],
+    "Vampire Lord": ["Dark Blood King", "Lord of Night", "Sovereign of Shadows", "Ruler of the Undead", "Master of Vampires", "Night Stalker", "Bloodthirsty Monarch", "Shadow Emperor", "Darkblood Ruler", "Wraith of the Night"],
+    "Warlock": ["Master of Dark Magic", "Weaver of the Infernal", "Lord of Curses", "Shadow Magician", "Hex Weaver", "Bearer of Dark Knowledge", "Coven Leader", "Master of Hexes", "Dark Sorcerer", "Shadow Sage"],
+    "Warrior": ["Warlord of Valor", "Master of Combat", "Champion of War", "Warblade", "Shieldbearer", "Warbringer", "Sword of Victory", "Warrior of Legends", "Battle-Hardened Hero", "Lord of the Battlefield"],
+    "Templar": ["Holy Crusader", "Sword of the Divine", "Shield of Righteousness", "Champion of Faith", "Knight of the Cross", "Protector of the Holy", "Defender of the Light", "Warrior of the Sacred", "Guardian of the Faith", "Sword of Virtue"],
+    "Gladiator": ["Champion of the Arena", "Master of the Colosseum", "Pit Fighter", "Warlord of the Sands", "Blood Champion", "Arena Warrior", "Battle-Hardened Fighter", "Lord of the Pit", "Sword of the Arena", "Colosseum Victor"],
+    "Summoner": ["Caller of Beasts", "Master of Summons", "Wielder of Creatures", "Invoker of Allies", "Summoner of Realms", "Creature Caller", "Beast Conjuror", "Spirit Summoner", "Master of Conjurations", "Herald of Creatures"],
+    "Witch Hunter": ["Hunter of Witches", "Bane of Sorcery", "Protector of Innocents", "Cleansing Flame", "Purger of Darkness", "Slayer of Magic", "Witchbane", "Champion of Light", "Shadow Purger", "Light's Retribution"],
+    "Sage": ["Master of Wisdom", "Keeper of Ancient Knowledge", "Seeker of Enlightenment", "Wise One", "Bearer of the Truth", "Mystic of the Ages", "Sage of the Realms", "Enlightened Master", "Wisdom Keeper", "Elder of the Realms"],
+    "Psychic": ["Mindbender", "Telepath of Power", "Wielder of the Mind", "Master of Thought", "Seer of Minds", "Psychic Conjuror", "Mindwalker", "Telekinetic Master", "Keeper of Thoughts", "Mentalist Sage"],
+    "Dark Knight": ["Knight of Shadows", "Bearer of Darkness", "Ruler of Night", "Wielder of the Void", "Shadowbringer", "Champion of Despair", "Harbinger of Night", "Darkblade", "Knight of the Abyss", "Warlord of the Void"],
+    "Inquisitor": ["Seeker of Truth", "Hunter of Heretics", "Purger of Sins", "Judge of the Damned", "Cleansing Light", "Heretic Slayer", "Wielder of Righteousness", "Judge of the Faithless", "Sword of the Inquisition", "Righteous Flame"],
+    "Scout": ["Pathfinder of the Wild", "Master Tracker", "Seeker of Secrets", "Ranger of the Unknown", "Warden of the Wilds", "Lightfoot", "Silent Watcher", "Tracker of Beasts", "Explorer of Realms", "Wilderness Wanderer"],
+    "Lancer": ["Spear Wielder", "Master of the Lance", "Knight of the Spear", "Piercer of Shields", "Spear of the Skies", "Spear Champion", "Knight of the Lance", "Lancebearer", "Wielder of the Spear", "Lancer of Legends"],
+    "Runesmith": ["Master of Runes", "Carver of Magic", "Wielder of Ancient Symbols", "Runewright", "Smith of Power", "Crafter of Enchantment", "Runescribe", "Bearer of Magical Symbols", "Runeforge Master", "Lord of the Runes"],
+    "Champion": ["Hero of the People", "Guardian of the Realm", "Sword of Victory", "Master of the Arena", "Warlord of Glory", "Victor of the Colosseum", "Lord of Triumph", "Conqueror of Realms", "Battle Champion", "Champion of Legends"]
 };
 const roleWeapon = {
     "Knight": ["Heavy Sword", "Short Sword", "Sword and Shield", "Spear", "Club", "Bat"],

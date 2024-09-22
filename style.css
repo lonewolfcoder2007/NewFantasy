@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-#weaponry{
-    align-content: center;
-}
+
 * {
     font-family: "Montserrat", sans-serif;
 }
@@ -15,13 +13,55 @@ body {
     align-items: center;
     font-family: Arial, sans-serif;
     padding: 20px;
+    overflow: hidden; /* Prevent overall overflow */
 }
 
 #characterDisplay {
     display: none;
     padding: 10px;
     max-width: 400px;
+    max-height: 70vh; /* Limit the height to prevent overflow */
+    overflow-y: auto; /* Enable scrolling when content overflows */
+    overflow-x: hidden;
 }
+
+/* Scrollbar styles for WebKit browsers (Chrome, Safari, Edge) */
+#characterDisplay::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+#characterDisplay::-webkit-scrollbar-track {
+    background: transparent; /* Background of the track */
+}
+
+#characterDisplay::-webkit-scrollbar-thumb {
+    background-color: #3a9185; /* Thumb color */
+    border-radius: 10px; /* Rounded corners for the thumb */
+    border: 2px solid transparent; /* Padding around the thumb */
+}
+
+#characterDisplay::-webkit-scrollbar-thumb:hover {
+    background-color: #06a590; /* Darker shade on hover */
+}
+
+/* Firefox scrollbar styling */
+#characterDisplay {
+    scrollbar-width: thin; /* Thin scrollbar */
+    scrollbar-color: #3a9185 transparent; /* Scrollbar thumb and track colors */
+}
+
+/* Optional: Hide the scrollbar in general */
+#characterDisplay::-webkit-scrollbar {
+    display: none; /* Completely hide the scrollbar */
+}
+
+/* To hide scrollbar only for Webkit-based browsers and still show for accessibility */
+@media (hover: hover) {
+    #characterDisplay::-webkit-scrollbar {
+        display: block;
+    }
+}
+
 
 .btn-info {
     background: rgb(0, 48, 255);
@@ -35,4 +75,16 @@ body {
 
 hr {
     border-top: 3px double #9CEDFF;
+}
+
+/* For small screens, ensure better readability */
+@media (max-width: 576px) {
+    #inputForm {
+        width: 100%;
+    }
+    
+    #characterDisplay {
+        max-width: 90%; /* Ensure it fits within small screen sizes */
+        max-height: 60vh;
+    }
 }
