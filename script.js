@@ -1,3 +1,4 @@
+var totalscore = 0;
 const roles = [
     "Knight", "Mage", "Rogue", "Archer", "Paladin", "Blacksmith", "Healer", "Assassin", "Saint", "Tamer",
     "Necromancer", "Unknown", "Death Knight", "Farmer", "Demon King", "Swordman", "Magic Swordman",
@@ -193,7 +194,6 @@ function submitName() {
         const luck = getRandomNumber(1, 100);
         const endurance = Math.floor((strength * 0.5) + 9);
         let ra = "";
-        let totalscore = lev*5;
         var secondary_role = "";
         if(role == "Champion"){
             do{
