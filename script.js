@@ -487,6 +487,6 @@ document.getElementById("darkEnergy").style.display = "block";
 document.getElementById("characterDisplay").style.display = "block";
 }}   
 else{
-    alert("Please type in your name.")
+    alert("Please fill in required field.")
 }
 }
