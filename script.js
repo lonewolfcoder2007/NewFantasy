@@ -421,7 +421,7 @@ function submitName() {
                     }
                 }
             }
-        }
+        totalscore = totalscore + lev*5;
         if(totalscore < F_overall){
             ra = "N/A";
         }
@@ -452,7 +452,7 @@ function submitName() {
         else{
             ra = "SSS"
         }
-        totalscore = totalscore + lev*5;
+        
         document.getElementById("charName").textContent = name;
         document.getElementById("charAgi").textContent = agi;
         document.getElementById("charLev").textContent = lev;
