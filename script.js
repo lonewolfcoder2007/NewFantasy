@@ -148,345 +148,322 @@ const roleWeapon = {
 "Runesmith": ["None"]
 };
 function getRandomElement(arr) {
-return arr[Math.floor(Math.random()*arr.length)];
+    return arr[Math.floor(Math.random()*arr.length)];
 }
 function getRandomNumber(min, max) {
-return Math.floor(Math.random() * (max - min + 1)) + min;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 function submitName() {
-const name = document.getElementById("nameInput").value;
-const gender = document.querySelector('input[name="gender"]:checked').value;
-if (name && gender) {
-const race = getRandomElement(races);
+    const name = document.getElementById("nameInput").value;
+    const gender = document.querySelector('input[name="gender"]:checked').value;
+    if (name && gender) {
+        const race = getRandomElement(races);
 
-let role;
-const randomChance = Math.random() * 100;
+        let role;
+        const randomChance = Math.random() * 100;
 
-if (randomChance < 1) {
-role = "Demon King";
-} else if (randomChance > 98) {
-role = "Saint";
-} else {
-do {
-role = getRandomElement(roles);
-} while (
-(["Demon", "Sarkaz", "Orc"].includes(race) && ["Healer", "Paladin", "Saint"].includes(role)) ||
-(role === "Blacksmith" && race !== "Dwarf") ||
-["Demon King", "Saint"].includes(role) || ((role == "Rifleman" || role == "Sapper") && (race == "Beast" || race == "Succubus" || race == "Dwarf" || race == "Feline" || race == "Slime" || race == "Deer"))
-);
-}
-
-
-document.getElementById("inputForm").style.display = "none";
-
-const strength = getRandomNumber(1, 100);
-const health = getRandomNumber(25, 100);
-const mana = getRandomNumber(1, 100);
-const agi = getRandomNumber(1, 100);
-const lev = getRandomNumber(1, 100);
-const guild = getRandomElement(guilds);
-const region = getRandomElement(regions);
-const characterSkills = [];
-const numberOfSkills = getRandomNumber(3, 5);
-const age = getRandomNumber(22, 60);
-const skillList = document.getElementById("charSkill");
-const dex = getRandomNumber(20, 100);
-const luck = getRandomNumber(1, 100);
-const endurance = Math.floor((strength * 0.5) + 9);
-let ra = "";
-totalscore = totalscore + lev*5;
-var secondary_role = "";
-if(role == "Champion"){
-do{
-secondary_role = getRandomElement(roles);
-}
-while(secondary_role == "Champion");
-document.getElementById("SecondRole").style.display = "block";
-}
-else{
-document.getElementById("SecondRole").style.display = "none";
-}
-
-//Band score for ability and title
-const F_score = 1;
-const E_score = 5;
-const D_score = 10;
-const C_score = 25;
-const B_score = 50;
-const A_score = 150;
-const S_score = 300;
-const SS_score = 500;
-const SSS_score = 1000;
-//End of band score
-
-//Random score if rank = ???
-var random_score = [];
-random_score.push(F_score, E_score, D_score, C_score, B_score, A_score, S_score, SS_score, SSS_score);
-
-//Total band score for overall ranking
-const F_overall = 10;
-const E_overall = 50;
-const D_overall = 100;
-const C_overall = 300;
-const B_overall = 700
-const A_overall = 1250;
-const S_overall = 2000;
-const SS_overall = 3000;
-const SSS_overall = 4500;
-//End of total band score
-
-skillList.innerHTML = "";
-const availableSkill = roleSkills[role];
-
-for (let i = 0; i < numberOfSkills; i++) {
-var skill = getRandomElement(availableSkill);
-var rank = getRandomElement(ranks);
-var ImmunityChance = Math.random() * 1000;
-if(ImmunityChance == 1000){
-skill = "Total Immunity"
-rank = "SSS";
-totalscore = totalscore + SSS_score;
-}
-else{
-do{
-skill = getRandomElement(availableSkill);
-}
-while(skill == "Total Immunity");
-if(rank == "F"){
-totalscore = totalscore + F_score;
-}
-else if(rank == "E"){
-totalscore = totalscore + E_score;
-}
-else if(rank == "D"){
-totalscore = totalscore + D_score;
-}
-else if(rank == "C"){
-totalscore = totalscore + C_score;
-}
-else if(rank == "B"){
-totalscore = totalscore + B_score;
-}
-else if(rank == "A"){
-}
-else if(rank == "S"){
-totalscore = totalscore + S_score;
-}
-else if(rank == "SS"){
-totalscore = totalscore + SS_score;
-}
-else{
-totalscore = totalscore + SSS_score;
-}
-}
-if (!characterSkills.includes(skill)) {
-//characterSkills.push(`${skill} (Rank ${rank})`);
-characterSkills.push({
-skill: skill,
-rank: rank
-})
-}
-const listItem = document.createElement("li");
-listItem.textContent = `${skill} (${rank})`;
-skillList.appendChild(listItem);
-}
-const titlesCount = getRandomNumber(1, 2);
-const titleList = document.getElementById("charTitle");
-titleList.innerHTML = "";
-
-const availableTitles = titles[role];
+        if (randomChance < 1) {
+            role = "Demon King";
+        } else if (randomChance > 98) {
+            role = "Saint";
+        } else {
+            do {
+                role = getRandomElement(roles);
+            } while (
+                (["Demon", "Sarkaz", "Orc"].includes(race) && ["Healer", "Paladin", "Saint"].includes(role)) ||
+                (role === "Blacksmith" && race !== "Dwarf") ||
+                ["Demon King", "Saint"].includes(role) || ((role == "Rifleman" || role == "Sapper") && (race == "Beast" || race == "Succubus" || race == "Dwarf" || race == "Feline" || race == "Slime" || race == "Deer"))
+            );
+        }
 
 
-for (let i = 0; i < titlesCount; i++) {
-var NoobChances = getRandomNumber(0, 100);
-var GreatWar = getRandomNumber(0, 1000);
-var title = getRandomElement(availableTitles);
-var titleRank = getRandomElement(ranks);
-if (GreatWar == 1000) {
-title = "Great War Participant - Losing Side";
-} else if (GreatWar == 0) {
-title = "Great War Participant - Winning Side";
-}
-if(NoobChances == 50){
-title = "Noob"
-}
-if(title == "Black Baron" || title == "Great War Participant - Winning Side"){
-titleRank = "SSS";
-totalscore = totalscore + SSS_score;
-}
-else if(title == "Great War Participant - Losing Side" || title == "Noob"){
-titleRank = "F";
-totalscore = totalscore + F_score
-}
-else{
-if(titleRank == "F"){
-totalscore = totalscore + F_score;
-}
-else if(titleRank == "E"){
-totalscore = totalscore + E_score;
-}
-else if(titleRank == "D"){
-totalscore = totalscore + D_score;
-}
-else if(titleRank == "C"){
-totalscore = totalscore + C_score;
-}
-else if(titleRank == "B"){
-totalscore = totalscore + B_score;
-}
-else if(titleRank == "A"){
-totalscore = totalscore + A_score;
-}
-else if(titleRank == "S"){
-totalscore = totalscore + S_score;
-}
-else if(titleRank == "SS"){
-totalscore = totalscore + SS_score;
-}
-else{
-totalscore = totalscore + SSS_score
-}
-}
-const listItem = document.createElement("li");
-listItem.textContent = `${title} (${titleRank})`;
-titleList.appendChild(listItem);
-}
+        document.getElementById("inputForm").style.display = "none";
 
-const availableWeapons = roleWeapon[role];
-const characterWeapon = [];
-const WeaponNumber = 1;
+        const strength = getRandomNumber(1, 100);
+        const health = getRandomNumber(25, 100);
+        const mana = getRandomNumber(1, 100);
+        const agi = getRandomNumber(1, 100);
+        const lev = getRandomNumber(1, 100);
+        const guild = getRandomElement(guilds);
+        const region = getRandomElement(regions);
+        const characterSkills = [];
+        const numberOfSkills = getRandomNumber(3, 5);
+        const age = getRandomNumber(22, 60);
+        const skillList = document.getElementById("charSkill");
+        const dex = getRandomNumber(20, 100);
+        const luck = getRandomNumber(1, 100);
+        const endurance = getRandomNumber(Math.floor((strength * 0.5) + 9), 100);
+        let ra = "";
+        totalscore = totalscore + lev*5;
+        var secondary_role = "";
+        if(role == "Champion"){
+            do{
+                secondary_role = getRandomElement(roles);
+            }
+            while(secondary_role == "Champion");
+            document.getElementById("SecondRole").style.display = "block";
+        }
+        else{
+            document.getElementById("SecondRole").style.display = "none";
+        }
 
-for (let i = 0; i <WeaponNumber; i++){
-const weapon = getRandomElement(availableWeapons);
-var rank = getRandomElement(ranks);
-if(weapon == "None"){
-characterWeapon.push(`${weapon}`)
-}
-else if(weapon == "Unknown"){
-rank = "???";
-totalscore = totalscore + getRandomElement(random_score);
-}
-else{
-if(rank == "F"){
-totalscore = totalscore + F_score;
-if(!characterWeapon.includes(weapon)){
-characterWeapon.push(`${weapon} (${rank})`);
-}
-}
-else if(rank == "E"){
-totalscore = totalscore + E_score;
-if(!characterWeapon.includes(weapon)){
-characterWeapon.push(`${weapon} (${rank})`);
-}
-}
-else if(rank == "D"){
-totalscore = totalscore + D_score;
-if(!characterWeapon.includes(weapon)){
-characterWeapon.push(`${weapon} (${rank})`);
-}
-}
-else if(rank == "C"){
-totalscore = totalscore + C_score;
-if(!characterWeapon.includes(weapon)){
-characterWeapon.push(`${weapon} (${rank})`);
-}
-}
-else if(rank == "B"){
-totalscore = totalscore + B_score;
-if(!characterWeapon.includes(weapon)){
-characterWeapon.push(`${weapon} (${rank})`);
-}
-}
-else if(rank == "A"){
-totalscore = totalscore + A_score;
-if(!characterWeapon.includes(weapon)){
-characterWeapon.push(`${weapon} (${rank})`);
-}
-}
-else if(rank == "S"){
-totalscore = totalscore + S_score;
-if(!characterWeapon.includes(weapon)){
-characterWeapon.push(`${weapon} (${rank})`);
-}
-}
-else if(rank == "SS"){
-totalscore = totalscore + SS_score;
-if(!characterWeapon.includes(weapon)){
-characterWeapon.push(`${weapon} (${rank})`);
-}
-}
-else{
-totalscore = totalscore + SSS_score;
-if(!characterWeapon.includes(weapon)){
-characterWeapon.push(`${weapon} (${rank})`);
-}
-}
-}
+        //Band score for ability and title
+        const F_score = 1;
+        const E_score = 5;
+        const D_score = 10;
+        const C_score = 25;
+        const B_score = 50;
+        const A_score = 150;
+        const S_score = 300;
+        const SS_score = 500;
+        const SSS_score = 1000;
+        //End of band score
 
-if(totalscore < F_overall){
-ra = "N/A";
-}
-else if (totalscore >= F_overall && totalscore < E_overall){
-ra = "F";
-}
-else if(totalscore >= E_overall && totalscore < D_overall){
-ra = "E";
-}
-else if(totalscore >= D_overall && totalscore < C_overall){
-ra = "D";
-}
-else if(totalscore >= C_overall && totalscore < B_overall){
-ra = "C";
-}
-else if(totalscore >= B_overall && totalscore < A_overall){
-ra = "B";
-}
-else if(totalscore >= A_overall && totalscore < S_overall){
-ra = "A";
-}
-else if(totalscore >= S_overall && totalscore < SS_overall){
-ra = "S";
-}
-else if(totalscore >= SS_overall && totalscore < SSS_overall){
-ra = "SS";
-}
-else{
-ra = "SSS"
-}
+        //Random score if rank = ???
+        var random_score = [];
+        random_score.push(F_score, E_score, D_score, C_score, B_score, A_score, S_score, SS_score, SSS_score);
 
-document.getElementById("charName").textContent = name;
-document.getElementById("charAgi").textContent = agi;
-document.getElementById("charLev").textContent = lev;
-document.getElementById("charRole").textContent = role;
-document.getElementById("charRace").textContent = race;
-document.getElementById("charStrength").textContent = strength;
-document.getElementById("charHealth").textContent = health;
-document.getElementById("charMana").textContent = mana;
-document.getElementById("charRank").textContent = ra;
-document.getElementById("charGuild").textContent = guild;
-document.getElementById("charRegion").textContent = region;
-document.getElementById("charAge").textContent = age;
-document.getElementById("charWeapon").textContent = characterWeapon;
-document.getElementById("charDexterity").textContent = dex;
-document.getElementById("charLuck").textContent = luck;
-document.getElementById("charEndurance").textContent = endurance;
-document.getElementById("charGender").textContent = gender;
+        //Total band score for overall ranking
+        const F_overall = 10;
+        const E_overall = 50;
+        const D_overall = 100;
+        const C_overall = 300;
+        const B_overall = 700
+        const A_overall = 1250;
+        const S_overall = 2000;
+        const SS_overall = 3000;
+        const SSS_overall = 4500;
+        //End of total band score
 
-if (["Healer", "Paladin", "Saint"].includes(role)) {
-const divinePower = getRandomNumber(50, 100);
-document.getElementById("charDivinePower").textContent = divinePower;
-document.getElementById("divinePower").style.display = "block";
-}
+        skillList.innerHTML = "";
+        const availableSkill = roleSkills[role];
 
-if (["Necromancer", "Unknown", "Death Knight", "Demon King"].includes(role) || race === "Demon") {
-const darkEnergy = getRandomNumber(50, 100);
-document.getElementById("charDarkEnergy").textContent = darkEnergy;
-document.getElementById("darkEnergy").style.display = "block";
-}
+        for (let i = 0; i < numberOfSkills; i++) {
+            var skill = getRandomElement(availableSkill);
+            var rank = getRandomElement(ranks);
+            var ImmunityChance = Math.random() * 1000;
+            if(ImmunityChance == 1000){
+                skill = "Total Immunity"
+                rank = "SSS";
+                totalscore = totalscore + SSS_score;
+            }
+            else{
+                do{
+                    skill = getRandomElement(availableSkill);
+                }
+                while(skill == "Total Immunity");
+                if(rank == "F"){
+                    totalscore = totalscore + F_score;
+                }
+                else if(rank == "E"){
+                    totalscore = totalscore + E_score;
+                }
+                else if(rank == "D"){
+                    totalscore = totalscore + D_score;
+                }
+                else if(rank == "C"){
+                    totalscore = totalscore + C_score;
+                }
+                else if(rank == "B"){
+                    totalscore = totalscore + B_score;
+                }
+                else if(rank == "A"){
+                    totalscore = totalscore + A_score;
+                }
+                else if(rank == "S"){
+                    totalscore = totalscore + S_score;
+                }
+                else if(rank == "SS"){
+                    totalscore = totalscore + SS_score;
+                }
+                else{
+                    totalscore = totalscore + SSS_score;
+                }
+            }
+            if (!characterSkills.includes(skill)) {
+                characterSkills.push({
+                    skill: skill,
+                    rank: rank
+                })
+            }
+            const listItem = document.createElement("li");
+            listItem.textContent = `${skill} (${rank})`;
+            skillList.appendChild(listItem);
+        }
+        const titlesCount = getRandomNumber(1, 2);
+        const titleList = document.getElementById("charTitle");
+        titleList.innerHTML = "";
 
-document.getElementById("characterDisplay").style.display = "block";
-}}   
-else{
-    alert("Please fill in required field.")
-}
+        const availableTitles = titles[role];
+
+
+        for (let i = 0; i < titlesCount; i++) {
+            var NoobChances = getRandomNumber(0, 100);
+            var GreatWar = getRandomNumber(0, 1000);
+            var title = getRandomElement(availableTitles);
+            var titleRank = getRandomElement(ranks);
+            if (GreatWar == 1000) {
+                title = "Great War Participant - Losing Side";
+            } else if (GreatWar == 0) {
+                title = "Great War Participant - Winning Side";
+            }
+            if(NoobChances == 50){
+                title = "Noob"
+            }
+            if(title == "Black Baron" || title == "Great War Participant - Winning Side"){
+                titleRank = "SSS";
+                totalscore = totalscore + SSS_score;
+            }
+            else if(title == "Great War Participant - Losing Side" || title == "Noob"){
+                titleRank = "F";
+                totalscore = totalscore + F_score
+            }
+            else{
+                if(titleRank == "F"){
+                    totalscore = totalscore + F_score;
+                }
+                else if(titleRank == "E"){
+                    totalscore = totalscore + E_score;
+                }
+                else if(titleRank == "D"){
+                    totalscore = totalscore + D_score;
+                }
+                else if(titleRank == "C"){
+                    totalscore = totalscore + C_score;
+                }
+                else if(titleRank == "B"){
+                    totalscore = totalscore + B_score;
+                }
+                else if(titleRank == "A"){
+                    totalscore = totalscore + A_score;
+                }
+                else if(titleRank == "S"){
+                    totalscore = totalscore + S_score;
+                }
+                else if(titleRank == "SS"){
+                    totalscore = totalscore + SS_score;
+                }
+                else{
+                    totalscore = totalscore + SSS_score
+                }
+            }
+            const listItem = document.createElement("li");
+            listItem.textContent = `${title} (${titleRank})`;
+            titleList.appendChild(listItem);
+        }
+
+        const availableWeapons = roleWeapon[role];
+        const characterWeapon = [];
+        const WeaponNumber = 1;
+
+        for (let i = 0; i <WeaponNumber; i++){
+            const weapon = getRandomElement(availableWeapons);
+            var rank = getRandomElement(ranks);
+            if(weapon == "None"){
+                characterWeapon.push(`${weapon}`)
+            }
+            else if(weapon == "Unknown"){
+                rank = "???";
+                totalscore = totalscore + getRandomElement(random_score);
+            }
+            else{
+                if(rank == "F"){
+                    totalscore = totalscore + F_score;
+                }
+                else if(rank == "E"){
+                    totalscore = totalscore + E_score;
+                }
+                else if(rank == "D"){
+                    totalscore = totalscore + D_score;
+                }
+                else if(rank == "C"){
+                    totalscore = totalscore + C_score;
+                }
+                else if(rank == "B"){
+                    totalscore = totalscore + B_score;
+                }
+                else if(rank == "A"){
+                    totalscore = totalscore + A_score;
+                }
+                else if(rank == "S"){
+                    totalscore = totalscore + S_score;
+                }
+                else if(rank == "SS"){
+                    totalscore = totalscore + SS_score;
+                }
+                else{
+                    totalscore = totalscore + SSS_score;
+                }
+            }
+            if(!characterWeapon.includes(weapon)){
+                characterWeapon.push(`${weapon} (${rank})`);
+            }
+        }
+        if(totalscore < F_overall){
+            ra = "N/A";
+        }
+        else if (totalscore >= F_overall && totalscore < E_overall){
+            ra = "F";
+        }
+        else if(totalscore >= E_overall && totalscore < D_overall){
+            ra = "E";
+        }
+        else if(totalscore >= D_overall && totalscore < C_overall){
+            ra = "D";
+        }
+        else if(totalscore >= C_overall && totalscore < B_overall){
+            ra = "C";
+        }
+        else if(totalscore >= B_overall && totalscore < A_overall){
+            ra = "B";
+        }
+        else if(totalscore >= A_overall && totalscore < S_overall){
+            ra = "A";
+        }
+        else if(totalscore >= S_overall && totalscore < SS_overall){
+            ra = "S";
+        }
+        else if(totalscore >= SS_overall && totalscore < SSS_overall){
+            ra = "SS";
+        }
+        else{
+            ra = "SSS"
+        }
+
+    document.getElementById("charName").textContent = name;
+    document.getElementById("charAgi").textContent = agi;
+    document.getElementById("charLev").textContent = lev;
+    document.getElementById("charRole").textContent = role;
+    document.getElementById("charRace").textContent = race;
+    document.getElementById("charStrength").textContent = strength;
+    document.getElementById("charHealth").textContent = health;
+    document.getElementById("charMana").textContent = mana;
+    document.getElementById("charRank").textContent = ra;
+    document.getElementById("charGuild").textContent = guild;
+    document.getElementById("charRegion").textContent = region;
+    document.getElementById("charAge").textContent = age;
+    document.getElementById("charWeapon").textContent = characterWeapon;
+    document.getElementById("charDexterity").textContent = dex;
+    document.getElementById("charLuck").textContent = luck;
+    document.getElementById("charEndurance").textContent = endurance;
+    document.getElementById("charGender").textContent = gender;
+
+    if (["Healer", "Paladin", "Saint"].includes(role)) {
+        const divinePower = getRandomNumber(50, 100);
+        document.getElementById("charDivinePower").textContent = divinePower;
+        document.getElementById("divinePower").style.display = "block";
+    }
+
+    if (["Necromancer", "Unknown", "Death Knight", "Demon King"].includes(role) || race === "Demon") {
+        const darkEnergy = getRandomNumber(50, 100);
+        document.getElementById("charDarkEnergy").textContent = darkEnergy;
+        document.getElementById("darkEnergy").style.display = "block";
+    }
+
+    document.getElementById("characterDisplay").style.display = "block";
+    }   
+    else{
+        alert("Please fill in required field.");
+    }
+    console.log(totalscore);
 }
