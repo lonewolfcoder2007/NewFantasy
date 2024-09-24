@@ -156,7 +156,7 @@ function getRandomNumber(min, max) {
 function submitName() {
     const name = document.getElementById("nameInput").value;
     const gender = document.querySelector('input[name="gender"]:checked').value;
-    if (name && gender) {
+    if (name && document.getElementsByClassName("form-check-input").checked) {
         const race = getRandomElement(races);
 
         let role;
