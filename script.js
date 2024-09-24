@@ -192,7 +192,7 @@ function submitName() {
         const skillList = document.getElementById("charSkill");
         const dex = getRandomNumber(20, 100);
         const luck = getRandomNumber(1, 100);
-        const endurance = getRandomNumber(Math.floor((strength * 0.5) + 9), 100);
+        const endurance = getRandomNumber(Math.floor((strength * 0.5) + 9), strength);
         let ra = "";
         totalscore = totalscore + lev*5;
         var secondary_role = "";
