@@ -1,492 +1,1140 @@
 var totalscore = 0;
-const roles = [
-"Knight", "Mage", "Rogue", "Archer", "Paladin", "Blacksmith", "Healer", "Assassin", "Saint", "Tamer",
-"Necromancer", "Unknown", "Death Knight", "Farmer", "Demon King", "Swordman", "Magic Swordman",
-"Martial Artist", "Trader", "Archmage", "Slave", "Chef", "Rifleman", "Sapper", "Vampire",
-"Berserker", "Bard", "Pirate", "Priest", "Alchemist", "Ranger", "Samurai", "Monk", "Vampire Lord",
-"Warrior", "Summoner", "Witch Hunter", "Dark Knight",
-"Inquisitor", "Scout", "Lancer", "Runesmith", "Champion"
-];
-const races = [
-"Human", "Elf", "Dwarf", "Orc", "Beast", "Dark Elf", "Dragon", "Half Dragon", "Half Elf", "Demon",
-"Werewolf", "Succubus", "Divine Being", "Feline", "Frogman", "Lizardman", "Slime", "Jawir",
-"Sarkaz", "Liberi", "Sankta", "Deer", "Fishman", "Unknown", "Vampire", "Phoenix", "Giant", "Fairy", "Merfolk", "Gnome", "Troll", "Gargoyle", "Zombie", "Skeleton", "Harpy", "Minotaur", "Djinn", "Centaur", "Cyclops", "Satyr", "Dryad", "Spirit", "Naga", "Undead",
-"Goblin", "Elemental", "Chimera", "Griffin", "Treant", "Yeti", "Ogre"
-];
-const regions = [
-"LowRess Kingdom", "Liberia", "Great Forest", "Heavenhold", "Kingdom of Erusea", "Soviet Republics",
-"Drakenfell Mountains", "Evershade Isles", "Frostspire Tundra", "Ashenmoor Wastes", "Valoria",
-"Silverpeak Highlands", "Thornwood Vale", "Eldergrove", "Blackwater Marsh", "Suncrest Plains",
-"Ironcliff Bastion", "Whispering Sands", "Starlight Hollow", "Glimmerfall Cove", "Shadowfen Swamp",
-"Stormveil Coast", "Crimson Hollow", "Verdantwild", "Obsidian Flats", "Azurelake Shores",
-"Emberstone Citadel", "Duskmire Reach", "Wildthorn Expanse", "Goldenleaf Glade", "Ivoryspire City"
-];
-const roleSkills = {
-"Knight": ["Sword Mastery", "Shield Mastery", "Mounted Combat", "War Cry", "Heavy Armor", "Tactical Strategy", "Battle Charge", "Shield Bash", "Combat Reflexes", "Defensive Stance", "Sword Block", "Battlefield Awareness", "Parry", "Shield Slam", "Armor Reinforcement", "Toughness", "Sword Precision", "Holy Vow", "Defender's Resolve", "Battle Endurance", "Total Immunity"],
-"Mage": ["Fire Magic", "Water Magic", "Earth Magic", "Wind Magic", "Lightning Magic", "Arcane Magic", "Teleportation", "Time Manipulation", "Illusion", "Energy Bolt", "Mana Control", "Dark Magic", "Summon Elementals", "Meteor Shower", "Magic Shield", "Mana Drain", "Arcane Blast", "Magic Ward", "Mana Burst", "Elemental Mastery", "Total Immunity"],
-"Rogue": ["Stealth", "Sneak Attack", "Lockpicking", "Pickpocketing", "Backstab", "Evasion", "Poison Crafting", "Agility Boost", "Silent Step", "Ambush", "Trap Detection", "Shadow Step", "Dagger Mastery", "Dual Wielding", "Smoke Bomb", "Shadow Meld", "Thievery", "Quick Escape", "Decoy", "Cloak of Shadows", "Total Immunity"],
-"Archer": ["Archery", "Tracking", "Trap Setting", "Camouflage", "Eagle Eye", "Quick Shot", "Bow Mastery", "Arrow Crafting", "Precision Shot", "Wind Guidance", "Critical Strike", "Multi Shot", "Long Range Mastery", "Animal Companion", "Piercing Arrow", "Explosive Arrow", "Double Shot", "Sniper Focus", "Hawk Eye", "Rapid Fire", "Total Immunity"],
-"Paladin": ["Holy Strike", "Divine Protection", "Healing", "Sword Mastery", "Shield of Faith", "Blessing of Light", "Aura of Courage", "Smite Evil", "Guardian's Shield", "Divine Resilience", "Holy Aura", "Purification", "Divine Judgement", "Divine Shield", "Light's Wrath", "Sacred Sword", "Healing Light", "Holy Hammer", "Divine Crusade", "Faith Barrier", "Total Immunity"],
-"Blacksmith": ["Blacksmithing", "Crafting", "Metal Manipulation", "Weapon Forging", "Armor Crafting", "Enchanting", "Repairing", "Mining", "Material Refinement", "Tool Crafting", "Metalworking", "Rune Engraving", "Weapon Enhancement", "Resource Management", "Hammer Strike", "Metal Shaping", "Smith's Endurance", "Ore Detection", "Forge Mastery", "Anvil Strike", "Total Immunity"],
-"Healer": ["Healing", "Potion Brewing", "Herbalism", "Light Magic", "First Aid", "Divine Touch", "Cure Disease", "Revitalize", "Holy Ward", "Life Restoration", "Group Healing", "Resurrection", "Mana Regeneration", "Protective Aura", "Restoration Surge", "Healing Circle", "Cleanse", "Renewal", "Sanctified Healing", "Restorative Light", "Total Immunity"],
-"Assassin": ["Stealth", "Poison Crafting", "Sneak Attack", "Dagger Mastery", "Critical Strike", "Dual Wielding", "Silent Step", "Shadow Meld", "Smoke Bomb", "Assassination", "Death Strike", "Vanish", "Shadow Clone", "Nerve Strike", "Ambush", "Silent Kill", "Toxin Expert", "Blinding Powder", "Heart Strike", "Deadly Precision", "Total Immunity"],
-"Saint": ["Blessing Magic", "Divine Protection", "Healing", "Charisma", "Inspiration", "Holy Flame", "Sanctuary", "Holy Light", "Miracle", "Divine Aura", "Sacred Shield", "Purify", "Light of Hope", "Holy Wrath", "Blessed Words", "Divine Intervention", "Blessing of Strength", "Holy Song", "Sacred Prayer", "Eternal Light", "Total Immunity"],
-"Tamer": ["Animal Training", "Beast Communication", "Taming Magic", "Summon Beast", "Beast Mastery", "Animal Bond", "Feral Rage", "Beast Riding", "Track Animals", "Command Beast", "Wild Frenzy", "Animal Empathy", "Beast Whisperer", "Tame Elemental", "Summon Spirit Beast", "Feral Protection", "Nature's Call", "Primal Roar", "Savage Charge", "Pack Leader", "Total Immunity"],
-"Necromancer": ["Necromancy", "Curse Magic", "Soul Magic", "Bone Magic", "Dark Ritual", "Raise Dead", "Undead Mastery", "Corpse Explosion", "Soul Drain", "Lich Transformation", "Plague Magic", "Life Drain", "Dark Pact", "Death's Embrace", "Graveborn", "Soul Reaver", "Spirit Shackles", "Shadow of Death", "Soul Harvest", "Deathly Aura", "Total Immunity"],
-"Unknown": ["Unknown Skill", "Mystery", "Hidden Talent", "Adaptability", "Survival Instinct", "Random Burst", "Eternal Enigma", "Shifting Powers", "Unpredictable Talent", "Foresight", "Chaos Manipulation", "Arcane Puzzle", "Reality Bending", "Anomalous Strength", "Unstable Magic", "Flicker Strike", "Quantum Leap", "Temporal Shift", "Mimic", "Darkness Within", "Total Immunity"],
-"Death Knight": ["Death Blade", "Soul Drain", "Plague Strike", "Undead Mastery", "Dark Armor", "Cursed Shield", "Death Charge", "Grim Command", "Necrotic Slash", "Unholy Aura", "Corpse Explosion", "Bone Shield", "Life Steal", "Dark Pact", "Vampiric Strike", "Reaper's Touch", "Soul Reaper", "Dark Command", "Death's Advance", "Doom Strike", "Total Immunity"],
-"Farmer": ["Harvesting", "Soil Knowledge", "Crop Mastery", "Animal Husbandry", "Seed Crafting", "Irrigation Mastery", "Plowing", "Plant Growth", "Land Fertility", "Livestock Care", "Crop Rotation", "Agricultural Trade", "Farming Tools", "Pest Control", "Farm Management", "Compost Creation", "Breeding Mastery", "Crop Forecasting", "Herbology", "Barn Construction", "Total Immunity"],
-"Demon King": ["Dark Command", "Infernal Flames", "Demon Summoning", "Absolute Domination", "Demonic Aura", "Soul Corruption", "Hellfire", "Dark Rebirth", "Demon Lord's Might", "Dark Pact", "Summon Demon Hordes", "Hellstorm", "Infernal Protection", "Shadow Flame", "Doom Prophecy", "Chaos Control", "Abyssal Magic", "Soul Reaver", "Eternal Torment", "Cursed Throne", "Total Immunity"],
-"Swordman": ["Sword Mastery", "Blade Dance", "Quick Strike", "Deflect", "Parry", "Sword Combo", "Sharp Focus", "Sword Spin", "Deadly Slash", "Sword Precision", "Sword Reflection", "Blade Guard", "Heavy Strike", "Sword Blitz", "Raging Slash", "Sword of Fury", "Rapid Slash", "Sword Counter", "Blade Crush", "Whirling Blade", "Total Immunity"],
-"Magic Swordman": ["Sword Mastery", "Elemental Blade", "Arcane Strike", "Mana Infusion", "Sword Dance", "Enchanted Weapon", "Magic Burst", "Quick Slash", "Spellblade", "Blade of Flames", "Ice Blade", "Lightning Edge", "Earth Cleave", "Wind Cutter", "Sword of Light", "Darkness Slash", "Sword Aura", "Mystic Edge", "Arcane Barrier", "Mana Shield", "Total Immunity"],
-"Martial Artist": ["Hand-to-Hand Combat", "Pressure Point Strike", "Fists of Fury", "Agility Boost", "Palm Strike", "Roundhouse Kick", "Counterattack", "Chi Focus", "Tiger Stance", "Dragon Kick", "Iron Fist", "Body Hardening", "Mental Focus", "Chi Channeling", "Flurry of Blows", "Disarm", "Sweeping Kick", "Nerve Strike", "Power Punch", "Energy Burst", "Total Immunity"],
-"Trader": ["Bartering", "Market Analysis", "Negotiation", "Wealth Accumulation", "Merchant's Eye", "Inventory Management", "Contract Drafting", "Supply Chain", "Risk Assessment", "Sales Mastery", "Trade Secrets", "Customer Rapport", "Trade Route Knowledge", "Investment Strategies", "Merchant's Luck", "Price Manipulation", "Logistics Expertise", "Market Expansion", "Haggling", "Wealth Control", "Total Immunity"],
-"Archmage": ["Ultimate Fireball", "Meteor Shower", "Elemental Mastery", "Arcane Surge", "Mystic Explosion", "Mana Mastery", "Teleportation", "Time Warp", "Mana Storm", "Reality Shatter", "Infinite Wisdom", "Arcane Barrage", "Planar Rift", "Arcane Manipulation", "Elemental Fury", "Cosmic Insight", "Eternal Flame", "Mana Explosion", "Spellsurge", "Mana Infusion", "Total Immunity"],
-"Slave": ["Endurance", "Survival Instinct", "Pain Tolerance", "Obedience", "Escape Artist", "Servitude Mastery", "Submission", "Silent Endurance", "Servant's Will", "Willpower", "Stealth Work", "Escape Plan", "Unseen Movement", "Rebellious Mind", "Survival Expert", "Hidden Talent", "Chained Strength", "Mental Resilience", "Resistance", "Hidden Strength", "Total Immunity"],
-"Chef": ["Cooking", "Ingredient Sourcing", "Flavor Mastery", "Knife Skills", "Heat Control", "Herb Knowledge", "Food Presentation", "Recipe Creation", "Gourmet Crafting", "Culinary Expertise", "Meal Preparation", "Food Preservation", "Baking Mastery", "Herb Infusion", "Ingredient Substitution", "Food Safety", "Multitasking", "Culinary Innovation", "Taste Testing", "Plating Expertise", "Total Immunity"],
-"Rifleman": ["Precise Aim", "Wind Estimation", "Critical Strike", "Lethality", "Mass Shooting", "Bayonet Fight", "Multishot", "Dead Eye", "Overload", "Suppresive Fire", "Close Air Support", "Guerrilla", "Artillery Strike", "Iron Clad", "Dual Welding", "Bullseye", "Total Focus", "Eyes In The Sky", "Infinite Mazagine", "Bulletproof", "Limit Break", "Two Birds One Stone", "APHE Shots", "Total Immunity", "Elemental Bullets"],
-"Sapper": ["Suppressive Fire", "Field Repair", "Bomb Defuse", "Sabotage", "Limit Break", "Iron Clad", "Marvelous Engineering", "Excavation", "Minesweeping", "Multitasking", "Confrontation", "No Retreat", "Demolition Expert", "Unconventional Warfare", "Eagle Eyes", "Damage Reduction", "Total Immunity", "Front Line Defense"],
-"Vampire": ["Total Immunity", "Blood Drain", "Bat Transformation", "Night Vision", "Immortal Presence", "Vampiric Aura", "Shadow Strike", "Dark Seduction", "Blood Pact", "Mist Form", "Blood Frenzy", "Summon Bats", "Night Stalker", "Immortal Regeneration", "Crimson Fury", "Charm of the Undead", "Blood Ritual", "Shadow Dash", "Nightwalker", "Hypnotic Gaze", "Vampire's Thrall"],
-"Berserker": ["Total Immunity", "Rage Unleashed", "Bloodlust", "Frenzied Strikes", "Battle Roar", "Relentless Assault", "Fearless Charge", "Savage Blow", "Battle Frenzy", "Bloodthirst", "Weapon Smash", "War Cry", "Unstoppable Force", "Rampage", "Critical Strike", "Battlefield Fury", "Rage Recovery", "Adrenaline Surge", "Destruction Wave", "Uncontrolled Rage", "Death Rage"],
-"Bard": ["Total Immunity", "Song of Valor", "Melodic Healing", "Inspiring Anthem", "Lute Mastery", "Song of Protection", "Charming Tune", "Magical Melody", "Harmonic Harmony", "Ballad of Bravery", "Rhythmic Defense", "Melody of Recovery", "Tune of Tranquility", "Battle Hymn", "Sonic Burst", "Hymn of Power", "Lullaby of Sleep", "Musical Shield", "Soundwave Shock", "Note of Clarity", "Inspiration Aura"],
-"Pirate": ["Total Immunity", "Swordplay", "Navigation", "Pistol Mastery", "Rum Drinking", "Sea Tactics", "Ship Management", "Plundering", "Treasure Hunting", "Cannon Operation", "Sea Combat", "Boarding Mastery", "Anchor Toss", "Sea Legs", "Whirlwind Slash", "Jolly Roger Spirit", "Oceanic Maneuvering", "Sail Mastery", "Rope Swing", "Pirate's Code", "Storm Riding"],
-"Priest": ["Total Immunity", "Holy Prayer", "Purify", "Healing Light", "Divine Intervention", "Blessing of Protection", "Resurrection", "Smite", "Holy Aura", "Faith Shield", "Prayer of Hope", "Restoration", "Spiritual Guidance", "Divine Judgment", "Miracle Healing", "Aura of Devotion", "Sermon of Light", "Benediction", "Martyrdom", "Prayer of Salvation", "Divine Grace"],
-"Alchemist": ["Total Immunity", "Potion Crafting", "Transmutation", "Herb Knowledge", "Elemental Infusion", "Elixir Mastery", "Alchemy Circle", "Catalyst Expertise", "Mana Elixirs", "Poison Brewing", "Stone Transmutation", "Antidote Creation", "Explosive Concoctions", "Potion of Speed", "Regeneration Brew", "Flame Essence", "Alchemy Enhancement", "Mana Restoration", "Resilience Brew", "Healing Elixirs", "Elemental Fusion"],
-"Ranger": ["Total Immunity", "Bow Mastery", "Tracking", "Stealth", "Hunting", "Nature Knowledge", "Animal Companion", "Cloak of Shadows", "Precision Shot", "Silent Kill", "Trap Setting", "Camouflage", "Survival Instinct", "Arrow Mastery", "Rapid Fire", "Animal Bond", "Foraging", "Evasion", "Swift Movements", "Lethal Arrow", "Wilderness Navigation"],
-"Samurai": ["Total Immunity", "Katana Mastery", "Bushido Code", "Quick Draw", "Parry", "Iaijutsu", "Sword Stance", "Focused Strike", "Spiritual Resolve", "Deflect Arrows", "Blade of Honor", "Perfect Focus", "Kiai", "Dual Katana", "Swift Blade", "Martial Spirit", "Battle Discipline", "Zen Meditation", "Blade Fury", "Warrior's Patience", "Sacred Oath"],
-"Monk": ["Total Immunity", "Chi Mastery", "Meditation", "Palm Strike", "Iron Fist", "Serene Mind", "Tiger Claw", "Pressure Point", "Swift Movement", "Chi Shield", "Inner Strength", "Spiritual Awareness", "Energy Channeling", "Keen Reflexes", "Healing Meditation", "Chi Burst", "Mystic Harmony", "Whirling Kick", "Fist of Fury", "Evasion", "Focused Breathing"],
-"Vampire Lord": ["Total Immunity", "Blood Drain", "Bat Transformation", "Night Vision", "Immortal Presence", "Vampiric Aura", "Shadow Strike", "Dark Seduction", "Blood Pact", "Mist Form", "Blood Frenzy", "Summon Bats", "Night Stalker", "Immortal Regeneration", "Crimson Fury", "Charm of the Undead", "Blood Ritual", "Shadow Dash", "Nightwalker", "Hypnotic Gaze", "Vampire's Thrall"],
-"Summoner": ["Total Immunity", "Summon Beast", "Arcane Summoning", "Summon Elemental", "Summon Golem", "Mana Channeling", "Familiar Mastery", "Summon Phoenix", "Spirit Bond", "Summon Doppelganger", "Ethereal Binding", "Summon Undead", "Mana Surge", "Summon Hydra", "Soul Link", "Summon Titan", "Elemental Convergence", "Arcane Familiar", "Conjure Guardian", "Planar Rift", "Summon Chimera"],
-"Witch Hunter": ["Total Immunity", "Dark Detection", "Purifying Flame", "Holy Shot", "Hunter's Mark", "Silver Bullets", "Dark Magic Nullification", "Curse Breaking", "Demonbane", "Vampire Slayer", "Purity of Will", "Mystic Ward", "Crossbow Mastery", "Exorcism", "Hunter’s Reflexes", "Witch’s Bane", "Trap Mastery", "Evil Scent", "Divine Smite", "Shadow Purge", "True Sight"],
-"Dark Knight": ["Total Immunity", "Shadow Strike", "Death Blade", "Dark Aura", "Nightmare Slash", "Soul Corruption", "Void Edge", "Unholy Strength", "Vampiric Touch", "Fell Cleave", "Shadow Barrier", "Blackened Blade", "Dark Shield", "Abyssal Wrath", "Soul Drain", "Grim Resolve", "Spectral Slash", "Voidwalker", "Dread Charge", "Cursed Armor", "Siphon Life"],
-"Scout": ["Total Immunity", "Keen Eye", "Ambush", "Tracking", "Silent Step", "Sniper Shot", "Camouflage", "Hawk’s Vision", "Quick Shot", "Evasion", "Trap Mastery", "Trailblazer", "Agility Boost", "Escape Artist", "Deadly Aim", "Stealth Tactics", "Bow Mastery", "Terrain Mastery", "Survivalist", "Vantage Point", "Reconnaissance"],
-"Runesmith": ["Total Immunity", "Rune Crafting", "Weapon Inscription", "Armor Engraving", "Rune Empowerment", "Magic Infusion", "Rune of Fire", "Rune of Frost", "Rune of Protection", "Mystic Inscription", "Arcane Engravings", "Rune of Lightning", "Rune of Life", "Stone Rune", "Empowered Glyphs", "Rune Channeling", "Spirit Binding", "Rune of Destruction", "Mystic Warding", "Rune of Clarity", "Enchantment Mastery"],
-"Champion": ["Total Immunity", "Heroic Strike", "Battle Charge", "Defensive Posture", "War Cry", "Shield Bash", "Mighty Cleave", "Roar of the Champ", "Battle Endurance", "Overpower", "Critical Blow", "Tactical Defense", "Rallying Cry", "Victory Rush", "Stalwart Defense", "Unyielding Strength", "Shield Mastery", "Battlefield Domination", "Power Slam", "Warrior's Wrath"]
-};
+
 const ranks = ["F", "E", "D", "C", "B", "A", "S", "SS", "SSS"];
-const guilds = ["PSHT", "RHODES", "Silverthorn", "Dragonshade", "Shadowspire", "El Gasing", "Mariners"];
+
+const guilds = [
+    "Neon Crucible", "TechnoForge", "Void Seraphs", "Shadow Nexus", "CryoPhalanx", "Data Syndicate", "Ironclad Union", "Quantum Corsairs", "Cybernova", "Gravitas Collective", "Plasma Vanguard", 
+    "Nano Legion", "AI Consortium", "Synth Reapers", "Cybernet Collective", "Stellar Cartel", "BioHacker Coalition", "Mecha Blades", "Photon Raiders", "Digital Dominion", 
+    "Circuitbreakers", "Fusion Covenant", "Voidwalkers", "Neural Ascendants", "Graviton Order"
+];
+
+
+const roles = [
+    "Cybernetician", "Synth-Jacker", "Techno-Nomad", "Data Runner", "Quantum Hacker", "Neuro-Splicer", "Drone Pilot", "Exo-Soldier", "Gravity Shifter", "Bio-Engineer", "Nano-Surgeon", "Cyber Ronin", 
+    "Energy Manipulator", "Void Skimmer", "AI Whisperer", "Psi-Warrior", "Gene Splicer", "Code Phantom", "Grid Enforcer", "Weapon Specialist", "Cyber Gladiator", "Stasis Operative", "Quantum Enforcer", 
+    "Tech Shaman", "Cyber Police Officer", "Corporate Agent", "Street Samurai", "Mind Runner", "Quantum Mechanic", "Nanotech Assassin", "Astro-Navigator", "Reality Bender", "Void Harvester",
+    "Cryo-Tactician", "Cyber-Mercenary", "Virtual Reality Architect"
+];
+
+const races = [
+    "Cybernetic Human", "Synthoid", "Voidborn", "Mecha-Beast", "Gene-Tweaked Human", "Bio-Android", "Digital Spirit", "Nano-Born", "Quantum Entity",  "Techno-Alien", "AI Construct", "Psi-Enhanced Human", 
+    "Void Dweller", "Gravity Bender", "Robotic Hybrid", "Cloned Soul", "Chrono-Mutant", "Plasma Being", "Void Shadow", "Photon Being", "Hive Mind Collective", "Bio-Assimilator", "Quantum Phantom", 
+    "Nano-Swarm Being", "Cryo-Mutant", "Digital Entity", "Hybrid Human", "Galactic Nomad", "Astral Entity", "Neuro-Borg", "Stellar Construct", "Dimensional Wanderer", "Hyper-Evolved Primate", 
+    "Solar Ascendant", "Telekinetic Humanoid", "Cyber-Serpent", "Nano-Dragon"
+];
+
+const regions = [
+    "Neonspire City", "Technocrypt Nexus", "Steelhaven", "Quantum Rift", "Voidfront", "Synthfall District", "Mecha-Wastes", "Cybersteel Enclave", "Voidreach Station", "Stellar Forge", "Data Vortex", 
+    "Neural Nexus", "Graviton Slums", "Cryo-Citadel", "AI Core Sanctuary", "Neurogrid Expanse", "Holo-Realm", "Nano-Wastes", "Digital Abyss", "Plasma Verge", "Shattered Grid", 
+    "Quantum Abyss", "Bio-Dome Alpha", "Virtual Utopia", "Fusion Fields", "Voidsea Outpost", "Cryo-Vault", "Eclipse Bastion", "Radiant Shard", "Cybernetic Frontier", "Dimensionless Drift"
+];
+
+const roleSkills = {
+    "Cybernetician": [
+        "Cybernetics Engineering", "Neural Interface Design", "Augmentation Synthesis", "Advanced AI Control", "Bio-Mechanical Integration", "Enhanced Reflex Programming", "Cyborg Anatomy Knowledge",
+        "Drone Command", "Robotic Surgery", "Quantum Processor Overclocking", "Exo-Suit Customization", "Nano-Repair Protocols", "Sensory Enhancement Programming", "Mechanical Limbs Calibration",
+        "Cyber Eye Augmentation", "Energy Shield Optimization", "Cyber-Security Bypass", "Implant Design", "Precision Tool Operation", "Cyber Neural Mapping", "Brain-Computer Interface Mastery", 
+        "Digital Consciousness Transfer", "Advanced Neuroplasticity Control", "Machine Learning Algorithms", "Cognitive Processor Control"
+    ],
+    "Synth-Jacker": [
+        "Synth Manipulation", "Neural Hacking", "Augmentation Hijacking", "Data Interception", "Augmented Strength Boost", "Neural Override", "Memory Extraction",
+        "Cyber Implant Corruption", "Synth-Cloaking", "Perception Hijack", "Hostile AI Manipulation", "Synthetic Biology Knowledge", "Virtual Body Control", "Augmented Reflex Hacking",
+        "Neural Interface Jamming", "Augmentation Disruption", "Infiltration Programming", "Advanced Neural Decryption", "Combat Synth Overload", "Virtual Combat Expertise", "Augmented Armor Sabotage",
+        "Synth Weapon Overclocking", "Cognitive Reprogramming", "Mind-Wave Interference", "Data Stream Hijack", "Combat Reflex Enhancement"
+    ],
+    "Techno-Nomad": [
+        "Mobile Tech Command", "Portable Power Systems", "Energy Shield Deployment", "Holographic Decoy Mastery", "Exo-Skeleton Control", "Environmental Adaptation", "Quantum Signal Control",
+        "Stealth Field Generation", "Nomadic Navigation", "Survival Hacking", "Drone Companion Control", "Adaptive Weapon Tuning", "Kinetic Energy Storage", "Portable EMP Generator",
+        "Mobile Data Encryption", "Cyber-Camouflage", "Digital Tactics", "Terrain Hacking", "Resource Optimization", "Portable AI Assistant", "Data Mapping Expertise", "Digital Trail Concealment",
+        "Augmentation Battery Mastery", "Quantum Tracking", "Adaptive Armor Integration"
+    ],
+    "Data Runner": [
+        "Data Encryption Mastery", "Packet Sniffing", "Quantum Decryption", "Firewall Breaching", "Neural Net Navigation", "Data Burst Transmission", "Zero-Latency Communication",
+        "Data Integrity Protection", "Quantum Encryption Breaker", "Data Leak Containment", "Trace Erasure", "Compression Algorithms", "Firewall Penetration", "Network Relay Manipulation",
+        "Quantum Routing", "Data Stream Control", "Advanced Code Injection", "Signal Manipulation", "Data Packet Reconstruction", "Time-Lock Encryption", "Signal Jamming", "Cyber Footprint Eradication",
+        "Data Extraction", "Stealth Data Transfer", "Malware Deployment", "Reverse Engineering"
+    ],
+    "Quantum Hacker": [
+        "Quantum Encryption Bypass", "Phase Hacking", "Dimensional Firewall Penetration", "Quantum Code Injection", "Time Loop Exploit", "Reality Alteration", "Quantum Key Distribution Mastery",
+        "Parallel Network Manipulation", "Multi-Reality Access", "Quantum Processor Manipulation", "Quantum AI Control", "Phase Shift Hacking", "Quantum Data Manipulation", "Chrono Hacking",
+        "Temporal Network Control", "Multi-Dimensional Analysis", "Quantum Feedback Looping", "Dimensional AI Reprogramming", "Quantum Firewalls", "Quantum Cloaking Protocols", "Reality Distortion Manipulation",
+        "Quantum Phase Encryption", "Dimensional Vulnerability Exploitation", "Time Dilation Hacking", "Quantum Bit Management"
+    ],
+    "Neuro-Splicer": [
+        "Neural Pathway Alteration", "Synapse Hacking", "Brainwave Interference", "Memory Splicing", "Consciousness Hacking", "Cognitive Override", "Neuro-Plasticity Mastery",
+        "Neural Implant Integration", "Thought Pattern Encryption", "Cerebral Command", "Mental Pathway Reconstruction", "Mind-Control Protocols", "Neuro-Sensitivity Tuning", "Brainwave Manipulation",
+        "Psychological Warfare Programming", "Consciousness Mapping", "Neuro-Security Bypass", "Cerebral System Hijacking", "Memory Reconstruction", "Cognitive Reflex Enhancement", "Artificial Emotion Implantation",
+        "Mind Shackle", "Neural Override Mastery", "Brain-Machine Interface", "Subconscious Implantation"
+    ],
+    "Drone Pilot": [
+        "Drone Combat Control", "Aerial Recon Mastery", "Remote Weapon Control", "Advanced Drone Swarm Management", "AI Pilot Control", "Drone Reflex Tuning", "Weaponized Drones",
+        "Recon Data Analysis", "Multi-Drone Synchronization", "Advanced Flight Maneuvering", "Stealth Drone Deployment", "Aerial Attack Coordination", "Payload Delivery", "EMP Resistant Drones",
+        "Drone Shielding Systems", "Environmental Drone Adaptation", "Drone Repair Mastery", "Combat AI Co-Pilot", "Drone Sentry Deployment", "Autonomous Recon Programming", "Energy Efficient Flight",
+        "Heavy Duty Payload Management", "Anti-Air Drone Countermeasures", "Real-Time Drone Hacking", "Drone Stealth Tactics"
+    ],
+    "Exo-Soldier": [
+        "Exo-Suit Mastery", "Heavy Exo Armor Use", "Energy Shield Manipulation", "Augmented Strength Control", "Advanced Target Acquisition", "Power Armor Combat", "Exo-Suit Mobility",
+        "Exo Weapon Integration", "Combat Reflex Augmentation", "Power Armor Maintenance", "Exo-Combat Tactics", "Combat AI Interface", "Tactical HUD Mastery", "Exo Shield Deployment",
+        "Advanced Suit Repairs", "Heavy Weapon Handling", "Augmented Mobility Mastery", "Exo-Stealth Technology", "Energy Weapon Mastery", "Nanite Repair Protocols", "EMP Defense", "Energy Core Overload",
+        "Precision Targeting Systems", "Combat Maneuvering in Exo-Suit", "Survivability Enhancement"
+    ],
+    "Gravity Shifter": [
+        "Gravity Manipulation", "Anti-Gravity Field Creation", "Gravitational Distortion", "Mass Alteration", "Gravity Well Deployment", "Field Levitation", "Gravitational Force Shielding",
+        "Gravity Beam Control", "Tactical Gravity Shifting", "Gravitational Crush", "Mass Field Absorption", "Atmospheric Gravity Control", "Gravity Bomb Deployment", "Anti-Mass Armor",
+        "Gravitational Energy Weaponry", "Gravity Compression", "Kinetic Energy Redirection", "Field Suppression", "Gravitational Field Detection", "Tactical Weight Manipulation", 
+        "Zero-G Combat", "Gravity Distortion Shield", "Mass Displacement", "Space-Time Distortion", "Repulsion Field"
+    ],
+    "Bio-Engineer": [
+        "Gene Editing", "Tissue Regeneration", "Bio-Augmentation", "Genetic Enhancement", "Biological Weapon Design", "Nanotech Bio Integration", "Immune System Hacking",
+        "Synthetic Biology Mastery", "Bio-Interface Design", "Adaptive Physiology", "Virus Engineering", "Neuro-Bio Link Creation", "Advanced Cloning Techniques", "Stem Cell Manipulation",
+        "Bio-Sensor Integration", "Toxin Resistance Enhancement", "Regenerative Nanites", "Bio-Chemical Knowledge", "Biological Computing", "Cognitive Gene Therapy", "Bio-Armor Synthesis",
+        "Combat Gene Engineering", "Bio-Electronic Integration", "Organ Replacement", "Synthetic Organism Creation"
+    ],
+    "Nano-Surgeon": [
+        "Nanobot Control", "Cellular Reconstruction", "Tissue Repair", "Nanite Immune Response", "Advanced Nano Programming", "Invasive Surgery with Nanites", "Nano-Drone Command",
+        "Neural Nano-Stimulation", "Combat Field Medicine", "Nanite Adaptation", "Nano-Targeting Precision", "Micro-Surgery Mastery", "Infection Elimination", "Nanite Bone Reconstruction",
+        "Neural Repair Protocols", "Nano-Tech Healing", "Cellular Regeneration", "Nanobot Combat Deployment", "Nano-Antidote Synthesis", "AI-Assisted Surgery", "Tissue Augmentation",
+        "Nano-Implant Design", "Bio-Nano Fusion", "Internal Diagnostics", "Regenerative Therapy"
+    ],
+    "Cyber Ronin": [
+        "Cyber Katana Mastery", "Augmented Reflexes", "Cybernetic Stealth", "Combat Augmentation", "Cyber Agility", "Neural Combat Programming", "Energy Blade Manipulation",
+        "Combat Cloaking", "Augmented Martial Arts", "Drone Countermeasures", "AI Target Prediction", "Cybernetic Armor Use", "Stealth Maneuvering", "Combat Enhancement Hacking",
+        "Energy Weapon Defense", "Precision Combat AI", "Enhanced Speed Protocols", "Combat Infiltration", "Exo-Suit Stealth", "Cybernetic Mobility Mastery", "Nanite Blade Edge",
+        "Combat Neural Reflexes", "Energy Defense Maneuvers", "Augmented Strength Combat", "Precision Cyber Combat"
+    ],
+    "Energy Manipulator": [
+        "Energy Field Manipulation", "Plasma Generation", "Force Field Deployment", "Electromagnetic Pulse Control", "Energy Weapon Mastery", "Thermal Energy Manipulation", "Kinetic Energy Absorption",
+        "Plasma Blade Control", "Energy Shielding", "Energy Conversion Mastery", "Quantum Energy Manipulation", "Electromagnetic Storm", "Energy Core Overcharge", "Solar Energy Absorption",
+        "Energy Discharge Control", "Energy Barrier Creation", "Thermal Dynamics Control", "Anti-Matter Energy Utilization", "Charged Particle Manipulation", "Power Field Mastery", "Photon Blast",
+        "Energy Wave Emission", "Plasma Blast Control", "Energy Amplification", "Magnetic Field Mastery"
+    ],
+    "Void Skimmer": [
+        "Dimensional Shift", "Void Navigation", "Space-Time Rift Control", "Void Energy Manipulation", "Dimensional Travel", "Anti-Gravity Control", "Void Cloaking",
+        "Spatial Awareness Enhancement", "Quantum Rift Generation", "Void Energy Shield", "Reality Phase Shifting", "Dimensional Breaching", "Space-Time Anchor Deployment", "Quantum Slipstreaming",
+        "Void Teleportation", "Dimensional Rift Mapping", "Void Energy Weaponry", "Quantum Warp Mastery", "Void Rift Stabilization", "Phase Shift Cloak", "Zero-Point Energy Control", 
+        "Anti-Matter Weaponry", "Reality Folding", "Dimensional Rift Combat", "Void Surge Control"
+    ],
+    "AI Whisperer": [
+        "AI Control Protocols", "Advanced AI Programming", "AI Sentience Design", "Neural Network Mastery", "Artificial Consciousness Creation", "AI Personality Programming", "Autonomous Weapon System Control",
+        "AI Communication", "Digital Mind Programming", "AI Subconscious Manipulation", "Machine Learning Optimization", "AI Behavior Algorithms", "Neural Net Adaptation", "AI Conflict Resolution",
+        "Advanced Cognitive AI Systems", "AI Empathy Programming", "AI Defensive Protocols", "Self-Aware AI Tuning", "Advanced Machine Learning Models", "Quantum AI Control", "AI Ethics Design",
+        "Neural Net Algorithm Mastery", "Multi-AI Synchronization", "AI Intelligence Augmentation", "Digital Sentience Command"
+    ],
+    "Psi-Warrior": [
+        "Telekinetic Force Mastery", "Mind Over Matter", "Telepathic Communication", "Psionic Shielding", "Mental Assault", "Psi-Blade Control", "Psychic Reflexes",
+        "Telekinetic Flight", "Mind Control Resistance", "Psi-Enhanced Strength", "Psychic Stealth", "Psionic Weaponry", "Mental Projection", "Energy Manipulation through Thought",
+        "Telekinetic Combat", "Mind Pulse Generation", "Psionic Barrier Deployment", "Empathic Healing", "Cognitive Suppression", "Mental Disruption", "Telepathic Overload", 
+        "Psi Field Generation", "Mental Shield Reinforcement", "Psychic Infiltration", "Mind Warp"
+    ],
+    "Gene Splicer": [
+        "Genetic Sequencing", "DNA Reconstruction", "Mutagenic Manipulation", "Gene Therapy Mastery", "Bio-Weapon Synthesis", "Hybrid Species Engineering", "Bio-Augmented Reflexes",
+        "Neuro-DNA Enhancement", "Genetic Code Rewriting", "Genetic Shielding", "Combat Genetic Enhancement", "Toxin Resistance Engineering", "Mutation Control", "Rapid Evolution Design",
+        "DNA Combat Mastery", "Genetic Stealth", "Bio-Toxin Synthesis", "Adaptive Gene Engineering", "Bio-Regeneration Acceleration", "Gene Manipulation Tactics", "Enhanced Strength Gene Splicing",
+        "Genetic Disease Immunity", "Hybrid Weaponry Design", "Organism Modification", "Synthetic Genome Programming"
+    ],
+    "Code Phantom": [
+        "Code Obfuscation", "Data Encryption Mastery", "Stealth Code Injection", "Digital Camouflage", "Firewall Circumvention", "Quantum Code Cracking", "Malware Creation",
+        "Data Signature Hiding", "AI Countermeasures", "Digital Invisibility", "Code Manipulation", "Zero-Trace Hacking", "Ghost Protocol Activation", "Remote Device Control",
+        "Signal Decryption", "Stealth Data Mining", "Quantum Firewall Breach", "Network Disappearance", "System Erasure", "Phantom Protocol Deployment", "Security Backdoor Creation",
+        "Digital Identity Masking", "Intrusion Detection Avoidance", "Black Box Penetration", "Subterranean Hacking"
+    ],
+    "Grid Enforcer": [
+        "Firewall Breaching", "Network Defense Mastery", "Grid Security Overhaul", "Digital Surveillance", "Intrusion Detection", "AI Defense Protocols", "Digital Takedown",
+        "Malware Neutralization", "Quantum Grid Management", "Cyber Threat Intelligence", "Network Stability Control", "Grid Vulnerability Scanning", "Encryption Key Management", "Digital Forensics",
+        "Grid Lockdown Protocols", "Security Breach Prevention", "Automated Defense Systems", "Quantum Intrusion Detection", "Network Intrusion Recovery", "System Integrity Restoration", "Threat Neutralization",
+        "Hostile AI Containment", "Digital Grid Fortification", "Real-Time Network Control", "Malware Eradication"
+    ],
+    "Weapon Specialist": [
+        "Energy Weapon Mastery", "Ballistics Expertise", "Weapon Calibration", "Heavy Firearms Handling", "Advanced Targeting Systems", "Kinetic Weapon Engineering", "Explosive Weaponry",
+        "Tactical Reloading", "Sniper Rifle Precision", "Energy Core Overclocking", "Plasma Weapon Control", "Railgun Expertise", "Heavy Artillery Operation", "Portable EMP Launcher",
+        "Laser Weapon Calibration", "Target Lock Systems", "Thermal Weaponry", "Shockwave Weaponry", "Stealth Weaponry", "Combat Projectile Mastery", "Gatling Gun Operation", 
+        "Quantum Energy Rounds", "Weapon Crafting", "Tactical Ammunition Supply", "Auto-Turret Operation"
+    ],
+    "Cyber Gladiator": [
+        "Cybernetic Weapon Mastery", "Combat Implants", "Enhanced Reflexes", "Augmented Strength", "Energy Shield Deployment", "Cyber Armor Use", "Cybernetic Endurance",
+        "Combat AI Synchronization", "Cybernetic Martial Arts", "Energy Weaponry", "Advanced Hand-to-Hand Combat", "Battlefield Tactics", "Combat Implant Repair", "Adaptive Armor Systems",
+        "Tactical Neural Enhancements", "Plasma Blade Proficiency", "Combat Programming", "Augmented Mobility", "Cybernetic Healing Systems", "EMP Resistance", "Combat Neural Interface",
+        "Bio-Mechanical Repair", "Cybernetic Durability", "Combat Sensory Enhancement", "Energy Weapon Calibration"
+    ],
+    "Stasis Operative": [
+        "Temporal Field Creation", "Time Freeze Manipulation", "Temporal Anomaly Detection", "Quantum Time Lock", "Chrono Combat Tactics", "Temporal Rift Navigation", "Time-Lock Weaponry",
+        "Chrono-Disruption Field", "Temporal Stealth", "Time Loop Creation", "Dimensional Time Shift", "Temporal Barrier Deployment", "Time Field Stabilization", "Quantum Stasis Field",
+        "Temporal Infiltration", "Combat Time Perception", "Chrono Energy Manipulation", "Time Warp Tactics", "Chrono Burst Weaponry", "Time-Lock Hacking", "Temporal Projection",
+        "Chrono Stabilization Mastery", "Time-Lock Armor", "Temporal Reflex Enhancement", "Stasis Weapon Calibration"
+    ],
+    "Quantum Enforcer": [
+        "Quantum Field Control", "Reality Stabilization", "Quantum Rift Detection", "Dimensional Policing", "Quantum Weapon Deployment", "Time-Space Monitoring", "Quantum Barrier Creation",
+        "Reality Enforcement Protocols", "Multi-Dimensional Awareness", "Quantum Combat Tactics", "Reality Disruption Control", "Quantum Hacking Defense", "Dimensional Rift Combat", "Quantum Target Locking",
+        "Time-Space Collapse Prevention", "Quantum Core Stabilization", "Dimensional Tracking", "Reality Breach Containment", "Quantum Cloaking Detection", "Anti-Phase Weaponry", "Time-Space Realignment",
+        "Quantum Tether Deployment", "Chrono Combat Maneuvering", "Phase Shift Countermeasures", "Dimensional Lockdown"
+    ],
+    "Tech Shaman": [
+        "Cyber Rituals", "Neural Enhancement Spells", "Machine Spirit Communication", "Tech Totem Creation", "Energy Field Harmonization", "Quantum Spellcasting", "Digital Healing Rituals",
+        "Data Stream Divination", "Augmented Tech Blessings", "AI Spirit Summoning", "Quantum Field Invocation", "Nanite Enchantment", "Cyber Ward Creation", "Augmentation Infusion",
+        "Tech Summoning Rituals", "Data Flow Alteration", "Circuit Augmentation", "Virtual Reality Projection", "Tech Entity Binding", "Machine Invocation", "Techno-Sorcery Mastery",
+        "Digital Hexing", "Cybernetic Shielding Spells", "Nanite Repair Rites", "Quantum Ward Deployment"
+    ],
+    "Cyber Police Officer": [
+        "Surveillance Network Mastery", "AI Crime Detection", "Grid Patrolling", "Cybercrime Investigation", "Intrusion Detection", "Digital Footprint Analysis", "Network Security",
+        "Firewall Bypassing", "Suspect Neural Scanning", "Cybernetic Restraint Systems", "Cybercrime Intelligence Gathering", "Digital Pursuit Tactics", "Grid Violation Response", "AI-Enhanced Interrogation",
+        "Hacker Takedown", "Digital Evidence Recovery", "Security Breach Containment", "Malware Detection", "Cybercrime Prevention", "Network Traffic Monitoring", "Suspect Profile Analysis",
+        "Intrusion Alarm Systems", "Surveillance AI Deployment", "Data Breach Investigation", "Suspect Identification Systems"
+    ],
+    "Corporate Agent": [
+        "Corporate Espionage", "Digital Asset Protection", "Hostile Takeover Tactics", "Cyber Economic Warfare", "Quantum Financial Systems", "Corporate Security Breach Countermeasures", "AI-Driven Market Analysis",
+        "Data Interception", "Corporate Influence Operations", "Hostile AI Manipulation", "Executive Asset Protection", "Quantum Trading Manipulation", "Corporate Surveillance Tactics", "Security Audit Counterintelligence",
+        "Corporate Data Encryption", "Digital Asset Recovery", "AI-Powered Negotiation Tactics", "Market Disruption", "Corporate Intelligence Gathering", "Competitive AI Sabotage", "Financial Data Hacking",
+        "Quantum Currency Control", "Asset Tracing", "High-Level Executive Manipulation", "Corporate Blackmail"
+    ],
+    "Street Samurai": [
+        "Augmented Blade Mastery", "Neural Combat Reflexes", "Cybernetic Agility", "Martial Arts Augmentation", "Energy Katana Mastery", "Combat Stealth", "Cyber Armor Mastery",
+        "Augmented Speed Enhancement", "Combat Implant Optimization", "Stealth Movement Enhancement", "Tactical Blade Maneuvers", "Combat Reflex Programming", "Cybernetic Defense Mastery", "Augmented Strength Boost",
+        "AI Combat Prediction", "Neural Infiltration Tactics", "Energy Blade Calibration", "Combat Cloaking Devices", "Cyber Limb Precision", "Neural Combat Optimization", "Plasma Blade Proficiency",
+        "Neural Reflex Augmentation", "Combat Awareness Programming", "Cyber Martial Arts", "Cybernetically Enhanced Perception"
+    ],
+    "Mind Runner": [
+        "Mind-Machine Interface Mastery", "Cognitive Data Transfer", "Thought Encryption", "Neural Command Hacking", "Brainwave Scanning", "Consciousness Hacking", "Mind Control Resistance",
+        "Mental Firewall Deployment", "Neural Hacking Defense", "Cognitive Synchronization", "Memory Hacking", "Digital Thought Projection", "Mental Network Navigation", "Mind-Cloud Synchronization",
+        "Subconscious Data Retrieval", "Mental Energy Shielding", "Consciousness Transfer", "Neural Network Communication", "Memory Erasure Protocols", "Digital Dream Manipulation", "Subconscious Hacking",
+        "Psychic Infiltration", "Neural Feedback Loop Creation", "Cognitive Combat Reflexes", "Mindwave Manipulation"
+    ],
+    "Quantum Mechanic": [
+        "Quantum Entanglement Manipulation", "Reality Repair Protocols", "Dimensional Stabilization", "Quantum Rift Sealing", "Space-Time Fabrication", "Quantum Device Calibration", "Quantum Power Systems",
+        "Multi-Dimensional Engineering", "Quantum Circuit Repair", "Temporal Anomaly Detection", "Quantum Computing Mastery", "Phase Shift Engineering", "Dimensional Tuning", "Quantum Drive Engineering",
+        "Anti-Matter Containment", "Reality Warp Prevention", "Quantum Processor Synchronization", "Phase Modulation", "Quantum Fusion Reactor Maintenance", "Temporal Field Calibration", "Quantum Energy Conversion",
+        "Dimensional Flux Stabilization", "Phase Shift Weapon Calibration", "Quantum Rift Mapping", "Quantum Core Repair"
+    ],
+    "Nanotech Assassin": [
+        "Nanobot Infiltration", "Molecular Deconstruction", "Nano-Stealth Deployment", "Nanite Poisoning", "Nano-Warfare Tactics", "Neural Nanite Hacking", "Nanobot Disguise",
+        "Micro-Tech Espionage", "Nanite Weaponry", "Bio-Nanite Targeting", "Nanobot Assassination Protocols", "Nano-Armor Penetration", "Molecular Disruption", "Nanite Cloaking",
+        "Nanobot Combat Deployment", "Bio-Toxin Nanites", "Micro-Drones for Surveillance", "Nano Explosive Charges", "Nanobot Precision Attack", "Cognitive Nanite Implants", "Nanotech Virus Deployment",
+        "Stealth Nanite Sabotage", "Nanite Healing Interruption", "Biological System Overload", "Nano-Wave Disruption"
+    ],
+    "Astro-Navigator": [
+        "Star Chart Navigation", "Quantum Drive Operation", "Astro-Coordinate Mapping", "Wormhole Navigation", "Gravitational Field Mapping", "Spatial Awareness Enhancement", "Quantum Rift Detection",
+        "Exoplanet Surveying", "Astro-Distortion Calibration", "Dimensional Warp Navigation", "Celestial Event Prediction", "Quantum Jump Calculation", "Space-Time Continuum Monitoring", "Asteroid Field Evasion",
+        "Black Hole Trajectory Calculation", "Starship Navigation Systems", "Wormhole Stabilization", "Gravity Well Avoidance", "Quantum Jump Execution", "Astro-Navigation AI Integration", "Interstellar Mapping",
+        "Quantum Energy Detection", "Space-Time Travel Mastery", "Supernova Prediction", "Solar Flare Detection"
+    ],
+    "Reality Bender": [
+        "Reality Warp Manipulation", "Dimensional Distortion", "Matter Reshaping", "Temporal Shift Control", "Quantum Probability Control", "Reality Anchor Creation", "Reality Breach Detection",
+        "Phase Shift Manipulation", "Time-Space Distortion", "Energy Matrix Alteration", "Quantum Realignment", "Phase Reality Stabilization", "Matter-Phase Conversion", "Dimensional Warp Projection",
+        "Quantum Flux Management", "Alternate Timeline Creation", "Matter Displacement", "Dimensional Folding", "Reality Shielding", "Quantum Paradox Control", "Energy to Matter Conversion",
+        "Reality Tear Prevention", "Quantum Fabric Reinforcement", "Phase Shift Awareness", "Dimensional Space Expansion"
+    ],
+    "Void Harvester": [
+        "Void Energy Extraction", "Dark Matter Manipulation", "Void Rift Control", "Gravitational Well Creation", "Dimensional Tear Harvesting", "Anti-Matter Containment", "Quantum Void Mapping",
+        "Void Rift Navigation", "Dark Energy Weaponry", "Void Resonance Tuning", "Quantum Vacuum Energy Harnessing", "Matter Extraction from Void", "Dimensional Collapse Prevention", "Void Entity Communication",
+        "Quantum Rift Harvesting", "Gravitational Collapse Control", "Void Energy Shielding", "Energy Drain from Void", "Void Rift Sealing", "Quantum Energy Conversion", "Void Surge Harnessing",
+        "Quantum Void Resonance", "Dimensional Void Engineering", "Void Anomaly Detection", "Black Hole Energy Harvesting"
+    ],
+    "Cryo-Tactician": [
+        "Cryogenic Field Generation", "Thermal Energy Manipulation", "Cryo Weapon Mastery", "Cryo Barrier Deployment", "Cryo Combat Tactics", "Cold Resistance Enhancement", "Liquid Nitrogen Deployment",
+        "Cryo-Damage Amplification", "Thermal Energy Drain", "Ice Shield Creation", "Cryogenic Breach Tactics", "Cryo-Freezing Explosives", "Sub-Zero Temperature Manipulation", "Cryo-Armor Engineering",
+        "Frozen Terrain Creation", "Cryo Energy Conduction", "Combat Cryostasis", "Cryo Field Expansion", "Cryogenic Disruption", "Frost Blade Mastery", "Temperature Manipulation Tactics", "Cryo-Grenade Deployment",
+        "Cryo-Field Stabilization", "Combat Frostbite Generation", "Thermal Energy Neutralization"
+    ],
+    "Cyber-Mercenary": [
+        "Combat Drone Command", "Energy Weaponry", "Cybernetic Strength Enhancement", "Stealth Field Operation", "Combat AI Synchronization", "Augmented Reflexes", "Tactical Deployment Systems",
+        "Energy Shield Mastery", "Cyber Armor Usage", "Targeting System Hacking", "Augmented Combat Tactics", "Tactical EMP Deployment", "Plasma Blade Mastery", "Combat Cloaking",
+        "Exo-Suit Mastery", "Energy Surge Weaponry", "Kinetic Armor Systems", "Advanced Hand-to-Hand Combat", "Cyber Limb Precision", "Neural Combat Programming", "Combat Drone Deployment",
+        "Augmented Mobility", "Energy Surge Control", "Cybernetic Field Maintenance", "Combat Neural Interface"
+    ],
+    "Virtual Reality Architect": [
+        "VR World Building", "Quantum Simulation Creation", "Reality Rendering Control", "AI-Driven Simulation Tuning", "Neural Interface Design", "Sensory Augmentation", "Virtual Landscape Manipulation",
+        "VR Combat Arena Creation", "Mind Mapping Interface", "Sensory Feedback Optimization", "Quantum VR Network Management", "Neural Sync Calibration", "Advanced VR Physics", "AI-Supported World Creation",
+        "VR Weapon Design", "Augmented Reality Fusion", "Reality Simulation Stabilization", "Neural Interface Synchronization", "VR Reality Tuning", "Multi-Sensory Immersion", "VR Security System Design",
+        "Simulation Continuum Stabilization", "Advanced Avatar Creation", "Augmented Reality Holograms", "Neural Immersive Interaction"
+    ]
+};
+
 const titles = {
-"Knight": ["Champion of Light", "Guardian of the Realm", "Master of Arms", "Sword Guardian", "Defender of the Weak", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Mage": ["Master of Elements", "Arcane Scholar", "Stormcaller", "Elemental Weaver", "Mystic of the Arcane", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Rogue": ["Adept of Shadows", "Silent Blade", "Shadow Stalker", "Master Thief", "Cloaked Avenger", "Anomaly", "Noob"],
-"Archer": ["Eagle Eye", "Sharpshooter", "Bowmaster", "Hunter of the Wild", "Silent Marksman", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Paladin": ["Divine Protector", "Lightbringer", "Holy Crusader", "Guardian of the Faith", "Shield of Light", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Blacksmith": ["Master Blacksmith", "Forge Master", "Hammer of the Forge", "Steel Crafter", "Anvil Guardian", "Anomaly", "Noob"],
-"Healer": ["Grand Healer", "Life Restorer", "Saint of Light", "Divine Medic", "Reviver of Souls", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Assassin": ["Master Assassin", "Death's Whisper", "Silent Executioner", "Shadow's Edge", "Night Hunter", "Anomaly", "Noob"],
-"Saint": ["Blessed Savior", "Eternal Light", "Divine Speaker", "Holy Guardian", "Radiant Saint", "Anomaly", "Noob"],
-"Tamer": ["Beast Master", "Wild Whisperer", "Rider of Beasts", "Nature's Bond", "Animal Sovereign", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Necromancer": ["Necromancer King", "Master of the Dead", "Soul Weaver", "Lord of Shadows", "Gravecaller", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Unknown": ["Enigma", "Fate Twister", "Seeker of the Unknown", "Wielder of Chaos", "Shifter of Realms", "Anomaly", "Noob"],
-"Death Knight": ["Reaper of Souls", "Doombringer", "Knight of Death", "Grim Commander", "Bearer of Darkness", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Farmer": ["Harvest Lord", "Master of Fields", "Crop Sovereign", "Tiller of the Earth", "Lord of the Land", "Anomaly", "Noob"],
-"Demon King": ["Emperor of Flames", "Lord of Chaos", "Dark Overlord", "Hell's Ruler", "Master of Despair", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Swordman": ["Master Swordsman", "Blademaster", "Sword Sage", "Steel Tempest", "Blade Lord", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Magic Swordman": ["Arcane Blademaster", "Mystic Swordsman", "Elemental Bladesman", "Spellblade", "Mana Wielder", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Martial Artist": ["Master of Fists", "Chi Guardian", "Iron Fist", "Dragon Warrior", "Martial Master", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Trader": ["Master Merchant", "Goldfinger", "Wealth Accumulator", "Lord of Trade", "Market King", "Anomaly", "Noob"],
-"Archmage": ["Archmage Supreme", "Master of Magic", "Eternal Scholar", "Cosmic Magus", "Arcane Sovereign", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Slave": ["Survivor", "Endurer of Chains", "Liberated Soul", "Unseen Warrior", "Silent Strength", "Anomaly", "Noob"],
-"Chef": ["Ultimate Chef", "Gourmet King", "Master of Flavors", "Grand Cook", "Sovereign of Taste", "Anomaly", "Noob"],
-"Rifleman": ["Deadshot", "Precision Shooter", "Pistol Specialist", "Rifle Expert", "Marine for Life", "Black Baron", "Anomaly", "Noob", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Sapper": ["Bomb Defuser", "Field Repair Specialist", "Handyman", "Master of Engineering", "Nutcracker", "Anomaly", "Noob", "Codebreaker", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Berserker": ["Rage of the Battlefield", "Warrior of Fury", "Bloodthirsty Destroyer", "Wielder of Wrath", "Fury Unleashed", "Madman of Battle", "Bringer of Carnage", "The Frenzied", "Wrathbringer", "Destroyer of Foes", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Bard": ["Songweaver", "Master of Melody", "Minstrel of Legends", "Keeper of Tales", "Harmonious Singer", "Traveler's Song", "Poet of Ages", "Muse of the Realm", "Melody Maker", "Voice of the Ages", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Pirate": ["Captain of the Seas", "Sea Rover", "Lord of the Ocean", "Buccaneer King", "Ruler of the Waves", "Master of the High Seas", "Ocean Raider", "Corsair Champion", "Scourge of the Waters", "Seafaring Marauder"],
-"Priest": ["Blessed Cleric", "Voice of the Divine", "Keeper of Faith", "Holy Shepherd", "Bearer of Grace", "Soul Keeper", "Divine Intercessor", "Servant of the Light", "Harbinger of the Sacred", "Guardian of the Faithful"],
-"Alchemist": ["Master of Transmutation", "Potion Master", "Crafter of Elixirs", "Herbalist of the Realms", "Arcane Chemist", "Wielder of Elements", "Mixer of Potions", "Catalyst of Change", "Enchanter of Potions", "Alchemical Sage"],
-"Ranger": ["Warden of the Wilds", "Guardian of Nature", "Tracker of Beasts", "Forest Wanderer", "Nature’s Protector", "Hunter of the Wild", "Beast Seeker", "Woodsman of the Realm", "Pathfinder", "Wilds Keeper", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Samurai": ["Warrior of Honor", "Master of the Katana", "Bushido Blade", "Sword of Honor", "Lord of the Katana", "Disciple of Bushido", "Master of the Sword", "Ronin of Valor", "Keeper of the Code", "Blade of Honor", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Monk": ["Disciple of Peace", "Master of Tranquility", "Fist of the Ancients", "Silent Guardian", "Wanderer of Virtue", "Keeper of Balance", "Mystic Warrior", "Guardian of Serenity", "Devout of the Spirit", "Master of Harmony"],
-"Vampire Lord": ["Dark Blood King", "Lord of Night", "Sovereign of Shadows", "Ruler of the Undead", "Master of Vampires", "Night Stalker", "Bloodthirsty Monarch", "Shadow Emperor", "Darkblood Ruler", "Wraith of the Night", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Summoner": ["Caller of Beasts", "Master of Summons", "Wielder of Creatures", "Invoker of Allies", "Summoner of Realms", "Creature Caller", "Beast Conjuror", "Spirit Summoner", "Master of Conjurations", "Herald of Creatures", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Witch Hunter": ["Hunter of Witches", "Bane of Sorcery", "Protector of Innocents", "Cleansing Flame", "Purger of Darkness", "Slayer of Magic", "Witchbane", "Champion of Light", "Shadow Purger", "Light's Retribution", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Dark Knight": ["Knight of Shadows", "Bearer of Darkness", "Ruler of Night", "Wielder of the Void", "Shadowbringer", "Champion of Despair", "Harbinger of Night", "Darkblade", "Knight of the Abyss", "Warlord of the Void", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Scout": ["Pathfinder of the Wild", "Master Tracker", "Seeker of Secrets", "Ranger of the Unknown", "Warden of the Wilds", "Lightfoot", "Silent Watcher", "Tracker of Beasts", "Explorer of Realms", "Wilderness Wanderer", "Great War Participant - Winning Side", "Great War Participant - Losing Side"],
-"Runesmith": ["Master of Runes", "Carver of Magic", "Wielder of Ancient Symbols", "Runewright", "Smith of Power", "Crafter of Enchantment", "Runescribe", "Bearer of Magical Symbols", "Runeforge Master", "Lord of the Runes"],
-"Champion": ["Hero of the People", "Guardian of the Realm", "Sword of Victory", "Master of the Arena", "Warlord of Glory", "Victor of the Colosseum", "Lord of Triumph", "Conqueror of Realms", "Battle Champion", "Champion of Legends", "Great War Participant - Winning Side"]
+    "Cybernetician": [
+        "Master of Circuits", "Cyber Architect", "Data Sculptor", "Code Crafter", "Circuit Sage", 
+        "Neural Engineer", "System Synthesizer", "Machine Binder", "Digital Artisan", "AI Conductor", 
+        "Robotic Maestro", "Code Breaker", "Circuit Weaver", "Quantum Programmer", "Cyber Mechanic"
+    ],
+    
+    "Synth-Jacker": [
+        "Synth Raider", "Mind Pirate", "Soul Hijacker", "Code Marauder", "Data Seizer", 
+        "Tech Bandit", "Synthetic Saboteur", "Neuro Thief", "Memory Plunderer", "Mind Snatcher", 
+        "Neural Infiltrator", "Body Hijacker", "Synth Marauder", "Virtual Bandit", "Digital Raider"
+    ],
+    
+    "Techno-Nomad": [
+        "Wanderer of the Grid", "Circuit Vagabond", "Tech Traveler", "Cyber Pilgrim", "Digital Drifter", 
+        "Data Wanderer", "Code Exile", "Neon Wayfarer", "Grid Outlander", "Quantum Nomad", 
+        "Hyperlaner", "Net Strider", "Data Gypsy", "Rogue Coder", "Cosmic Wanderer"
+    ],
+    
+    "Data Runner": [
+        "Packet Sprinter", "Bit Courier", "Cipher Runner", "Quantum Messenger", "Code Courier", 
+        "Neural Sprinter", "Packet Smuggler", "Info Whisperer", "Cyber Courier", "Digital Runner", 
+        "Grid Racer", "Cipher Sprinter", "Quantum Sprinter", "Data Harrier", "Info Drifter"
+    ],
+    
+    "Quantum Hacker": [
+        "Reality Cracker", "Code Warper", "Dimensional Breaker", "Data Anomaly", "Quantum Cipher", 
+        "Hyper-Slicer", "Entanglement Manipulator", "Schrodinger's Coder", "Virtual Breaker", "Bit Entangler", 
+        "Subspace Hacker", "Quantum Disruptor", "Dimensional Codebreaker", "Time-Twister", "Reality Slicer"
+    ],
+    
+    "Neuro-Splicer": [
+        "Mind Weaver", "Thought Surgeon", "Synapse Splicer", "Neural Sculptor", "Cognitive Crafter", 
+        "Neuro Hacker", "Mind Binder", "Memory Engineer", "Dream Shaper", "Neuron Twister", 
+        "Cerebral Crafter", "Mind-Meld Operative", "Neuro Artisan", "Synaptic Engineer", "Thought Hacker"
+    ],
+    
+    "Drone Pilot": [
+        "Sky Navigator", "Remote Operator", "Rogue Pilot", "Drone Commander", "Skybound Agent", 
+        "Wingmaster", "Cyber Swarm Leader", "Mech-Swarm Pilot", "Void Flyer", "Drone Squadron Leader", 
+        "Autonomous Aviator", "Mech-Fleet Commander", "Sky-Pathfinder", "Swarm Master", "Digital Pilot"
+    ],
+    
+    "Exo-Soldier": [
+        "Mech Warrior", "Armored Veteran", "Exo Enforcer", "Battleframe Operator", "Steel Vanguard", 
+        "Cyber Knight", "Heavy Armor Specialist", "Exo Operative", "Steel Battalion", "Titan Walker", 
+        "Exo Sentinel", "Cyber Juggernaut", "Warframe Operator", "Mech Mercenary", "Exo Legionnaire"
+    ],
+    
+    "Gravity Shifter": [
+        "Void Manipulator", "Graviton Shaper", "Force Bender", "Graviton Architect", "Quantum Grav Handler", 
+        "Space Warper", "Singularity Weaver", "Mass Disruptor", "Void Shaper", "Gravity Sculptor", 
+        "Force Master", "Dimensional Gravity Shifter", "Void Bender", "Black Hole Tamer", "Gravity Twister"
+    ],
+    
+    "Bio-Engineer": [
+        "Genetic Shaper", "Life Architect", "DNA Weaver", "Biotech Innovator", "Genome Crafter", 
+        "Cell Sculptor", "Biotic Engineer", "Neon Biologist", "Life Synthesizer", "Gene Designer", 
+        "Bio Hacker", "Bio Architect", "Cell Crafter", "Synthetic Biologist", "Evolution Designer"
+    ],
+    
+    "Nano-Surgeon": [
+        "Nano Healer", "Molecular Doctor", "Atomic Surgeon", "Nano Architect", "Cellular Weaver", 
+        "Microscopic Medic", "Nano-Cell Sculptor", "Quantum Healer", "Micro Surgeon", "Nano Crafter", 
+        "Nanite Specialist", "Bio-Nano Healer", "Nano Medic", "Nano-Therapist", "Molecular Sculptor"
+    ],
+    
+    "Cyber Ronin": [
+        "Digital Wanderer", "Code Ronin", "Data Samurai", "Cyber Exile", "Neon Blade", 
+        "Cyber Warrior", "Rogue Hacker", "Ronin of the Grid", "Digital Mercenary", "Circuit Nomad", 
+        "Blade of the Grid", "Cyber Sword", "Grid Samurai", "Cyber Outlaw", "Shadow Blade"
+        ],
+        
+    "Energy Manipulator": [
+        "Force Shaper", "Plasma Crafter", "Light Weaver", "Energy Sculptor", "Quantum Energy Master", 
+        "Plasma Shaper", "Energy Conductor", "Power Architect", "Electro Crafter", "Volt Sculptor", 
+        "Neon Force Bender", "Lightning Crafter", "Quantum Charger", "Plasma Weaver", "Volt Bender"
+        ],
+        
+    "Void Skimmer": [
+        "Edge of Reality", "Void Navigator", "Space Diver", "Dimensional Voyager", "Quantum Void Pilot", 
+        "Void Whisperer", "Dimensional Traveler", "Voidcraft Operator", "Event Horizon Skimmer", "Voidwalker", 
+        "Stellar Skipper", "Subspace Drifter", "Void Surfer", "Quantum Voyager", "Graviton Diver"
+        ],
+        
+    "AI Whisperer": [
+        "Sentient Shaper", "Code Oracle", "AI Architect", "Cognizant Binder", "Machine Speaker", 
+        "Digital Sage", "Synthetic Sage", "AI Engineer", "Code Whisperer", "Machine Interpreter", 
+        "AI Keeper", "Algorithm Weaver", "Sentient Designer", "Code Mediator", "Cyber Speaker"
+    ],
+    "Psi-Warrior": [
+        "Mindblade", "Psychic Enforcer", "Mental Vanguard", "Telepathic Knight", "Psionic Crusader", 
+        "Thoughtblade", "Psi-Warden", "Mindforce Adept", "Cerebral Sentinel", "Mental Combatant", 
+        "Telekinetic Warlord", "Psionic Shadow", "Thought Enforcer", "Psychic Guardian", "Psi-Samurai"
+    ],
+    
+    "Gene Splicer": [
+        "Genetic Alchemist", "DNA Crafter", "Genome Weaver", "Biomorph Artisan", "Evolution Designer", 
+        "Gene Sculptor", "Genetic Architect", "Bio-Slicer", "Life Code Manipulator", "Biotech Artisan", 
+        "Mutation Crafter", "Bio-Crafter", "Genome Innovator", "Gene Binder", "Biomorph Shaper"
+    ],
+    
+    "Code Phantom": [
+        "Digital Ghost", "Cyber Specter", "Shadow Coder", "Neon Phantom", "Code Wraith", 
+        "Invisible Hacker", "Binary Shade", "Quantum Ghost", "Cipher Shade", "Virtual Apparition", 
+        "Spectral Coder", "Data Shade", "Neural Wraith", "Grid Phantom", "Quantum Specter"
+    ],
+    
+    "Grid Enforcer": [
+        "Network Guardian", "Cyber Sentinel", "Protocol Enforcer", "System Enforcer", "Code Sheriff", 
+        "Grid Sentinel", "Neon Watcher", "Firewall Warden", "Digital Lawkeeper", "Network Marshal", 
+        "Cyber Vanguard", "Grid Arbiter", "Net Enforcer", "Digital Lawbringer", "Protocol Defender"
+    ],
+    
+    "Weapon Specialist": [
+        "Armory Master", "Firepower Expert", "Tech Blademaster", "Munitions Architect", "Arsenal Crafter", 
+        "Firepower Savant", "Cyber Armorer", "Blade Engineer", "Tactical Weaponist", "Neon Armamentist", 
+        "Heavy Weapon Artist", "Ballistics Expert", "Weapon Tactician", "Plasma Gunner", "Arsenal Engineer"
+    ],
+    
+    "Cyber Gladiator": [
+        "Arena Brawler", "Steel Duelist", "Neon Fighter", "Battleframe Gladiator", "Cyber Pit Fighter", 
+        "Digital Warrior", "Steel Arena Champion", "Neon Bruiser", "Circuit Gladiator", "Titan Brawler", 
+        "Cyber Arena Champion", "Digital Combatant", "Neon Duelist", "Steel Battler", "Cyber Pit Champion"
+    ],
+    
+    "Stasis Operative": [
+        "Timekeeper", "Temporal Enforcer", "Chrono Operator", "Quantum Sleeper", "Stasis Guardian", 
+        "Time Warden", "Frozen Sentinel", "Temporal Sentinel", "Stasis Soldier", "Chrono Agent", 
+        "Stasis Keeper", "Temporal Strategist", "Chrono Guardian", "Frozen Enforcer", "Timebound Soldier"
+    ],
+    
+    "Quantum Enforcer": [
+        "Reality Guardian", "Quantum Regulator", "Dimensional Enforcer", "Time-Warp Officer", "Chrono Keeper", 
+        "Space-Time Arbiter", "Quantum Sentinel", "Reality Keeper", "Dimensional Warden", "Quantum Overseer", 
+        "Chrono Enforcer", "Dimensional Guardian", "Time-Bender Enforcer", "Reality Shifter", "Quantum Protector"
+    ],
+    
+    "Tech Shaman": [
+        "Circuit Mystic", "Neon Shaman", "Digital Seer", "Grid Mystic", "Tech Oracle", 
+        "Machine Prophet", "Code Shaman", "Cyber Spirit", "Quantum Mystic", "AI Sage", 
+        "Digital Guide", "Data Shaman", "Machine Whisperer", "Cyber Seer", "Virtual Mystic"
+    ],
+    
+    "Cyber Police Officer": [
+        "Cyber Beat Cop", "Grid Officer", "Digital Enforcer", "Tech Patrolman", "Neon Lawkeeper", 
+        "Cyber Detective", "Network Enforcer", "Digital Constable", "Neural Patrol Officer", "Cyber Marshal", 
+        "Circuit Enforcer", "Data Patrol Officer", "Grid Inspector", "Protocol Officer", "Cyber Lawman"
+    ],
+    
+    "Corporate Agent": [
+        "Corporate Operator", "Neon Agent", "Cyber Diplomat", "Corporate Fixer", "Tech Operative", 
+        "Corporate Spy", "Neural Agent", "Grid Operative", "Digital Fixer", "Tech Negotiator", 
+        "Corporate Strategist", "Corporate Executive", "Corporate Handler", "Neon Diplomat", "Data Broker"
+    ],
+    
+    "Street Samurai": [
+        "Blade Runner", "Neon Ronin", "Cyber Swordmaster", "Street Ronin", "Cyber Warrior", 
+        "Blade Dancer", "Street Ronin", "Tech Katana Master", "Neon Swordsman", "Urban Samurai", 
+        "Steel Blade", "Cyber Katana Wielder", "Street Blademaster", "Neon Warrior", "Urban Ronin"
+    ],
+    
+    "Mind Runner": [
+        "Memory Seeker", "Neural Navigator", "Thought Harvester", "Cognitive Runner", "Neon Dreamcatcher", 
+        "Neuro Runner", "Mind Sprinter", "Mental Strider", "Thought Racer", "Memory Diver", 
+        "Neural Pathfinder", "Dream Weaver", "Cognition Runner", "Neural Seeker", "Memory Runner"
+    ],
+    
+    "Quantum Mechanic": [
+        "Reality Engineer", "Dimensional Mechanic", "Space-Time Fixer", "Quantum Craftsman", "Dimensional Engineer", 
+        "Chrono Mechanic", "Time-Warp Technician", "Quantum Tinkerer", "Space-Time Artisan", "Quantum Engineer", 
+        "Dimensional Technician", "Temporal Fixer", "Reality Craftsman", "Quantum Technician", "Chrono Engineer"
+    ],
+    
+    "Nanotech Assassin": [
+        "Nano Blade", "Micro Killer", "Molecular Executioner", "Nano Ghost", "Neural Slicer", 
+        "Nano Saboteur", "Atom Assassin", "Molecular Slayer", "Quantum Killer", "Nano Operative", 
+        "Micro Hunter", "Nanite Assassin", "Nano Reaper", "Molecular Ghost", "Nano Predator"
+    ],
+    
+    "Astro-Navigator": [
+        "Starship Pathfinder", "Stellar Navigator", "Void Pilot", "Quantum Voyager", "Astro Scout", 
+        "Starship Pilot", "Void Wayfinder", "Stellar Guide", "Quantum Pilot", "Voidcraft Navigator", 
+        "Spacefarer", "Starbound Navigator", "Astro Pilot", "Galactic Navigator", "Void Scout"
+    ],
+    
+    "Reality Bender": [
+        "Dimension Shifter", "Space-Time Bender", "Quantum Reality Shaper", "Chrono Crafter", "Reality Twister", 
+        "Dimensional Weaver", "Quantum Shaper", "Reality Architect", "Space-Time Sculptor", "Dimensional Warper", 
+        "Quantum Weaver", "Chrono Shifter", "Reality Warper", "Time-Twister", "Quantum Architect"
+    ],
+    
+    "Void Harvester": [
+        "Stellar Reaper", "Quantum Extractor", "Void Collector", "Event Horizon Harvester", "Black Hole Tamer", 
+        "Cosmic Harvester", "Neon Reaper", "Space Gatherer", "Quantum Collector", "Stellar Extractor", 
+        "Void Gatherer", "Cosmic Collector", "Space Reaper", "Neon Harvester", "Void Extractor"
+    ],
+    
+    "Cryo-Tactician": [
+        "Frozen Strategist", "Cold-Warrior", "Cryo Commander", "Ice Mastermind", "Frost Tactician", 
+        "Cryo Strategist", "Glacier Commander", "Cold Vanguard", "Frozen Planner", "Cryo Operative", 
+        "Glacial Strategist", "Frost Commander", "Cryo Planner", "Chill Vanguard", "Frozen Tactician"
+    ],
+    
+    "Cyber-Mercenary": [
+        "Tech Merc", "Digital Gun-for-Hire", "Neon Mercenary", "Cyber Gunman", "Code Soldier", 
+        "Circuit Merc", "Digital Enforcer", "Grid Mercenary", "Neural Gun-for-Hire", "Cyber Freelancer", 
+        "Tech Contractor", "Cyber Hired Gun", "Grid Freelancer", "Digital Bounty Hunter", "Neon Freelancer"
+    ],
+    
+    "Virtual Reality Architect": [
+        "Simulation Builder", "VR Designer", "Reality Sculptor", "Dream Architect", "Virtual World Crafter", 
+        "Neon Reality Builder", "VR Shaper", "Digital Dimension Architect", "Neural Designer", "Virtual Sculptor", 
+        "Dream Engineer", "Sim Crafter", "Neon VR Architect", "Virtual Crafter", "Simulation Engineer"
+    ],
+    "Cybernetician": [
+        "Master of Circuits", "Cyber Architect", "Data Sculptor", "Code Crafter", "Circuit Sage", 
+        "Neural Engineer", "System Synthesizer", "Machine Binder", "Digital Artisan", "AI Conductor", 
+        "Robotic Maestro", "Code Breaker", "Circuit Weaver", "Quantum Programmer", "Cyber Mechanic"
+    ],
+    
+    "Synth-Jacker": [
+        "Synth Raider", "Mind Pirate", "Soul Hijacker", "Code Marauder", "Data Seizer", 
+        "Tech Bandit", "Synthetic Saboteur", "Neuro Thief", "Memory Plunderer", "Mind Snatcher", 
+        "Neural Infiltrator", "Body Hijacker", "Synth Marauder", "Virtual Bandit", "Digital Raider"
+    ],
+    
+    "Techno-Nomad": [
+        "Wanderer of the Grid", "Circuit Vagabond", "Tech Traveler", "Cyber Pilgrim", "Digital Drifter", 
+        "Data Wanderer", "Code Exile", "Neon Wayfarer", "Grid Outlander", "Quantum Nomad", 
+        "Hyperlaner", "Net Strider", "Data Gypsy", "Rogue Coder", "Cosmic Wanderer"
+    ],
+    
+    "Data Runner": [
+        "Packet Sprinter", "Bit Courier", "Cipher Runner", "Quantum Messenger", "Code Courier", 
+        "Neural Sprinter", "Packet Smuggler", "Info Whisperer", "Cyber Courier", "Digital Runner", 
+        "Grid Racer", "Cipher Sprinter", "Quantum Sprinter", "Data Harrier", "Info Drifter"
+    ],
+    
+    "Quantum Hacker": [
+        "Reality Cracker", "Code Warper", "Dimensional Breaker", "Data Anomaly", "Quantum Cipher", 
+        "Hyper-Slicer", "Entanglement Manipulator", "Schrodinger's Coder", "Virtual Breaker", "Bit Entangler", 
+        "Subspace Hacker", "Quantum Disruptor", "Dimensional Codebreaker", "Time-Twister", "Reality Slicer"
+    ],
+    
+    "Neuro-Splicer": [
+        "Mind Weaver", "Thought Surgeon", "Synapse Splicer", "Neural Sculptor", "Cognitive Crafter", 
+        "Neuro Hacker", "Mind Binder", "Memory Engineer", "Dream Shaper", "Neuron Twister", 
+        "Cerebral Crafter", "Mind-Meld Operative", "Neuro Artisan", "Synaptic Engineer", "Thought Hacker"
+    ],
+    
+    "Drone Pilot": [
+        "Sky Navigator", "Remote Operator", "Rogue Pilot", "Drone Commander", "Skybound Agent", 
+        "Wingmaster", "Cyber Swarm Leader", "Mech-Swarm Pilot", "Void Flyer", "Drone Squadron Leader", 
+        "Autonomous Aviator", "Mech-Fleet Commander", "Sky-Pathfinder", "Swarm Master", "Digital Pilot"
+    ],
+    
+    "Exo-Soldier": [
+        "Mech Warrior", "Armored Veteran", "Exo Enforcer", "Battleframe Operator", "Steel Vanguard", 
+        "Cyber Knight", "Heavy Armor Specialist", "Exo Operative", "Steel Battalion", "Titan Walker", 
+        "Exo Sentinel", "Cyber Juggernaut", "Warframe Operator", "Mech Mercenary", "Exo Legionnaire"
+    ],
+    
+    "Gravity Shifter": [
+        "Void Manipulator", "Graviton Shaper", "Force Bender", "Graviton Architect", "Quantum Grav Handler", 
+        "Space Warper", "Singularity Weaver", "Mass Disruptor", "Void Shaper", "Gravity Sculptor", 
+        "Force Master", "Dimensional Gravity Shifter", "Void Bender", "Black Hole Tamer", "Gravity Twister"
+    ],
+    
+    "Bio-Engineer": [
+        "Genetic Shaper", "Life Architect", "DNA Weaver", "Biotech Innovator", "Genome Crafter", 
+        "Cell Sculptor", "Biotic Engineer", "Neon Biologist", "Life Synthesizer", "Gene Designer", 
+        "Bio Hacker", "Bio Architect", "Cell Crafter", "Synthetic Biologist", "Evolution Designer"
+    ],
+    
+    "Nano-Surgeon": [
+        "Nano Healer", "Molecular Doctor", "Atomic Surgeon", "Nano Architect", "Cellular Weaver", 
+        "Microscopic Medic", "Nano-Cell Sculptor", "Quantum Healer", "Micro Surgeon", "Nano Crafter", 
+        "Nanite Specialist", "Bio-Nano Healer", "Nano Medic", "Nano-Therapist", "Molecular Sculptor"
+    ],
+    
+    "Cyber Ronin": [
+        "Digital Wanderer", "Code Ronin", "Data Samurai", "Cyber Exile", "Neon Blade", 
+        "Cyber Warrior", "Rogue Hacker", "Ronin of the Grid", "Digital Mercenary", "Circuit Nomad", 
+        "Blade of the Grid", "Cyber Sword", "Grid Samurai", "Cyber Outlaw", "Shadow Blade"
+    ],
+    
+    "Energy Manipulator": [
+        "Force Shaper", "Plasma Crafter", "Light Weaver", "Energy Sculptor", "Quantum Energy Master", 
+        "Plasma Shaper", "Energy Conductor", "Power Architect", "Electro Crafter", "Volt Sculptor", 
+        "Neon Force Bender", "Lightning Crafter", "Quantum Charger", "Plasma Weaver", "Volt Bender"
+    ],
+    
+    "Void Skimmer": [
+        "Edge of Reality", "Void Navigator", "Space Diver", "Dimensional Voyager", "Quantum Void Pilot", 
+        "Void Whisperer", "Dimensional Traveler", "Voidcraft Operator", "Event Horizon Skimmer", "Voidwalker", 
+        "Stellar Skipper", "Subspace Drifter", "Void Surfer", "Quantum Voyager", "Graviton Diver"
+    ],
+    
+    "AI Whisperer": [
+        "Sentient Shaper", "Code Oracle", "AI Architect", "Cognizant Binder", "Machine Speaker", 
+        "Digital Sage", "Synthetic Sage", "AI Engineer", "Code Whisperer", "Machine Interpreter", 
+        "AI Keeper", "Algorithm Weaver", "Sentient Designer", "Code Mediator", "Cyber Speaker"
+    ],
+    
+    "Psi-Warrior": [
+        "Mindblade", "Psychic Enforcer", "Mental Vanguard", "Telepathic Knight", "Psionic Crusader", 
+        "Thoughtblade", "Psi-Warden", "Mindforce Adept", "Cerebral Sentinel", "Mental Combatant", 
+        "Telekinetic Warlord", "Psionic Shadow", "Thought Enforcer", "Psychic Guardian", "Psi-Samurai"
+    ],
+    
+    "Gene Splicer": [
+        "Genetic Alchemist", "DNA Crafter", "Genome Weaver", "Biomorph Artisan", "Evolution Designer", 
+        "Gene Sculptor", "Genetic Architect", "Bio-Slicer", "Life Code Manipulator", "Biotech Artisan", 
+        "Mutation Crafter", "Bio-Crafter", "Genome Innovator", "Gene Binder", "Biomorph Shaper"
+    ],
+    
+    "Code Phantom": [
+        "Digital Ghost", "Cyber Specter", "Shadow Coder", "Neon Phantom", "Code Wraith", 
+        "Invisible Hacker", "Binary Shade", "Quantum Ghost", "Cipher Shade", "Virtual Apparition", 
+        "Spectral Coder", "Data Shade", "Neural Wraith", "Grid Phantom", "Quantum Specter"
+    ],
+    
+    "Grid Enforcer": [
+        "Network Guardian", "Cyber Sentinel", "Protocol Enforcer", "System Enforcer", "Code Sheriff", 
+        "Grid Sentinel", "Neon Watcher", "Firewall Warden", "Digital Lawkeeper", "Network Marshal", 
+        "Cyber Vanguard", "Grid Arbiter", "Net Enforcer", "Digital Lawbringer", "Protocol Defender"
+    ],
+    
+    "Weapon Specialist": [
+        "Armory Master", "Firepower Expert", "Tech Blademaster", "Munitions Architect", "Arsenal Crafter", 
+        "Firepower Savant", "Cyber Armorer", "Blade Engineer", "Tactical Weaponist", "Neon Armamentist", 
+        "Heavy Weapon Artist", "Ballistics Expert", "Weapon Tactician", "Plasma Gunner", "Arsenal Engineer"
+    ],
+    
+    "Cyber Gladiator": [
+        "Arena Brawler", "Steel Duelist", "Neon Fighter", "Battleframe Gladiator", "Cyber Pit Fighter", 
+        "Digital Warrior", "Steel Arena Champion", "Neon Bruiser", "Circuit Gladiator", "Titan Brawler", 
+        "Cyber Arena Champion", "Digital Combatant", "Neon Duelist", "Steel Battler", "Cyber Pit Champion"
+    ],
+    
+    "Stasis Operative": [
+        "Timekeeper", "Temporal Enforcer", "Chrono Operator", "Quantum Sleeper", "Stasis Guardian", 
+        "Time Warden", "Frozen Sentinel", "Temporal Sentinel", "Stasis Soldier", "Chrono Agent", 
+        "Stasis Keeper", "Temporal Strategist", "Chrono Guardian", "Frozen Enforcer", "Timebound Soldier"
+    ],
+    
+    "Quantum Enforcer": [
+        "Reality Guardian", "Quantum Regulator", "Dimensional Enforcer", "Time-Warp Officer", "Chrono Keeper", 
+        "Space-Time Arbiter", "Quantum Sentinel", "Reality Keeper", "Dimensional Warden", "Quantum Overseer", 
+        "Chrono Enforcer", "Dimensional Guardian", "Time-Bender Enforcer", "Reality Shifter", "Quantum Protector"
+    ],
+    
+    "Tech Shaman": [
+        "Circuit Mystic", "Neon Shaman", "Digital Seer", "Grid Mystic", "Tech Oracle", 
+        "Machine Prophet", "Code Shaman", "Cyber Spirit", "Quantum Mystic", "AI Sage", 
+        "Digital Guide", "Data Shaman", "Machine Whisperer", "Cyber Seer", "Virtual Mystic"
+    ],
+    
+    "Cyber Police Officer": [
+        "Cyber Beat Cop", "Grid Officer", "Digital Enforcer", "Tech Patrolman", "Neon Lawkeeper", 
+        "Cyber Detective", "Network Enforcer", "Digital Constable", "Neural Patrol Officer", "Cyber Marshal", 
+        "Circuit Enforcer", "Data Patrol Officer", "Grid Inspector", "Protocol Officer", "Cyber Lawman"
+    ],
+    
+    "Corporate Agent": [
+        "Corporate Operator", "Neon Agent", "Cyber Diplomat", "Corporate Fixer", "Tech Operative", 
+        "Corporate Spy", "Neural Agent", "Grid Operative", "Digital Fixer", "Tech Negotiator", 
+        "Corporate Strategist", "Corporate Executive", "Corporate Handler", "Neon Diplomat", "Data Broker"
+    ],
+    
+    "Street Samurai": [
+        "Blade Runner", "Neon Ronin", "Cyber Swordmaster", "Street Ronin", "Cyber Warrior", 
+        "Blade Dancer", "Street Ronin", "Tech Katana Master", "Neon Swordsman", "Urban Samurai", 
+        "Steel Blade", "Cyber Katana Wielder", "Street Blademaster", "Neon Warrior", "Urban Ronin"
+    ],
+    
+    "Mind Runner": [
+        "Memory Seeker", "Neural Navigator", "Thought Harvester", "Cognitive Runner", "Neon Dreamcatcher", 
+        "Neuro Runner", "Mind Sprinter", "Mental Strider", "Thought Racer", "Memory Diver", 
+        "Neural Pathfinder", "Dream Weaver", "Cognition Runner", "Neural Seeker", "Memory Runner"
+    ],
+    
+    "Quantum Mechanic": [
+        "Reality Engineer", "Dimensional Mechanic", "Space-Time Fixer", "Quantum Craftsman", "Dimensional Engineer", 
+        "Chrono Mechanic", "Time-Warp Technician", "Quantum Tinkerer", "Space-Time Artisan", "Quantum Engineer", 
+        "Dimensional Technician", "Temporal Fixer", "Reality Craftsman", "Quantum Technician", "Chrono Engineer"
+    ],
+    
+    "Nanotech Assassin": [
+        "Nano Blade", "Micro Killer", "Molecular Executioner", "Nano Ghost", "Neural Slicer", 
+        "Nano Saboteur", "Atom Assassin", "Molecular Slayer", "Quantum Killer", "Nano Operative", 
+        "Micro Hunter", "Nanite Assassin", "Nano Reaper", "Molecular Ghost", "Nano Predator"
+    ],
+    
+    "Astro-Navigator": [
+        "Starship Pathfinder", "Stellar Navigator", "Void Pilot", "Quantum Voyager", "Astro Scout", 
+        "Starship Pilot", "Void Wayfinder", "Stellar Guide", "Quantum Pilot", "Voidcraft Navigator", 
+        "Spacefarer", "Starbound Navigator", "Astro Pilot", "Galactic Navigator", "Void Scout"
+    ],
+    
+    "Reality Bender": [
+        "Dimension Shifter", "Space-Time Bender", "Quantum Reality Shaper", "Chrono Crafter", "Reality Twister", 
+        "Dimensional Weaver", "Quantum Shaper", "Reality Architect", "Space-Time Sculptor", "Dimensional Warper", 
+        "Quantum Weaver", "Chrono Shifter", "Reality Warper", "Time-Twister", "Quantum Architect"
+    ],
+    
+    "Void Harvester": [
+        "Stellar Reaper", "Quantum Extractor", "Void Collector", "Event Horizon Harvester", "Black Hole Tamer", 
+        "Cosmic Harvester", "Neon Reaper", "Space Gatherer", "Quantum Collector", "Stellar Extractor", 
+        "Void Gatherer", "Cosmic Collector", "Space Reaper", "Neon Harvester", "Void Extractor"
+    ],
+    
+    "Cryo-Tactician": [
+        "Frozen Strategist", "Cold-Warrior", "Cryo Commander", "Ice Mastermind", "Frost Tactician", 
+        "Cryo Strategist", "Glacier Commander", "Cold Vanguard", "Frozen Planner", "Cryo Operative", 
+        "Glacial Strategist", "Frost Commander", "Cryo Planner", "Chill Vanguard", "Frozen Tactician"
+    ],
+    
+    "Cyber-Mercenary": [
+        "Tech Merc", "Digital Gun-for-Hire", "Neon Mercenary", "Cyber Gunman", "Code Soldier", 
+        "Circuit Merc", "Digital Enforcer", "Grid Mercenary", "Neural Gun-for-Hire", "Cyber Freelancer", 
+        "Tech Contractor", "Cyber Hired Gun", "Grid Freelancer", "Digital Bounty Hunter", "Neon Freelancer"
+    ],
+    
+    "Virtual Reality Architect": [
+        "Simulation Builder", "VR Designer", "Reality Sculptor", "Dream Architect", "Virtual World Crafter", 
+        "Neon Reality Builder", "VR Shaper", "Digital Dimension Architect", "Neural Designer", "Virtual Sculptor", 
+        "Dream Engineer", "Sim Crafter", "Neon VR Architect", "Virtual Crafter", "Simulation Engineer"
+    ]
 };
+
 const roleWeapon = {
-"Knight": ["Heavy Sword", "Short Sword", "Sword and Shield", "Spear", "Club", "Bat"],
-"Mage": ["Staff of Water", "Staff of Earth", "Staff of Fire", "Staff of Darkness", "Metal Staff", "Magic Book"],
-"Rogue": ["Daggers", "Short Sword", "Switchblade", "Club", "Cleaver", "Silenced Pistol"],
-"Archer": ["Longbow", "Quick-fire Bow", "Elemental Bow", "Crossbow"],
-"Paladin": ["Heavy Sword", "Short Sword", "Sword and Shield"],
-"Blacksmith": ["Hammer", "Anvil", "Pickaxe", "Shovel", "Axe"],
-"Healer": ["Staff of Cleanse", "Staff of Healing", "Staff of Regeneration", "Book of Healing"],
-"Assasin": ["Katana", "Wakizashi", "Shuriken", "Daggers", "Sickle"],
-"Saint": ["Unknown"],
-"Tamer": ["Bear", "Crocodile", "Dinosaur", "Elephant", "Tiger", "Leopard"],
-"Necromancer": ["Staff of Darkness", "Staff of Skull", "Femur", "Bone Staff", "Book of the Undead"],
-"Unknown": ["Unknown"],
-"Death Knight": ["Reaper", "Undead Heavy Sword", "Short Sword of Death", "Sword and Shield", "Spear", "Club", "Bat"],
-"Farmer": ["Sickles", "Pitchforks", "Sticks", "Stone", "Bat"],
-"Demon King": ["Unknown"],
-"Swordman": ["Heavy Sword", "Short Sword", "Daggers", "Katana", "Wakizashi", "Cleaver"],
-"Magic Swordman": ["Magic-induced Heavy Sword", "Magic-induced Short Sword", "Magic-induced Daggers", "Magic-induced Katana", "Magic-induced Wakizashi", "Magic-induced Cleaver"],
-"Martial Artist" :["Barehand", "Nunchucks", "Fighting Gloves"],
-"Trader": ["None"],
-"Archmage": ["Staff of Water", "Staff of Earth", "Staff of Fire", "Staff of Darkness", "Metal Staff", "Magic Book", "Staff of Darkness", "Staff of Skull", "Femur", "Bone Staff", "Book of the Undead"],
-"Slave": ["None"],
-"Chef": ["Cleaver", "Axe", "Spatula", "Saucepan", "Wok", "Pot", "Kettle", "Rolling Pin", "Knife"],
-"Rifleman": ["Pistol", "Revolver", "Submachine Gun", "Shotgun", "Assault Rifle", "Light Machine Gun", "Heavy Machine Gun", "Sniper Rifle"],
-"Sapper": ["C4 Pack", "Grenade", "GP Machine Gun", "RPG", "Mortar Launcher", "Grenade Launcher", "Panzerfaust", "Pistol", "Revolver", "Flamethrower"],
-"Vampire": ["Fangs", "Claws"],
-"Berserker": ["Two-Handed Sword", "Battle Axe", "Heavy Sword", "Spear and Shield", "Zweihander", "Mjolnir Hammer"],
-"Bard": ["None"],
-"Pirate": ["Flintlock Pistol", "Quickslash Sword", "Cannon", "Hook"],
-"Priest": ["None"],
-"Alchemist": ["None"],
-"Ranger": ["Longbow", "Quick-fire Bow", "Elemental Bow", "Crossbow", "Daggers", "Short Sword", "Submachine Gun", "Revolver", "Pistol"],
-"Samurai": ["Bajō-zutsu", "Bo-hiya", "Daishō", "Tanegashima", "Wakizashi", "Shuriken"],
-"Monk": ["Fists"],
-"Vampire Lord": ["Fangs", "Claws"],
-"Summoner": ["Iron Golem", "Diamond Golem", "Warden", "Snow Warden", "Ender Dragon", "Ghast", "Lava Warden"],
-"Witch Hunter": ["Stake", "Revolver", "Axe", "Lighter", "Torch", "Pitchfork", "Counterspell"],
-"Dark Knight": ["Dark Heavy Sword", "Dark Short Sword", "Spear", "Club", "Bat", "Quickslash Sword of Darkness"],
-"Scout": ["Rifle", "Submachine Gun", "Pistol", "Dagger", "Short Sword", "Smoke Grenade", "Flare Gun"],
-"Runesmith": ["None"]
+    "Cybernetician": [
+        "Circuit Breaker Baton", "Neural Disruptor", "Code Splicer Rifle", "Cyber Flux Caster", "System Overload Blaster", "Quantum Pulse Cannon", "Data Torrent Gun",
+        "Circuitry Blades", "Machinewave Staff", "AI-Controlled Drone Swarm", "Digital Nova Grenade", "Neural Feedback Gauntlets", "Hyperlink Shotgun", "Synapse Surge Blade",
+        "Processing Spike", "Memory Wipe Bomb", "Robotic Tendril Launcher", "Holo-Blade", "Network Javelin", "Digital Storm Rifle", "Code-Eater Rifle",
+        "Firewall Fuser", "Bitstream Flail", "Data Spike Pistol", "Logic Grid Thrower", "AI Barrage Turret", "Mind Meld Carbine", "CPU Crusher Hammer",
+        "Server Slice Blade", "Neural Override Pistol"
+    ],
+    "Synth-Jacker": [
+        "Mind Jack Spike", "Neuro Sabre", "Cortex Hijacker", "Synth Razor Whip", "Memory Dagger", "Mental Subjugator Pistol", "Cognitive Disruptor Rifle",
+        "Data Drain Spear", "Neuro Scrambler Gauntlets", "Brainwave Injector", "Holo-Neural Katana", "Subconscious Breaker Blaster", "Synthe-Skull Mace", "Memory Swipe Grenade",
+        "Soul Rift Hammer", "Tech-Harpoon", "Data Thief Carbine", "Synthetic Spine Ripper", "Nerve Hijacker Bow", "Psy-Net Launcher", "Virtual Scythe",
+        "Cyber Synapse Drill", "Cortex Reaver Blade", "Neural Virus Gun", "Synthwave Saber", "Cyber Core Hammer", "Mind Hack Blaster", "Synthetic Pulse Rifle",
+        "Neural Overload Axe", "Mindchain Whip"
+    ],
+    "Techno-Nomad": [
+        "Nomad's Pulse Rifle", "Gridwalker Spear", "Datawave Scythe", "Signal Breaker Knife", "Cyber Sling", "Neon Pulse Gun", "Wireless Cutter Blade",
+        "Holo-Chakram", "Network Lance", "Quantum Tether Dagger", "Digital Traveler's Crossbow", "Nomad's Circuit Blade", "Gyro-Katana", "Data Staff",
+        "Techno-Tribal Bow", "Field Emitter Sword", "Neon Dart Gun", "Energy Net Launcher", "Quantum Beacon Hammer", "Codeflare Blade", "Circuit Arc Pistol",
+        "Neural Slinger", "Data Javelin", "Techno-Crippler Blade", "Pulse Shuriken", "Gyro-Blaster", "Quantum Net Grenade", "Nomad's Signal Breaker",
+        "Datawave Axe", "Plasma Traveler's Whip"
+    ],
+    "Data Runner": [
+        "Info Surge Gun", "Packet Cutter Blade", "Cipherbreaker Knife", "Data Whip", "Packet Pulse Rifle", "Bitstream Grenade", "Quantum Data Bow",
+        "Packet Pierce Spear", "Cipher Striker Blade", "Data Seeker's Crossbow", "Quantum Flux Cannon", "Neon Courier's Rifle", "Holo-Dagger", "Info Shredder Katana",
+        "Code Jumper Carbine", "Data Trail Gun", "Data Runner's Machete", "Bit Harpoon", "Quantum Info Scythe", "Neural Courier Spear", "Data Spike Javelin",
+        "Packet Grenade Launcher", "Cipher Blaster", "Bitstream Crossbow", "Dataflux Blade", "Packet Shuriken", "Quantum Jumper Knife", "Grid Pierce Rifle",
+        "Data-Wave Gauntlet", "Cipher Pulse Staff"
+    ],
+    "Quantum Hacker": [
+        "Reality Breaker Rifle", "Quantum Hack Knife", "Dimensional Flux Bow", "Quantum Code Blade", "Time-Warp Pistol", "Entanglement Harpoon", "Subspace Slicer",
+        "Quantum Glitch Rifle", "Reality Flux Gun", "Quantum Shift Sword", "Dimensional Breaker Spear", "Quantum Keyblade", "Subspace Anomaly Grenade", "Glitchwave Axe",
+        "Schrodinger's Gun", "Quantum Flare Dagger", "Reality Hacker's Sword", "Time Shifter Carbine", "Dimensional Sabre", "Space-Time Disruptor Blade", "Entanglement Hammer",
+        "Quantum Tear Launcher", "Subspace Pulse Cannon", "Reality Hacker's Gauntlets", "Quantum Lock Grenade", "Dimensional Wrecker Scythe", "Quantum Flux Blade", "Timebreaker Spear",
+        "Reality-Hack Shotgun", "Quantum Cascade Rifle"
+    ],
+    "Neuro-Splicer": [
+        "Neuro Scalpel", "Mindwave Cutter", "Synapse Razor", "Cognitive Injector Gun", "Synaptic Feedback Blade", "Neuron Surge Staff", "Mindspike Rifle",
+        "Cortex Splitter Katana", "Neural Razor Whip", "Dreamblade Dagger", "Synapse Reaper Gun", "Memory Shatter Knife", "Mindmeld Spear", "Neural Feedback Cannon",
+        "Dream Surge Blaster", "Neuron Blade", "Cortex Jumper Shotgun", "Neuro Lash", "Mind-Shatter Rifle", "Thoughtweaver Sabre", "Synapse Surge Spear",
+        "Mind Chain Mace", "Neuron Injector Gun", "Cortex Razor Pistol", "Mind-Wave Blade", "Neuro Scrambler Gun", "Synaptic Surge Rifle", "Neuron Flux Gun",
+        "Mind Surge Axe", "Memory Lance"
+    ],
+    "Drone Pilot": [
+        "Swarm Command Rifle", "Drone Spike Gun", "Aerial Harpoon", "Droneblade", "Wingmaster's Bow", "Auto-Swarm Dagger", "Drone Commander Carbine",
+        "Voidflyer Spear", "Dronewave Axe", "Pilot's Pulse Gun", "Mech-Swarm Launcher", "Drone Pilot's Blade", "Automated Fighter Rifle", "Swarm Control Rod",
+        "Neon Swarm Sabre", "Dronepath Harpoon", "Auto-Flyer Crossbow", "Swarm Grenade", "Wingmaster's Staff", "Dronewave Cutter", "Autopilot's Pistol",
+        "Mech-Flight Katana", "Swarm Spear", "Dronebolt Rifle", "Neon Drone Gun", "Aerial Scout's Rifle", "Drone Pilot's Edge", "Auto-Dagger", "Swarmbreaker Blade",
+        "Drone Command Baton"
+    ],
+    "Exo-Soldier": [
+        "Mech-Blade", "Titan's Hammer", "Exo-Flare Gun", "Warframe Rifle", "Steel Vanguard Spear", "Exo-Sabre", "Mech-Strike Sword",
+        "Cyber Exo-Hammer", "Steel Titan's Lance", "Warpath Crossbow", "Exo Warblade", "Mech-Force Gun", "Exo-Titan's Halberd", "Warframe Axe",
+        "Cyber Fortress Cannon", "Mech-War Mace", "Titan's Plasma Launcher", "Warframe Scythe", "Steel Juggernaut Shotgun", "Exo-Breaker Blade", "Warframe Railgun",
+        "Mech-Force Edge", "Exo-Warden Sword", "Titan's Maul", "Steel Vanguard Blaster", "Exo Battle Rifle", "Mech-Flare Pistol", "Steel Titan's Hammer", "Warpath Pulse Rifle",
+        "Titan Lance"
+    ],
+    "Gravity Shifter": [
+        "Graviton Pulse Gun", "Gravity Shift Blade", "Void Collapse Hammer", "Gravity Well Rifle", "Mass Bender Lance", "Graviton Crusher Mace", "Black Hole Blaster",
+        "Forcewave Sabre", "Gravity Rip Harpoon", "Singularity Gun", "Void Breaker Axe", "Graviton Surge Blade", "Gravity Hammer", "Force Collapse Gun",
+        "Singularity Flare Cannon", "Gravity Well Spear", "Force Manipulator Rifle", "Graviton Lash", "Gravity Spike Dagger", "Void Collapse Scythe", "Graviton Striker Gun",
+        "Gravity Well Whip", "Mass Shifter's Blade", "Forcewave Gauntlets", "Black Hole Spear", "Void Pulse Rifle", "Graviton Breaker Axe", "Force Twister Staff",
+        "Gravity Rip Rifle", "Void Collapse Gauntlets"
+    ],
+    "Bio-Engineer": [
+        "Gene Splicer Rifle", "DNA Harpoon", "Bio-Plasma Gun", "Evolutionary Blade", "Biotech Flare Gun", "Genome Reaper Sword", "Bio-Morph Axe",
+        "Cellular Injector Rifle", "Plasma Genome Grenade", "Bio Surge Mace", "Gene Wrecker Blade", "Bio-Toxin Dart Gun", "Cellular Blaster", "Genome Splitter Scythe",
+        "Plasma Harpoon", "Bio Flux Rifle", "Biotech Surge Sabre", "Gene Weaver Staff", "Bio Splice Knife", "Cell Shaper Gun", "Genome Edge",
+        "Bio-Plasma Axe", "Toxin Injector Gun", "Bio-Lasher", "Gene Weaver's Spear", "Plasma Splicer Blade", "Cellular Disruptor Gun", "Genome Sabre", "Bio-Morph Dagger",
+        "Evolution Surge Gun"
+    ],
+    "Nano-Surgeon": [
+        "Nano Injector Gun", "Molecular Sabre", "Atom Blade", "Nano Surge Rifle", "Molecular Disruptor Gun", "Nano Scalpel", "Cellular Shredder Knife",
+        "Atomic Hammer", "Nano Flux Rifle", "Molecular Injector Blade", "Nano Surge Staff", "Atomic Razor Gun", "Nano Surgeon’s Katana", "Molecular Scythe",
+        "Nano Shatter Gun", "Atomic Cutter", "Nano Reaper Rifle", "Molecular Surge Saber", "Nano Harpoon", "Nano Sculptor Gun", "Molecular Spike Dagger",
+        "Atomic Splitter Blade", "Nano Surgeon’s Rifle", "Cellular Injector Gun", "Nano Disruptor Blade", "Atomic Grenade", "Nano Edge", "Molecular Injector Rifle",
+        "Nano Splitter Gun", "Atomic Scalpel"
+    ],
+    "Cyber Ronin": [
+        "Digital Katana", "Neon Tanto", "Cyber Naginata", "Circuit Blade", "Holo-Katana", "Binary Sabre", "Cyber Ronin’s Scythe",
+        "Neon Blade", "Data Edge Sword", "Rogue Code Dagger", "Virtual Wakizashi", "Cyber Ronin’s Hammer", "Circuit Katana", "Binary Tanto",
+        "Neon Ronin’s Edge", "Cyber Yari", "Neon Shuriken", "Data Slasher Blade", "Ronin’s Pulse Gun", "Cybertech Sword", "Holo-Ronin’s Spear",
+        "Binary Ronin’s Bow", "Neon Longsword", "Data Samurai’s Edge", "Cyber Wave Scythe", "Cyber Ronin’s Razor", "Neon Ninja Star", "Code Ronin’s Dagger",
+        "Binary Polearm", "Virtual Ronin’s Staff"
+    ],
+    "Energy Manipulator": [
+        "Plasma Saber", "Electro-Whip", "Energy Conductor Spear", "Photon Blaster", "Plasma Pulse Rifle", "Lightning Lance", "Voltage Harpoon",
+        "Plasma Arc Gun", "Electro Surge Knife", "Photon Striker Sword", "Plasmawave Rifle", "Lightning Edge Axe", "Energy Manipulator’s Staff", "Photonblade",
+        "Plasma Emitter Gun", "Plasma Charge Bow", "Electro Spike Spear", "Energy Lash", "Photon Sabre", "Volt Disruptor Gun", "Plasma Volt Dagger",
+        "Lightning Field Gun", "Photon Charge Rifle", "Plasma Storm Blade", "Energy Manipulator’s Axe", "Plasma Shock Harpoon", "Photoncaster", "Lightning Whip",
+        "Energy Spear", "Plasmawave Blade"
+    ],
+    "Void Skimmer": [
+        "Void Breaker Blade", "Dimensional Rifle", "Gravity Flux Spear", "Subspace Sabre", "Voidfield Shotgun", "Quantum Cutlass", "Dimensional Harpoon",
+        "Voidstream Gun", "Subspace Axe", "Quantum Bow", "Voidwave Dagger", "Subspace Pulse Rifle", "Dimensional Scythe", "Quantum Rip Blade",
+        "Voidcaster Gun", "Subspace Razor", "Quantumfield Spear", "Void Tether Gun", "Dimensional Shift Blade", "Void Lance", "Subspace Shuriken",
+        "Quantumflare Rifle", "Dimensional Warp Gun", "Void Harpoon", "Subspace Edge", "Quantumfield Axe", "Void Tear Pistol", "Dimensional Flare Blade",
+        "Void Stream Gun", "Quantum Edge Spear"
+    ],
+    "AI Whisperer": [
+        "Algorithm Blade", "Code Infusion Rifle", "Cognitive Sabre", "Digital Whisper Gun", "AI Core Spear", "Neural Flux Knife", "Cognition Manipulator",
+        "Data Surge Axe", "Sentient Pulse Gun", "Digital Wave Dagger", "Neuralwave Rifle", "AI Conductor Blade", "Code-Breaker Gun", "Cognitive Injector Spear",
+        "Digital Caster Staff", "Sentient Spear", "Neural Edge Blade", "Cognition Surge Gun", "Data Flux Rifle", "AI Controller Hammer", "Neural Flux Sabre",
+        "Digital Infusion Scythe", "Cognitive Razor", "Sentient Shifter Spear", "AI Surge Pistol", "Data Manipulator Dagger", "Neuralwave Sword", "Cognitive Edge Spear",
+        "Sentient Infusion Rifle", "Neural Shredder Blade"
+    ],
+    "Psi-Warrior": [
+        "Psionic Blade", "Mindwarp Gun", "Thought Sabre", "Neuroforce Spear", "Telekinetic Whip", "Mind Spike Dagger", "Psionic Feedback Rifle",
+        "Mental Surge Scythe", "Psychic Lash", "Telepathic Bow", "Thoughtweaver Sword", "Cognitive Crusher Hammer", "Neuralwave Katana", "Psi-Breaker Axe",
+        "Mindforce Sabre", "Telekinetic Striker Blade", "Psychic Edge Gun", "Cerebral Shredder Knife", "Mindblast Rifle", "Neuralwave Edge", "Psiwave Dagger",
+        "Psychic Sabre", "Telepathic Scythe", "Thoughtspike Blade", "Psionicfield Rifle", "Mental Disruptor Gun", "Neuralforce Hammer", "Telekinetic Edge Sword",
+        "Psi-Breaker Gun", "Mindslash Blade"
+    ],
+    "Gene Splicer": [
+        "Genome Cutter", "Bio-Wave Gun", "DNA Injector Rifle", "Gene Sabre", "Splicer’s Scalpel", "Genetic Reaper Spear", "Biofield Sword",
+        "Genome Wave Blade", "DNA Harpoon", "Bio-Lash", "Genome Reaver Axe", "Splicer’s Plasma Gun", "Gene Surge Sabre", "Bio-Injector Knife",
+        "Genome Harpoon Gun", "Gene Tether Rifle", "Biotech Splitter Scythe", "Genomefield Edge", "Splice Surge Sword", "Genome Pulse Gun", "Bioflux Staff",
+        "DNA Spike Gun", "Genome Lash Dagger", "Bio-Morph Hammer", "Gene-Crafter Blade", "Genomewave Bow", "Biotech Surge Blade", "Splicer’s Edge Rifle",
+        "Bio-Plasma Spear", "Genome Injector Gun"
+    ],
+    "Code Phantom": [
+        "Ghost Circuit Blade", "Binary Wraith Rifle", "Quantum Shade Sabre", "Cyber-Phantom Edge", "Data Ghost Dagger", "Spectral Code Gun", "Neural Apparition Sword",
+        "Cipher Shade Spear", "Quantum Ghost Katana", "Phantom Spike Gun", "Digital Haunter Bow", "Circuit Shade Blade", "Cyber Specter Rifle", "Virtual Wraith Spear",
+        "Phantom Flux Gun", "Binary Ghost Axe", "Digital Phantom Dagger", "Neural Ghost Rifle", "Spectral Wave Gun", "Quantum Shade Axe", "Phantomwave Sword",
+        "Virtual Ghost Scythe", "Cipher Wraith Bow", "Neuralshade Blade", "Quantum Flux Dagger", "Digital Ghost Gun", "Spectral Spike Gun", "Binary Shade Spear",
+        "Virtual Phantom Rifle", "Cipher Ghost Sabre"
+    ],
+    "Grid Enforcer": [
+        "Protocol Enforcer Blade", "System Regulator Rifle", "Gridwatch Sabre", "Firewall Spear", "Network Protector Gun", "Cyber-Law Enforcer", "Protocol Sabre",
+        "Gridguard Sword", "Firewall Breaker Rifle", "Neural Enforcement Gun", "Digital Circuit Spear", "Grid Vanguard Sword", "System Warden Blade", "Protocol Striker Gun",
+        "Gridlock Axe", "Firewall Sabre", "Network Enforcer Rifle", "Systemguard Dagger", "Gridshield Spear", "Protocol Blade Gun", "Neural Sentinel Gun",
+        "Firewall Edge Blade", "Gridwar Rifle", "Protocol Spear", "Networkbreaker Gun", "Gridguard Hammer", "Firewall Crusher", "Protocol Edge Sabre", "System Surge Rifle",
+        "Gridwarrior Sabre"
+    ],
+    "Weapon Specialist": [
+        "Arsenal Blade", "Munitions Rifle", "Tech Blade Launcher", "Firepower Sabre", "Heavy Plasma Gun", "Tech Blaster Gun", "Armory Breaker Spear",
+        "Weapon Surge Blade", "Explosive Launcher", "Energyblade Dagger", "Plasma Cannon", "Munitions Shredder Gun", "Arsenal Spike Gun", "Tech Cutter Rifle",
+        "Pulse Grenade Launcher", "Firepower Edge Spear", "Heavy Armory Sword", "Plasma Blaster", "Munitionwave Axe", "Techblade Launcher", "Energy Edge Blade",
+        "Arsenal Railgun", "Munitions Striker Sabre", "Plasma Breaker Cannon", "Firepower Bow", "Tech Sabre", "Pulse Surge Gun", "Weapon Breaker Axe",
+        "Heavy Plasma Rifle", "Firepower Blade"
+    ],
+    "Cyber Gladiator": [
+        "Arena Circuit Blade", "Steel Champion’s Axe", "Cyber Duelist Sabre", "Gladiator Scythe", "Titan Breaker Gun", "Neon Edge Sword", "Circuit Flare Gun",
+        "Gladiator’s Plasma Spear", "Steel Arena Hammer", "Cyber-Champion Rifle", "Duelist's Katana", "Titan Pulse Rifle", "Gladiator's Surge Axe", "Neon Crusher Blade",
+        "Arena Breaker Gun", "Steel Gladiator's Spear", "Circuit Gladiator Gun", "Champion Edge Sabre", "Titan Spike Dagger", "Neon Blaster Gun", "Gladiator's Energy Scythe",
+        "Steel Duelist's Sabre", "Circuit Gladiator Sword", "Neon Razor Edge", "Arena Breaker Spear", "Titan Blade", "Cyber-Gladiator Sword", "Neon Scythe",
+        "Circuit Breaker Hammer", "Gladiator Edge Rifle"
+    ],
+    "Stasis Operative": [
+        "Timebreaker Sabre", "Chrono Edge Rifle", "Stasis Cutter Blade", "Temporal Spear", "Quantumwave Gun", "Time-Tether Dagger", "Stasis Sabre",
+        "Temporal Edge Axe", "Timeblade Gun", "Chrono-Lock Rifle", "Quantum Cutter Sabre", "Temporal Flux Spear", "Stasis Striker Axe", "Chrono-Pulse Rifle",
+        "Time Lock Gun", "Stasisfield Blade", "Chrono Spear", "Quantum Striker Rifle", "Temporal Surge Gun", "Stasis Razor Edge", "Chrono Crusher Blade",
+        "Quantumwave Spear", "Time-Lock Gun", "Stasis Pulse Gun", "Chrono Surge Rifle", "Temporal Sabre", "Stasis Edge Blade", "Time-Warp Rifle",
+        "Chrono-Spike Gun", "Stasis Lock Sword"
+    ],
+    "Quantum Enforcer": [
+        "Reality Shaper Sabre", "Dimensional Flux Rifle", "Quantum Breaker Gun", "Chrono Enforcer Blade", "Time-Warp Spear", "Dimensional Crusher Gun",
+        "Quantum Shift Rifle", "Reality Pierce Sword", "Chrono Razor Spear", "Timeflux Sabre", "Quantumfield Blade", "Dimensional Scythe", "Time Shifter Rifle",
+        "Quantum Sabre", "Chrono Surge Gun", "Reality Crusher Blade", "Quantum Pierce Gun", "Dimensional Harpoon", "Reality-Lock Sabre", "Time-Breaker Scythe",
+        "Chrono Razor Blade", "Quantum Wave Spear", "Dimensional Breaker Gun", "Reality Shift Sword", "Timeflux Gun", "Quantum Strike Rifle", "Dimensional Flux Blade",
+        "Reality Razor Spear", "Quantum Surge Gun", "Chrono Scythe"
+    ],
+    "Tech Shaman": [
+        "Circuit Totem Staff", "Tech Spirit Blade", "Digital Surge Gun", "Neon Mystic Scythe", "Code Spirit Staff", "Circuitwave Sabre", "Gridcaller Rifle",
+        "Dataflow Totem", "Techno-Mystic Bow", "Energy Spirit Spear", "Code Surge Blade", "Gridcaller Gun", "Neon Totem Staff", "Digital Spirit Gun",
+        "Data Surge Axe", "Code Totem Spear", "Tech Spirit Sabre", "Circuit Caller Rifle", "Energy Totem Blade", "Dataflow Bow", "Code Surge Spear",
+        "Techno-Mystic Edge", "Neon Spirit Sabre", "Digital Totem Blade", "Dataflow Edge Rifle", "Grid Surge Spear", "Neoncaller Rifle", "Circuit Totem Blade",
+        "Techno-Spirit Gun", "Digital Spirit Axe"
+    ],
+    "Cyber Police Officer": [
+        "Protocol Gun", "Cyber Beat Sabre", "Gridshot Rifle", "Neural Enforcer Baton", "Codebreaker Blaster", "Cyber Constable Edge", "Firewall Breaker Gun",
+        "Neon Patrol Rifle", "Protocol Baton", "Circuit Enforcer Sabre", "Gridguard Gun", "Neural Beat Blade", "Protocol Enforcer Rifle", "Neon Sabre",
+        "Cyber Lawkeeper Gun", "Firewall Edge Sword", "Neon Baton", "Gridbreaker Rifle", "Cyber Constable Blade", "Protocol Patrol Spear", "Neon Edge Gun",
+        "Firewall Shotgun", "Cyber Constable Baton", "Neural Enforcer Gun", "Codebreaker Sabre", "Cyber Patrol Rifle", "Firewall Edge Blade", "Neural Enforcer Axe",
+        "Protocol Sabre", "Gridshot Edge"
+    ],
+    "Corporate Agent": [
+        "Data Broker Rifle", "Neon Diplomat Gun", "Techno-Blade", "Corporate Sabre", "Cyber Negotiator Dagger", "Tech Fixer Gun", "Neon Diplomat Sabre",
+        "Grid Broker Spear", "Corporate Edge Blade", "Digital Spy Rifle", "Corporate Razor Blade", "Tech Handler Spear", "Neural Spy Gun", "Cyber Sabre",
+        "Grid Operator Rifle", "Neon Fixer Blade", "Tech Broker Dagger", "Corporate Flare Gun", "Spycraft Sabre", "Neon Handler Spear", "Cyber Agent Edge",
+        "Corporate Razor Gun", "Neural Fixer Sabre", "Spyflare Gun", "Neon Operator Sabre", "Techno-Edge Dagger", "Corporate Spy Rifle", "Digital Broker Sabre",
+        "Corporate Spear", "Grid Razor Gun"
+    ],
+    "Street Samurai": [
+        "Neon Katana", "Techno-Tanto", "Cyber Longsword", "Street Ronin Blade", "Neon Edge Dagger", "Street Katana", "Cyber Ninja Star",
+        "Techno-Katana", "Ronin Edge Sabre", "Street Ninja Blade", "Cyber Ronin Gun", "Neon Tanto", "Street Warrior Sabre", "Ronin Edge Gun",
+        "Cyber Samurai Rifle", "Neon Razor Katana", "Street Ronin Scythe", "Cyber Tanto", "Techno-Longsword", "Street Razor Blade", "Ronin Plasma Gun",
+        "Neon Edge Blade", "Street Ronin Katana", "Cyber Samurai Scythe", "Neon Edge Scythe", "Ronin Razor Dagger", "Street Warrior Blade", "Cyber Katana",
+        "Street Samurai Gun", "Neon Ronin Rifle"
+    ],
+    "Mind Runner": [
+        "Neural Runner Dagger", "Memory Spike Rifle", "Cognitive Sabre", "Neon Runner Blade", "Mindwarp Spear", "Thought-Edge Gun", "Neuro Surge Sabre",
+        "Dreamweaver Rifle", "Memory Lash Blade", "Neural Flux Gun", "Thoughtslicer Sabre", "Neon Runner Gun", "Mind Surge Spear", "Neuralwave Blade",
+        "Memoryfield Rifle", "Neon Lash Gun", "Dreamrunner Dagger", "Mindshredder Spear", "Neural Spike Gun", "Thought-Edge Rifle", "Memory Jumper Blade",
+        "Neural Striker Sabre", "Dreamweaver Gun", "Neon Flux Rifle", "Mind Lash Gun", "Memory Blade", "Neuralwave Edge", "Neon Jumper Sabre",
+        "Cognitive Strike Spear", "Memory Runner Gun"
+    ],
+    "Quantum Mechanic": [
+        "Reality Shifter Wrench", "Dimensional Pliers", "Time-Warp Spanner", "Quantum Ratchet Gun", "Chrono Cutter Sabre", "Dimensional Manipulator Rifle", "Quantumfield Wrench",
+        "Time Shifter Sawblade", "Reality Flux Wrench", "Chrono Pulse Cutter", "Dimensional Claw Hammer", "Quantum Breaker Gun", "Reality-Lock Wrench", "Timeflux Blade",
+        "Dimensional Pierce Dagger", "Quantum Tether Spear", "Reality Shift Spanner", "Chrono Ratchet Blade", "Quantum Shredder Gun", "Dimensional Cutter", "Quantum Manipulator Sabre",
+        "Reality Wrench Spear", "Chrono Breaker Gun", "Quantumfield Hammer", "Time-Warp Cutter", "Dimensional Spike Gun", "Reality-Lock Ratchet", "Quantum Flux Cutter",
+        "Chrono Cutter Rifle", "Quantum Shifter Wrench"
+    ],
+    "Nanotech Assassin": [
+        "Nano Spike Blade", "Molecular Razor Gun", "Atomic Injector Dagger", "Nano Surge Rifle", "Molecular Harpoon", "Nanite Sabre", "Cellular Shredder Knife",
+        "Nano-Edge Sword", "Molecular Pulse Rifle", "Atomcutter Gun", "Nano Scythe", "Cellular Flux Gun", "Molecular Injector Sabre", "Atomic Scalpel",
+        "Nano Pulse Gun", "Nanite Razor Blade", "Atomic Injector Knife", "Nano Scythe Gun", "Molecular Surge Rifle", "Atom-Blade", "Nano Shredder Gun",
+        "Nanite Flux Blade", "Atomic Disruptor Sabre", "Cellular Injector Gun", "Nano Breaker Rifle", "Nanite Razor Dagger", "Molecular Spike Gun",
+        "Atomic Flux Rifle", "Nano Injector Blade", "Molecular Sabre"
+    ],
+    "Astro-Navigator": [
+        "Starfinder Spear", "Void Navigator Sabre", "Astro-Cutter Gun", "Void Spike Rifle", "Quantum Navigator Bow", "Starship Edge Blade", "Galactic Harpoon",
+        "Void Surge Gun", "Astro Navigator Sabre", "Quantum Flare Rifle", "Starbreaker Spear", "Voidfield Dagger", "Galactic Shredder Rifle", "Astro Pulse Gun",
+        "Void Flare Spear", "Starship Navigator Edge", "Galactic Edge Gun", "Void Shifter Blade", "Astrofield Rifle", "Quantum Navigator Scythe", "Starfinder Bow",
+        "Void Navigator Gun", "Astro Harpoon", "Starship Shredder Rifle", "Void Razor Gun", "Galactic Surge Gun", "Voidfield Edge", "Astro Navigator Spear",
+        "Quantum Breaker Blade", "Starship Pulse Rifle"
+    ],
+    "Reality Bender": [
+        "Dimensional Flux Blade", "Space-Time Shifter Gun", "Reality Flux Sabre", "Quantum Breaker Scythe", "Time Surge Rifle", "Dimensional Razor Blade", "Reality Spike Gun",
+        "Space-Warp Sabre", "Quantum Shifter Rifle", "Time-Bender Scythe", "Reality-Lock Blade", "Dimensional Razor Sabre", "Quantum Flare Gun", "Reality Shift Sabre",
+        "Time-Warp Gun", "Space-Time Surge Rifle", "Reality-Breaker Axe", "Dimensional Shredder Gun", "Quantum Razor Scythe", "Time-Lock Rifle", "Reality Warp Gun",
+        "Dimensional Spear", "Quantum Spike Rifle", "Time-Breaker Blade", "Space-Warp Cutter", "Reality Flux Gun", "Dimensional Edge Sabre", "Time-Bender Gun",
+        "Quantum Breaker Blade", "Reality Shifter Rifle"
+    ],
+    "Void Harvester": [
+        "Voidbreaker Scythe", "Quantum Harvester Spear", "Black Hole Cutter", "Event Horizon Blade", "Voidfield Rifle", "Cosmic Razor Gun", "Stellar Reaper Axe",
+        "Void Tether Spear", "Black Hole Crusher Gun", "Event Horizon Scythe", "Cosmic Shredder Blade", "Void Harpoon", "Stellar Edge Rifle", "Quantumfield Gun",
+        "Void Harvester Sabre", "Event Horizon Dagger", "Void Collector Rifle", "Black Hole Edge", "Quantum Shredder Gun", "Cosmic Spike Gun", "Voidfield Blade",
+        "Stellar Scythe", "Black Hole Razor", "Void Harvester Gun", "Event Horizon Spear", "Cosmic Cutter Rifle", "Stellar Pulse Gun", "Void Harpoon Blade",
+        "Quantum Harvester Rifle", "Cosmic Edge Sabre"
+    ],
+    "Cryo-Tactician": [
+        "Frozen Sabre", "Cryo Spike Gun", "Icefield Spear", "Cold War Gun", "Glacier Razor Edge", "Frozenblade", "Cryo Pulse Rifle",
+        "Glacier Sabre", "Cold-Lock Gun", "Frostfield Edge Spear", "Cryo Surge Blade", "Frozen Shredder Rifle", "Cold-Tether Gun", "Cryo Edge Blade",
+        "Glacier Scythe", "Frost Sabre", "Frozen Cutter Gun", "Cryofield Rifle", "Cold-War Spear", "Glacier Spike Sabre", "Frost Shredder Blade",
+        "Frozen Surge Rifle", "Cryo Razor Sabre", "Coldfield Gun", "Frozen Scythe", "Cryo Breaker Gun", "Frostfield Rifle", "Glacier Surge Sabre",
+        "Cryo Edge Spear", "Frozen Cutter Rifle"
+    ],
+    "Cyber-Mercenary": [
+        "Tech Merc's Gun", "Neon Edge Blade", "Digital Sabre", "Cyber Razor Dagger", "Mercenary's Pulse Rifle", "Neon Harpoon Gun", "Grid Merc's Sabre",
+        "Tech Razor Gun", "Neon Mercenary Spear", "Cyber Edge Gun", "Mercenary's Blaster Rifle", "Tech Merc's Spear", "Grid Razor Blade", "Cybermerc's Sabre",
+        "Neon Striker Gun", "Mercenary's Plasma Rifle", "Techno-Edge Blade", "Neon Mercenary's Gun", "Digital Razor Rifle", "Grid Merc's Scythe", "Neon Razor Rifle",
+        "Mercenary's Laser Edge", "Tech Merc's Pulse Gun", "Neon Cutter Gun", "Grid Merc's Axe", "Cyber Razor Spear", "Tech Merc's Edge Gun", "Neon Sabre",
+        "Mercenary's Breaker Gun", "Neon Pulse Gun"
+    ],
+    "Virtual Reality Architect": [
+        "Sim-Weaver Blade", "Virtual Edge Gun", "Reality Sculptor's Sabre", "Dream Architect Dagger", "Neon VR Rifle", "Reality Flux Gun", "Virtual Razor Sabre",
+        "Sim-Crafter Rifle", "Neural Architect Edge", "VR Architect's Scythe", "Virtual Sabre", "Sim-Weaver's Gun", "Reality Sculptor's Blade", "Virtual Sculptor Spear",
+        "Dream Architect Gun", "Neon Blade", "Virtual Flux Rifle", "Sim-Weaver Sabre", "VR Architect Gun", "Dreamweaver Blade", "Sim-Crafter Gun",
+        "Virtual Reality Axe", "Neural Sculptor Rifle", "Sim-Weaver Dagger", "Reality Flux Sabre", "Virtual Sabre", "Sim Architect Gun", "Reality Weaver Blade",
+        "Neon Architect Gun", "Sim-Crafter Sabre"
+    ]
 };
+
+// Helper function to get a random element from an array
 function getRandomElement(arr) {
-return arr[Math.floor(Math.random()*arr.length)];
+    return arr[Math.floor(Math.random() * arr.length)];
 }
+
+// Helper function to get a random number between min and max (inclusive)
 function getRandomNumber(min, max) {
-return Math.floor(Math.random() * (max - min + 1)) + min;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+// Function to handle role selection logic
+function getRoleBasedOnChance(race) {
+    const roleSelectionChance = Math.random() * 100;
+    let role;
+
+    if (roleSelectionChance < 1) {
+        return "Demon King";
+    } else if (roleSelectionChance > 98) {
+        return "Saint";
+    } else {
+        do {
+            role = getRandomElement(roles);
+        } while (isInvalidRoleForRace(race, role));
+    }
+    return role;
+}
+
+// Check if a role is invalid for a given race
+function isInvalidRoleForRace(race, role) {
+    return (
+        // Technological incompatibility for races with limited physical form
+        (["Quantum Entity", "Void Shadow", "Photon Being", "Astral Entity"].includes(race) && 
+            ["Synth-Jacker", "Cybernetician", "Drone Pilot", "Neuro-Splicer", "Gravity Shifter", "Weapon Specialist"].includes(role)) ||
+
+        // Virtual entities not suited for physical or biological manipulation roles
+        (["Digital Spirit", "Digital Entity", "AI Construct", "Nano-Swarm Being"].includes(race) && 
+            ["Exo-Soldier", "Street Samurai", "Psi-Warrior", "Gene Splicer", "Bio-Engineer"].includes(role)) ||
+
+        // Non-combatant, peaceful races avoid combat roles
+        (["Voidborn", "Void Dweller", "Solar Ascendant"].includes(race) && 
+            ["Cyber Gladiator", "Street Samurai", "Quantum Enforcer", "Neuro-Borg", "Mind Runner"].includes(role)) ||
+
+        // Physical beings that lack awareness for multi-dimensional roles
+        (["Cybernetic Human", "Gene-Tweaked Human"].includes(race) && 
+            ["Void Skimmer", "Reality Bender", "Quantum Enforcer"].includes(role)) ||
+
+        // Purely machine races avoid biological roles
+        (["Synthoid", "Mecha-Beast", "Robotic Hybrid"].includes(race) && 
+            ["Nano-Surgeon", "Bio-Engineer", "Gene Splicer"].includes(role)) ||
+
+        // Cosmic beings avoid lower-bound tasks
+        (["Astral Entity", "Dimensional Wanderer", "Void Dweller"].includes(race) && 
+            ["Techno-Nomad", "Street Samurai", "Quantum Mechanic", "Cyber Police Officer"].includes(role)) ||
+
+        // Races limited by their pure cyber/mechanical nature
+        (["Digital Spirit", "AI Construct", "Digital Entity", "Nano-Swarm Being"].includes(race) && 
+            ["Bio-Engineer", "Gene Splicer", "Nano-Surgeon"].includes(role)) ||
+
+        // Non-organic entities should avoid roles requiring organic biological manipulation
+        (["Synthoid", "Mecha-Beast", "Robotic Hybrid"].includes(race) && 
+            ["Nano-Surgeon", "Bio-Engineer", "Gene Splicer"].includes(role)) ||
+
+        // Roles with cosmic awareness not suitable for grounded humans
+        (["Void Skimmer", "Reality Bender", "Quantum Enforcer"].includes(role) && 
+            ["Cybernetic Human", "Gene-Tweaked Human", "Hybrid Human"].includes(race))
+    );
+}
+
+
+// Function to assign attributes
+function assignAttributes() {
+    return {
+        strength: getRandomNumber(1, 100),
+        health: getRandomNumber(25, 100),
+        mana: getRandomNumber(1, 100),
+        agility: getRandomNumber(1, 100),
+        level: getRandomNumber(1, 100),
+        dexterity: getRandomNumber(20, 100),
+        luck: getRandomNumber(1, 100),
+        endurance: Math.floor((strength * 0.5) + 9),
+        age: getRandomNumber(22, 60)
+    };
+}
+
+// Function to handle skill selection
+function generateSkills(role, numberOfSkills) {
+    const skills = [];
+    const availableSkills = roleSkills[role];
+    const scoreMap = { F: 1, E: 5, D: 10, C: 25, B: 50, A: 150, S: 300, SS: 500, SSS: 1000 };
+
+    for (let i = 0; i < numberOfSkills; i++) {
+        let skill, rank;
+        do {
+            skill = getRandomElement(availableSkills);
+            rank = getRandomElement(ranks);
+        } while (skill === "Total Immunity");
+
+        skills.push({ skill, rank });
+        totalscore += scoreMap[rank] || 0;
+    }
+    return skills;
+}
+
+// Function to handle title selection
+function generateTitles(role, titlesCount) {
+    const titles = [];
+    const availableTitles = titles[role];
+    const scoreMap = { F: 10, E: 50, D: 100, C: 300, B: 700, A: 1250, S: 2000, SS: 3000, SSS: 4500 };
+
+    for (let i = 0; i < titlesCount; i++) {
+        let title = getRandomElement(availableTitles);
+        let rank = getRandomElement(ranks);
+        
+        if (title === "Great War Participant - Winning Side") {
+            rank = "SSS";
+        } else if (title === "Noob" || title === "Great War Participant - Losing Side") {
+            rank = "F";
+        }
+        titles.push({ title, rank });
+        totalscore += scoreMap[rank] || 0;
+    }
+    return titles;
+}
+
+// Function to handle weapon selection
+function generateWeapons(role, weaponCount) {
+    const weapons = [];
+    const availableWeapons = roleWeapon[role];
+    const scoreMap = { F: 1, E: 5, D: 10, C: 25, B: 50, A: 150, S: 300, SS: 500, SSS: 1000 };
+
+    for (let i = 0; i < weaponCount; i++) {
+        let weapon = getRandomElement(availableWeapons);
+        let rank = getRandomElement(ranks);
+
+        if (weapon === "Unknown") {
+            rank = "???";
+            totalscore += getRandomElement(scoreMap);
+        } else {
+            weapons.push({ weapon, rank });
+            totalscore += scoreMap[rank] || 0;
+        }
+    }
+    return weapons;
+}
+
+// Main function to submit the character name and generate its attributes, skills, and titles
 function submitName() {
-const name = document.getElementById("nameInput").value;
-const gender = document.querySelector('input[name="gender"]:checked').value;
-if (name && gender) {
-const race = getRandomElement(races);
+    const name = document.getElementById("nameInput").value;
+    const gender = document.querySelector('input[name="gender"]:checked').value;
 
-let role;
-const randomChance = Math.random() * 100;
+    if (name && gender) {
+        const race = getRandomElement(races);
+        const role = getRoleBasedOnChance(race);
+        const attributes = assignAttributes();
+        const numberOfSkills = getRandomNumber(3, 5);
+        const skills = generateSkills(role, numberOfSkills);
+        const titles = generateTitles(role, getRandomNumber(1, 2));
+        const weapons = generateWeapons(role, 1);
 
-if (randomChance < 1) {
-role = "Demon King";
-} else if (randomChance > 98) {
-role = "Saint";
-} else {
-do {
-role = getRandomElement(roles);
-} while (
-(["Demon", "Sarkaz", "Orc"].includes(race) && ["Healer", "Paladin", "Saint"].includes(role)) ||
-(role === "Blacksmith" && race !== "Dwarf") ||
-["Demon King", "Saint"].includes(role) || ((role == "Rifleman" || role == "Sapper") && (race == "Beast" || race == "Succubus" || race == "Dwarf" || race == "Feline" || race == "Slime" || race == "Deer"))
-);
-}
+        // Update character UI display
+        updateCharacterDisplay({
+            name,
+            gender,
+            race,
+            role,
+            attributes,
+            skills,
+            titles,
+            weapons
+        });
 
-
-document.getElementById("inputForm").style.display = "none";
-
-const strength = getRandomNumber(1, 100);
-const health = getRandomNumber(25, 100);
-const mana = getRandomNumber(1, 100);
-const agi = getRandomNumber(1, 100);
-const lev = getRandomNumber(1, 100);
-const guild = getRandomElement(guilds);
-const region = getRandomElement(regions);
-const characterSkills = [];
-const numberOfSkills = getRandomNumber(3, 5);
-const age = getRandomNumber(22, 60);
-const skillList = document.getElementById("charSkill");
-const dex = getRandomNumber(20, 100);
-const luck = getRandomNumber(1, 100);
-const endurance = Math.floor((strength * 0.5) + 9);
-let ra = "";
-totalscore = totalscore + lev*5;
-var secondary_role = "";
-if(role == "Champion"){
-do{
-secondary_role = getRandomElement(roles);
-}
-while(secondary_role == "Champion");
-document.getElementById("SecondRole").style.display = "block";
-}
-else{
-document.getElementById("SecondRole").style.display = "none";
+    } else {
+        alert("Please fill in required fields.");
+    }
 }
 
-//Band score for ability and title
-const F_score = 1;
-const E_score = 5;
-const D_score = 10;
-const C_score = 25;
-const B_score = 50;
-const A_score = 150;
-const S_score = 300;
-const SS_score = 500;
-const SSS_score = 1000;
-//End of band score
+// Function to update the character's display in the DOM
+function updateCharacterDisplay(character) {
+    document.getElementById("charName").textContent = character.name;
+    document.getElementById("charRole").textContent = character.role;
+    document.getElementById("charRace").textContent = character.race;
+    document.getElementById("charStrength").textContent = character.attributes.strength;
+    document.getElementById("charHealth").textContent = character.attributes.health;
+    document.getElementById("charMana").textContent = character.attributes.mana;
+    document.getElementById("charAgi").textContent = character.attributes.agility;
+    document.getElementById("charLev").textContent = character.attributes.level;
+    document.getElementById("charDexterity").textContent = character.attributes.dexterity;
+    document.getElementById("charLuck").textContent = character.attributes.luck;
+    document.getElementById("charEndurance").textContent = character.attributes.endurance;
+    document.getElementById("charWeapon").textContent = character.weapons.map(w => `${w.weapon} (${w.rank})`).join(', ');
 
-//Random score if rank = ???
-var random_score = [];
-random_score.push(F_score, E_score, D_score, C_score, B_score, A_score, S_score, SS_score, SSS_score);
+    // Display additional attributes based on the role
+    if (["Healer", "Paladin", "Saint"].includes(character.role)) {
+        document.getElementById("charDivinePower").textContent = getRandomNumber(50, 100);
+        document.getElementById("divinePower").style.display = "block";
+    }
+    if (["Necromancer", "Demon King"].includes(character.role) || character.race === "Demon") {
+        document.getElementById("charDarkEnergy").textContent = getRandomNumber(50, 100);
+        document.getElementById("darkEnergy").style.display = "block";
+    }
 
-//Total band score for overall ranking
-const F_overall = 10;
-const E_overall = 50;
-const D_overall = 100;
-const C_overall = 300;
-const B_overall = 700
-const A_overall = 1250;
-const S_overall = 2000;
-const SS_overall = 3000;
-const SSS_overall = 4500;
-//End of total band score
-
-skillList.innerHTML = "";
-const availableSkill = roleSkills[role];
-
-for (let i = 0; i < numberOfSkills; i++) {
-var skill = getRandomElement(availableSkill);
-var rank = getRandomElement(ranks);
-var ImmunityChance = Math.random() * 1000;
-if(ImmunityChance == 1000){
-skill = "Total Immunity"
-rank = "SSS";
-totalscore = totalscore + SSS_score;
-}
-else{
-do{
-skill = getRandomElement(availableSkill);
-}
-while(skill == "Total Immunity");
-if(rank == "F"){
-totalscore = totalscore + F_score;
-}
-else if(rank == "E"){
-totalscore = totalscore + E_score;
-}
-else if(rank == "D"){
-totalscore = totalscore + D_score;
-}
-else if(rank == "C"){
-totalscore = totalscore + C_score;
-}
-else if(rank == "B"){
-totalscore = totalscore + B_score;
-}
-else if(rank == "A"){
-}
-else if(rank == "S"){
-totalscore = totalscore + S_score;
-}
-else if(rank == "SS"){
-totalscore = totalscore + SS_score;
-}
-else{
-totalscore = totalscore + SSS_score;
-}
-}
-if (!characterSkills.includes(skill)) {
-//characterSkills.push(`${skill} (Rank ${rank})`);
-characterSkills.push({
-skill: skill,
-rank: rank
-})
-}
-const listItem = document.createElement("li");
-listItem.textContent = `${skill} (${rank})`;
-skillList.appendChild(listItem);
-}
-const titlesCount = getRandomNumber(1, 2);
-const titleList = document.getElementById("charTitle");
-titleList.innerHTML = "";
-
-const availableTitles = titles[role];
-
-
-for (let i = 0; i < titlesCount; i++) {
-var NoobChances = getRandomNumber(0, 100);
-var GreatWar = getRandomNumber(0, 1000);
-var title = getRandomElement(availableTitles);
-var titleRank = getRandomElement(ranks);
-if (GreatWar == 1000) {
-title = "Great War Participant - Losing Side";
-} else if (GreatWar == 0) {
-title = "Great War Participant - Winning Side";
-}
-if(NoobChances == 50){
-title = "Noob"
-}
-if(title == "Black Baron" || title == "Great War Participant - Winning Side"){
-titleRank = "SSS";
-totalscore = totalscore + SSS_score;
-}
-else if(title == "Great War Participant - Losing Side" || title == "Noob"){
-titleRank = "F";
-totalscore = totalscore + F_score
-}
-else{
-if(titleRank == "F"){
-totalscore = totalscore + F_score;
-}
-else if(titleRank == "E"){
-totalscore = totalscore + E_score;
-}
-else if(titleRank == "D"){
-totalscore = totalscore + D_score;
-}
-else if(titleRank == "C"){
-totalscore = totalscore + C_score;
-}
-else if(titleRank == "B"){
-totalscore = totalscore + B_score;
-}
-else if(titleRank == "A"){
-totalscore = totalscore + A_score;
-}
-else if(titleRank == "S"){
-totalscore = totalscore + S_score;
-}
-else if(titleRank == "SS"){
-totalscore = totalscore + SS_score;
-}
-else{
-totalscore = totalscore + SSS_score
-}
-}
-const listItem = document.createElement("li");
-listItem.textContent = `${title} (${titleRank})`;
-titleList.appendChild(listItem);
-}
-
-const availableWeapons = roleWeapon[role];
-const characterWeapon = [];
-const WeaponNumber = 1;
-
-for (let i = 0; i <WeaponNumber; i++){
-const weapon = getRandomElement(availableWeapons);
-var rank = getRandomElement(ranks);
-if(weapon == "None"){
-characterWeapon.push(`${weapon}`)
-}
-else if(weapon == "Unknown"){
-rank = "???";
-totalscore = totalscore + getRandomElement(random_score);
-}
-else{
-if(rank == "F"){
-totalscore = totalscore + F_score;
-if(!characterWeapon.includes(weapon)){
-characterWeapon.push(`${weapon} (${rank})`);
-}
-}
-else if(rank == "E"){
-totalscore = totalscore + E_score;
-if(!characterWeapon.includes(weapon)){
-characterWeapon.push(`${weapon} (${rank})`);
-}
-}
-else if(rank == "D"){
-totalscore = totalscore + D_score;
-if(!characterWeapon.includes(weapon)){
-characterWeapon.push(`${weapon} (${rank})`);
-}
-}
-else if(rank == "C"){
-totalscore = totalscore + C_score;
-if(!characterWeapon.includes(weapon)){
-characterWeapon.push(`${weapon} (${rank})`);
-}
-}
-else if(rank == "B"){
-totalscore = totalscore + B_score;
-if(!characterWeapon.includes(weapon)){
-characterWeapon.push(`${weapon} (${rank})`);
-}
-}
-else if(rank == "A"){
-totalscore = totalscore + A_score;
-if(!characterWeapon.includes(weapon)){
-characterWeapon.push(`${weapon} (${rank})`);
-}
-}
-else if(rank == "S"){
-totalscore = totalscore + S_score;
-if(!characterWeapon.includes(weapon)){
-characterWeapon.push(`${weapon} (${rank})`);
-}
-}
-else if(rank == "SS"){
-totalscore = totalscore + SS_score;
-if(!characterWeapon.includes(weapon)){
-characterWeapon.push(`${weapon} (${rank})`);
-}
-}
-else{
-totalscore = totalscore + SSS_score;
-if(!characterWeapon.includes(weapon)){
-characterWeapon.push(`${weapon} (${rank})`);
-}
-}
-}
-
-if(totalscore < F_overall){
-ra = "N/A";
-}
-else if (totalscore >= F_overall && totalscore < E_overall){
-ra = "F";
-}
-else if(totalscore >= E_overall && totalscore < D_overall){
-ra = "E";
-}
-else if(totalscore >= D_overall && totalscore < C_overall){
-ra = "D";
-}
-else if(totalscore >= C_overall && totalscore < B_overall){
-ra = "C";
-}
-else if(totalscore >= B_overall && totalscore < A_overall){
-ra = "B";
-}
-else if(totalscore >= A_overall && totalscore < S_overall){
-ra = "A";
-}
-else if(totalscore >= S_overall && totalscore < SS_overall){
-ra = "S";
-}
-else if(totalscore >= SS_overall && totalscore < SSS_overall){
-ra = "SS";
-}
-else{
-ra = "SSS"
-}
-
-document.getElementById("charName").textContent = name;
-document.getElementById("charAgi").textContent = agi;
-document.getElementById("charLev").textContent = lev;
-document.getElementById("charRole").textContent = role;
-document.getElementById("charRace").textContent = race;
-document.getElementById("charStrength").textContent = strength;
-document.getElementById("charHealth").textContent = health;
-document.getElementById("charMana").textContent = mana;
-document.getElementById("charRank").textContent = ra;
-document.getElementById("charGuild").textContent = guild;
-document.getElementById("charRegion").textContent = region;
-document.getElementById("charAge").textContent = age;
-document.getElementById("charWeapon").textContent = characterWeapon;
-document.getElementById("charDexterity").textContent = dex;
-document.getElementById("charLuck").textContent = luck;
-document.getElementById("charEndurance").textContent = endurance;
-document.getElementById("charGender").textContent = gender;
-
-if (["Healer", "Paladin", "Saint"].includes(role)) {
-const divinePower = getRandomNumber(50, 100);
-document.getElementById("charDivinePower").textContent = divinePower;
-document.getElementById("divinePower").style.display = "block";
-}
-
-if (["Necromancer", "Unknown", "Death Knight", "Demon King"].includes(role) || race === "Demon") {
-const darkEnergy = getRandomNumber(50, 100);
-document.getElementById("charDarkEnergy").textContent = darkEnergy;
-document.getElementById("darkEnergy").style.display = "block";
-}
-
-document.getElementById("characterDisplay").style.display = "block";
-}}   
-else{
-    alert("Please fill in required field.")
-}
+    document.getElementById("characterDisplay").style.display = "block";
 }
