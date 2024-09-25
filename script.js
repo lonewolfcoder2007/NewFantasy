@@ -8,7 +8,6 @@ const guilds = [
     "Circuitbreakers", "Fusion Covenant", "Voidwalkers", "Neural Ascendants", "Graviton Order"
 ];
 
-
 const roles = [
     "Cybernetician", "Synth-Jacker", "Techno-Nomad", "Data Runner", "Quantum Hacker", "Neuro-Splicer", "Drone Pilot", "Exo-Soldier", "Gravity Shifter", "Bio-Engineer", "Nano-Surgeon", "Cyber Ronin", 
     "Energy Manipulator", "Void Skimmer", "AI Whisperer", "Psi-Warrior", "Gene Splicer", "Code Phantom", "Grid Enforcer", "Weapon Specialist", "Cyber Gladiator", "Stasis Operative", "Quantum Enforcer", 
@@ -951,9 +950,9 @@ function getRoleBasedOnChance(race) {
     let role;
 
     if (roleSelectionChance < 1) {
-        return "Demon King";
+        return "Void Harvester";
     } else if (roleSelectionChance > 98) {
-        return "Saint";
+        return "Reality Bender";
     } else {
         do {
             role = getRandomElement(roles);
@@ -965,176 +964,341 @@ function getRoleBasedOnChance(race) {
 // Check if a role is invalid for a given race
 function isInvalidRoleForRace(race, role) {
     return (
-        // Technological incompatibility for races with limited physical form
-        (["Quantum Entity", "Void Shadow", "Photon Being", "Astral Entity"].includes(race) && 
-            ["Synth-Jacker", "Cybernetician", "Drone Pilot", "Neuro-Splicer", "Gravity Shifter", "Weapon Specialist"].includes(role)) ||
+        // Example rules (adjust based on the role-race logic you need)
+        (["Photon Being", "Quantum Entity", "Voidborn", "Astral Entity"].includes(race) && 
+            ["Synth-Jacker", "Cyber Gladiator", "Street Samurai"].includes(role)) ||
 
-        // Virtual entities not suited for physical or biological manipulation roles
-        (["Digital Spirit", "Digital Entity", "AI Construct", "Nano-Swarm Being"].includes(race) && 
-            ["Exo-Soldier", "Street Samurai", "Psi-Warrior", "Gene Splicer", "Bio-Engineer"].includes(role)) ||
+        (["Digital Spirit", "AI Construct", "Digital Entity"].includes(race) && 
+            ["Street Samurai", "Exo-Soldier"].includes(role)) ||
 
-        // Non-combatant, peaceful races avoid combat roles
-        (["Voidborn", "Void Dweller", "Solar Ascendant"].includes(race) && 
-            ["Cyber Gladiator", "Street Samurai", "Quantum Enforcer", "Neuro-Borg", "Mind Runner"].includes(role)) ||
+        (["Mecha-Beast", "Synthoid"].includes(race) && 
+            ["Psi-Warrior", "Gene Splicer"].includes(role)) ||
 
-        // Physical beings that lack awareness for multi-dimensional roles
-        (["Cybernetic Human", "Gene-Tweaked Human"].includes(race) && 
-            ["Void Skimmer", "Reality Bender", "Quantum Enforcer"].includes(role)) ||
+        (["Void Dweller", "Astral Entity", "Void Shadow"].includes(race) && 
+            ["Cyber Police Officer", "Corporate Agent"].includes(role)) ||
 
-        // Purely machine races avoid biological roles
-        (["Synthoid", "Mecha-Beast", "Robotic Hybrid"].includes(race) && 
-            ["Nano-Surgeon", "Bio-Engineer", "Gene Splicer"].includes(role)) ||
-
-        // Cosmic beings avoid lower-bound tasks
-        (["Astral Entity", "Dimensional Wanderer", "Void Dweller"].includes(race) && 
-            ["Techno-Nomad", "Street Samurai", "Quantum Mechanic", "Cyber Police Officer"].includes(role)) ||
-
-        // Races limited by their pure cyber/mechanical nature
-        (["Digital Spirit", "AI Construct", "Digital Entity", "Nano-Swarm Being"].includes(race) && 
-            ["Bio-Engineer", "Gene Splicer", "Nano-Surgeon"].includes(role)) ||
-
-        // Non-organic entities should avoid roles requiring organic biological manipulation
-        (["Synthoid", "Mecha-Beast", "Robotic Hybrid"].includes(race) && 
-            ["Nano-Surgeon", "Bio-Engineer", "Gene Splicer"].includes(role)) ||
-
-        // Roles with cosmic awareness not suitable for grounded humans
-        (["Void Skimmer", "Reality Bender", "Quantum Enforcer"].includes(role) && 
-            ["Cybernetic Human", "Gene-Tweaked Human", "Hybrid Human"].includes(race))
+        (["Neuro-Borg", "Bio-Android"].includes(race) && 
+            ["Void Skimmer", "Reality Bender"].includes(role))
     );
 }
 
-
-// Function to assign attributes
-function assignAttributes() {
-    return {
-        strength: getRandomNumber(1, 100),
-        health: getRandomNumber(25, 100),
-        mana: getRandomNumber(1, 100),
-        agility: getRandomNumber(1, 100),
-        level: getRandomNumber(1, 100),
-        dexterity: getRandomNumber(20, 100),
-        luck: getRandomNumber(1, 100),
-        endurance: Math.floor((strength * 0.5) + 9),
-        age: getRandomNumber(22, 60)
-    };
+function getRandomElement(arr) {
+    return arr[Math.floor(Math.random()*arr.length)];
 }
-
-// Function to handle skill selection
-function generateSkills(role, numberOfSkills) {
-    const skills = [];
-    const availableSkills = roleSkills[role];
-    const scoreMap = { F: 1, E: 5, D: 10, C: 25, B: 50, A: 150, S: 300, SS: 500, SSS: 1000 };
-
-    for (let i = 0; i < numberOfSkills; i++) {
-        let skill, rank;
-        do {
-            skill = getRandomElement(availableSkills);
-            rank = getRandomElement(ranks);
-        } while (skill === "Total Immunity");
-
-        skills.push({ skill, rank });
-        totalscore += scoreMap[rank] || 0;
-    }
-    return skills;
+function getRandomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
-// Function to handle title selection
-function generateTitles(role, titlesCount) {
-    const titles = [];
-    const availableTitles = titles[role];
-    const scoreMap = { F: 10, E: 50, D: 100, C: 300, B: 700, A: 1250, S: 2000, SS: 3000, SSS: 4500 };
-
-    for (let i = 0; i < titlesCount; i++) {
-        let title = getRandomElement(availableTitles);
-        let rank = getRandomElement(ranks);
-        
-        if (title === "Great War Participant - Winning Side") {
-            rank = "SSS";
-        } else if (title === "Noob" || title === "Great War Participant - Losing Side") {
-            rank = "F";
-        }
-        titles.push({ title, rank });
-        totalscore += scoreMap[rank] || 0;
-    }
-    return titles;
-}
-
-// Function to handle weapon selection
-function generateWeapons(role, weaponCount) {
-    const weapons = [];
-    const availableWeapons = roleWeapon[role];
-    const scoreMap = { F: 1, E: 5, D: 10, C: 25, B: 50, A: 150, S: 300, SS: 500, SSS: 1000 };
-
-    for (let i = 0; i < weaponCount; i++) {
-        let weapon = getRandomElement(availableWeapons);
-        let rank = getRandomElement(ranks);
-
-        if (weapon === "Unknown") {
-            rank = "???";
-            totalscore += getRandomElement(scoreMap);
-        } else {
-            weapons.push({ weapon, rank });
-            totalscore += scoreMap[rank] || 0;
-        }
-    }
-    return weapons;
-}
-
-// Main function to submit the character name and generate its attributes, skills, and titles
 function submitName() {
     const name = document.getElementById("nameInput").value;
     const gender = document.querySelector('input[name="gender"]:checked').value;
-
-    if (name && gender) {
+    if (name && gender != null) {
         const race = getRandomElement(races);
-        const role = getRoleBasedOnChance(race);
-        const attributes = assignAttributes();
+
+        let role;
+        const randomChance = Math.random() * 100;
+
+        if (randomChance < 1) {
+            role = "Demon King";
+        } else if (randomChance > 98) {
+            role = "Saint";
+        } else {
+            do {
+                role = getRandomElement(roles);
+            } while (
+                (["Demon", "Sarkaz", "Orc"].includes(race) && ["Healer", "Paladin", "Saint"].includes(role)) ||
+                (role === "Blacksmith" && race !== "Dwarf") ||
+                ["Demon King", "Saint"].includes(role) || ((role == "Rifleman" || role == "Sapper") && (race == "Beast" || race == "Succubus" || race == "Dwarf" || race == "Feline" || race == "Slime" || race == "Deer"))
+            );
+        }
+
+
+        document.getElementById("inputForm").style.display = "none";
+
+        const strength = getRandomNumber(1, 100);
+        const health = getRandomNumber(25, 100);
+        const mana = getRandomNumber(1, 100);
+        const agi = getRandomNumber(1, 100);
+        const lev = getRandomNumber(1, 100);
+        const guild = getRandomElement(guilds);
+        const region = getRandomElement(regions);
+        const characterSkills = [];
         const numberOfSkills = getRandomNumber(3, 5);
-        const skills = generateSkills(role, numberOfSkills);
-        const titles = generateTitles(role, getRandomNumber(1, 2));
-        const weapons = generateWeapons(role, 1);
+        const age = getRandomNumber(22, 60);
+        const skillList = document.getElementById("charSkill");
+        const dex = getRandomNumber(20, 100);
+        const luck = getRandomNumber(1, 100);
+        const endurance = getRandomNumber(Math.floor((strength * 0.5) + 9), strength);
+        let ra = "";
+        totalscore = totalscore + lev*5;
+        var secondary_role = "";
+        if(role == "Champion"){
+            do{
+                secondary_role = getRandomElement(roles);
+            }
+            while(secondary_role == "Champion");
+            document.getElementById("SecondRole").style.display = "block";
+        }
+        else{
+            document.getElementById("SecondRole").style.display = "none";
+        }
 
-        // Update character UI display
-        updateCharacterDisplay({
-            name,
-            gender,
-            race,
-            role,
-            attributes,
-            skills,
-            titles,
-            weapons
-        });
+        //Band score for ability and title
+        const F_score = 1;
+        const E_score = 5;
+        const D_score = 10;
+        const C_score = 25;
+        const B_score = 50;
+        const A_score = 150;
+        const S_score = 300;
+        const SS_score = 500;
+        const SSS_score = 1000;
+        //End of band score
 
-    } else {
-        alert("Please fill in required fields.");
-    }
-}
+        //Random score if rank = ???
+        var random_score = [];
+        random_score.push(F_score, E_score, D_score, C_score, B_score, A_score, S_score, SS_score, SSS_score);
 
-// Function to update the character's display in the DOM
-function updateCharacterDisplay(character) {
-    document.getElementById("charName").textContent = character.name;
-    document.getElementById("charRole").textContent = character.role;
-    document.getElementById("charRace").textContent = character.race;
-    document.getElementById("charStrength").textContent = character.attributes.strength;
-    document.getElementById("charHealth").textContent = character.attributes.health;
-    document.getElementById("charMana").textContent = character.attributes.mana;
-    document.getElementById("charAgi").textContent = character.attributes.agility;
-    document.getElementById("charLev").textContent = character.attributes.level;
-    document.getElementById("charDexterity").textContent = character.attributes.dexterity;
-    document.getElementById("charLuck").textContent = character.attributes.luck;
-    document.getElementById("charEndurance").textContent = character.attributes.endurance;
-    document.getElementById("charWeapon").textContent = character.weapons.map(w => `${w.weapon} (${w.rank})`).join(', ');
+        //Total band score for overall ranking
+        const F_overall = 10;
+        const E_overall = 50;
+        const D_overall = 100;
+        const C_overall = 300;
+        const B_overall = 700
+        const A_overall = 1250;
+        const S_overall = 2000;
+        const SS_overall = 3000;
+        const SSS_overall = 4500;
+        //End of total band score
 
-    // Display additional attributes based on the role
-    if (["Healer", "Paladin", "Saint"].includes(character.role)) {
-        document.getElementById("charDivinePower").textContent = getRandomNumber(50, 100);
+        skillList.innerHTML = "";
+        const availableSkill = roleSkills[role];
+
+        for (let i = 0; i < numberOfSkills; i++) {
+            var skill = getRandomElement(availableSkill);
+            var rank = getRandomElement(ranks);
+            var ImmunityChance = Math.random() * 1000;
+            if(ImmunityChance == 1000){
+                skill = "Total Immunity"
+                rank = "SSS";
+                totalscore = totalscore + SSS_score;
+            }
+            else{
+                do{
+                    skill = getRandomElement(availableSkill);
+                }
+                while(skill == "Total Immunity");
+                if(rank == "F"){
+                    totalscore = totalscore + F_score;
+                }
+                else if(rank == "E"){
+                    totalscore = totalscore + E_score;
+                }
+                else if(rank == "D"){
+                    totalscore = totalscore + D_score;
+                }
+                else if(rank == "C"){
+                    totalscore = totalscore + C_score;
+                }
+                else if(rank == "B"){
+                    totalscore = totalscore + B_score;
+                }
+                else if(rank == "A"){
+                    totalscore = totalscore + A_score;
+                }
+                else if(rank == "S"){
+                    totalscore = totalscore + S_score;
+                }
+                else if(rank == "SS"){
+                    totalscore = totalscore + SS_score;
+                }
+                else{
+                    totalscore = totalscore + SSS_score;
+                }
+            }
+            if (!characterSkills.includes(skill)) {
+                characterSkills.push({
+                    skill: skill,
+                    rank: rank
+                })
+            }
+            const listItem = document.createElement("li");
+            listItem.textContent = `${skill} (${rank})`;
+            skillList.appendChild(listItem);
+        }
+        const titlesCount = getRandomNumber(1, 2);
+        const titleList = document.getElementById("charTitle");
+        titleList.innerHTML = "";
+
+        const availableTitles = titles[role];
+
+
+        for (let i = 0; i < titlesCount; i++) {
+            var NoobChances = getRandomNumber(0, 100);
+            var GreatWar = getRandomNumber(0, 1000);
+            var title = getRandomElement(availableTitles);
+            var titleRank = getRandomElement(ranks);
+            if (GreatWar == 1000) {
+                title = "Great War Participant - Losing Side";
+            } else if (GreatWar == 0) {
+                title = "Great War Participant - Winning Side";
+            }
+            if(NoobChances == 50){
+                title = "Noob"
+            }
+            if(title == "Black Baron" || title == "Great War Participant - Winning Side"){
+                titleRank = "SSS";
+                totalscore = totalscore + SSS_score;
+            }
+            else if(title == "Great War Participant - Losing Side" || title == "Noob"){
+                titleRank = "F";
+                totalscore = totalscore + F_score
+            }
+            else{
+                if(titleRank == "F"){
+                    totalscore = totalscore + F_score;
+                }
+                else if(titleRank == "E"){
+                    totalscore = totalscore + E_score;
+                }
+                else if(titleRank == "D"){
+                    totalscore = totalscore + D_score;
+                }
+                else if(titleRank == "C"){
+                    totalscore = totalscore + C_score;
+                }
+                else if(titleRank == "B"){
+                    totalscore = totalscore + B_score;
+                }
+                else if(titleRank == "A"){
+                    totalscore = totalscore + A_score;
+                }
+                else if(titleRank == "S"){
+                    totalscore = totalscore + S_score;
+                }
+                else if(titleRank == "SS"){
+                    totalscore = totalscore + SS_score;
+                }
+                else{
+                    totalscore = totalscore + SSS_score
+                }
+            }
+            const listItem = document.createElement("li");
+            listItem.textContent = `${title} (${titleRank})`;
+            titleList.appendChild(listItem);
+        }
+
+        const availableWeapons = roleWeapon[role];
+        const characterWeapon = [];
+        const WeaponNumber = 1;
+
+        for (let i = 0; i <WeaponNumber; i++){
+            const weapon = getRandomElement(availableWeapons);
+            var rank = getRandomElement(ranks);
+            if(weapon == "None"){
+                characterWeapon.push(`${weapon}`)
+            }
+            else if(weapon == "Unknown"){
+                rank = "???";
+                totalscore = totalscore + getRandomElement(random_score);
+            }
+            else{
+                if(rank == "F"){
+                    totalscore = totalscore + F_score;
+                }
+                else if(rank == "E"){
+                    totalscore = totalscore + E_score;
+                }
+                else if(rank == "D"){
+                    totalscore = totalscore + D_score;
+                }
+                else if(rank == "C"){
+                    totalscore = totalscore + C_score;
+                }
+                else if(rank == "B"){
+                    totalscore = totalscore + B_score;
+                }
+                else if(rank == "A"){
+                    totalscore = totalscore + A_score;
+                }
+                else if(rank == "S"){
+                    totalscore = totalscore + S_score;
+                }
+                else if(rank == "SS"){
+                    totalscore = totalscore + SS_score;
+                }
+                else{
+                    totalscore = totalscore + SSS_score;
+                }
+            }
+            if(!characterWeapon.includes(weapon)){
+                characterWeapon.push(`${weapon} (${rank})`);
+            }
+        }
+        if(totalscore < F_overall){
+            ra = "N/A";
+        }
+        else if (totalscore >= F_overall && totalscore < E_overall){
+            ra = "F";
+        }
+        else if(totalscore >= E_overall && totalscore < D_overall){
+            ra = "E";
+        }
+        else if(totalscore >= D_overall && totalscore < C_overall){
+            ra = "D";
+        }
+        else if(totalscore >= C_overall && totalscore < B_overall){
+            ra = "C";
+        }
+        else if(totalscore >= B_overall && totalscore < A_overall){
+            ra = "B";
+        }
+        else if(totalscore >= A_overall && totalscore < S_overall){
+            ra = "A";
+        }
+        else if(totalscore >= S_overall && totalscore < SS_overall){
+            ra = "S";
+        }
+        else if(totalscore >= SS_overall && totalscore < SSS_overall){
+            ra = "SS";
+        }
+        else{
+            ra = "SSS"
+        }
+
+    document.getElementById("charName").textContent = name;
+    document.getElementById("charAgi").textContent = agi;
+    document.getElementById("charLev").textContent = lev;
+    document.getElementById("charRole").textContent = role;
+    document.getElementById("charRace").textContent = race;
+    document.getElementById("charStrength").textContent = strength;
+    document.getElementById("charHealth").textContent = health;
+    document.getElementById("charMana").textContent = mana;
+    document.getElementById("charRank").textContent = ra;
+    document.getElementById("charGuild").textContent = guild;
+    document.getElementById("charRegion").textContent = region;
+    document.getElementById("charAge").textContent = age;
+    document.getElementById("charWeapon").textContent = characterWeapon;
+    document.getElementById("charDexterity").textContent = dex;
+    document.getElementById("charLuck").textContent = luck;
+    document.getElementById("charEndurance").textContent = endurance;
+    document.getElementById("charGender").textContent = gender;
+
+    if (["Healer", "Paladin", "Saint"].includes(role)) {
+        const divinePower = getRandomNumber(50, 100);
+        document.getElementById("charDivinePower").textContent = divinePower;
         document.getElementById("divinePower").style.display = "block";
     }
-    if (["Necromancer", "Demon King"].includes(character.role) || character.race === "Demon") {
-        document.getElementById("charDarkEnergy").textContent = getRandomNumber(50, 100);
+
+    if (["Necromancer", "Unknown", "Death Knight", "Demon King"].includes(role) || race === "Demon") {
+        const darkEnergy = getRandomNumber(50, 100);
+        document.getElementById("charDarkEnergy").textContent = darkEnergy;
         document.getElementById("darkEnergy").style.display = "block";
     }
 
     document.getElementById("characterDisplay").style.display = "block";
+    }   
+    else{
+        alert("Please fill in required field.");
+    }
+    console.log(totalscore);
 }
