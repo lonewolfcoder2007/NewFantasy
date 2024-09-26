@@ -933,7 +933,6 @@ const roleWeapon = {
         "Neon Architect Gun", "Sim-Crafter Sabre"
     ]
 };
-
 // Helper function to get a random element from an array
 function getRandomElement(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
@@ -981,7 +980,6 @@ function isInvalidRoleForRace(race, role) {
             ["Void Skimmer", "Reality Bender"].includes(role))
     );
 }
-
 function getRandomElement(arr) {
     return arr[Math.floor(Math.random()*arr.length)];
 }
