@@ -1,5 +1,4 @@
 var totalscore = 0;
-
 const ranks = ["F", "E", "D", "C", "B", "A", "S", "SS", "SSS"];
 
 const guilds = [
@@ -989,7 +988,7 @@ function getRandomNumber(min, max) {
 function submitName() {
     const name = document.getElementById("nameInput").value;
     const gender = document.querySelector('input[name="gender"]:checked').value;
-    if (name && gender != null) {
+    if (name) {
         const race = getRandomElement(races);
 
         let role;
@@ -1012,13 +1011,14 @@ function submitName() {
 
         document.getElementById("inputForm").style.display = "none";
 
-        const strength = getRandomNumber(1, 100);
+        const strength = getRandomNumber(25, 100);
         const health = getRandomNumber(25, 100);
         const mana = getRandomNumber(1, 100);
         const agi = getRandomNumber(1, 100);
         const lev = getRandomNumber(1, 100);
         const guild = getRandomElement(guilds);
         const region = getRandomElement(regions);
+        const faction = getRandomElement(charFaction);
         const characterSkills = [];
         const numberOfSkills = getRandomNumber(3, 5);
         const age = getRandomNumber(22, 60);
@@ -1122,70 +1122,76 @@ function submitName() {
             const listItem = document.createElement("li");
             listItem.textContent = `${skill} (${rank})`;
             skillList.appendChild(listItem);
-        }
-        const titlesCount = getRandomNumber(1, 2);
-        const titleList = document.getElementById("charTitle");
-        titleList.innerHTML = "";
+            }
+            const titlesCount = getRandomNumber(1, 2);
+            const titleList = document.getElementById("charTitle");
+            titleList.innerHTML = "";
 
-        const availableTitles = titles[role];
+            const availableTitles = titles[role];
 
 
-        for (let i = 0; i < titlesCount; i++) {
-            var NoobChances = getRandomNumber(0, 100);
-            var GreatWar = getRandomNumber(0, 1000);
-            var title = getRandomElement(availableTitles);
-            var titleRank = getRandomElement(ranks);
-            if (GreatWar == 1000) {
-                title = "Great War Participant - Losing Side";
-            } else if (GreatWar == 0) {
-                title = "Great War Participant - Winning Side";
-            }
-            if(NoobChances == 50){
-                title = "Noob"
-            }
-            if(title == "Black Baron" || title == "Great War Participant - Winning Side"){
-                titleRank = "SSS";
-                totalscore = totalscore + SSS_score;
-            }
-            else if(title == "Great War Participant - Losing Side" || title == "Noob"){
-                titleRank = "F";
-                totalscore = totalscore + F_score
-            }
-            else{
-                if(titleRank == "F"){
-                    totalscore = totalscore + F_score;
+            for (let i = 0; i < titlesCount; i++) {
+                var NoobChances = getRandomNumber(0, 100);
+                var GreatWar = getRandomNumber(0, 1000);
+                var title = getRandomElement(availableTitles);
+                var titleRank = getRandomElement(ranks);
+                if (GreatWar == 1000) {
+                    title = "Great War Participant - Losing Side";
+                } else if (GreatWar == 0) {
+                    title = "Great War Participant - Winning Side";
                 }
-                else if(titleRank == "E"){
-                    totalscore = totalscore + E_score;
+                if(NoobChances == 50){
+                    title = "Noob"
                 }
-                else if(titleRank == "D"){
-                    totalscore = totalscore + D_score;
+                if(title == "Black Baron" || title == "Great War Participant - Winning Side"){
+                    titleRank = "SSS";
+                    totalscore = totalscore + SSS_score;
                 }
-                else if(titleRank == "C"){
-                    totalscore = totalscore + C_score;
-                }
-                else if(titleRank == "B"){
-                    totalscore = totalscore + B_score;
-                }
-                else if(titleRank == "A"){
-                    totalscore = totalscore + A_score;
-                }
-                else if(titleRank == "S"){
-                    totalscore = totalscore + S_score;
-                }
-                else if(titleRank == "SS"){
-                    totalscore = totalscore + SS_score;
+                else if(title == "Great War Participant - Losing Side" || title == "Noob"){
+                    titleRank = "F";
+                    totalscore = totalscore + F_score
                 }
                 else{
-                    totalscore = totalscore + SSS_score
+                    if(titleRank == "F"){
+                        totalscore = totalscore + F_score;
+                    }
+                    else if(titleRank == "E"){
+                        totalscore = totalscore + E_score;
+                    }
+                    else if(titleRank == "D"){
+                        totalscore = totalscore + D_score;
+                    }
+                    else if(titleRank == "C"){
+                        totalscore = totalscore + C_score;
+                    }
+                    else if(titleRank == "B"){
+                        totalscore = totalscore + B_score;
+                    }
+                    else if(titleRank == "A"){
+                        totalscore = totalscore + A_score;
+                    }
+                    else if(titleRank == "S"){
+                        totalscore = totalscore + S_score;
+                    }
+                    else if(titleRank == "SS"){
+                        totalscore = totalscore + SS_score;
+                    }
+                    else{
+                        totalscore = totalscore + SSS_score
+                    }
                 }
+                const listItem = document.createElement("li");
+                listItem.textContent = `${title} (${titleRank})`;
+                titleList.appendChild(listItem);
             }
-            const listItem = document.createElement("li");
-            listItem.textContent = `${title} (${titleRank})`;
-            titleList.appendChild(listItem);
-        }
 
-        const availableWeapons = roleWeapon[role];
+        var availableWeapons;
+        if(role == "Champion"){
+            availableWeapons = roleWeapon[secondary_role];
+        }
+        else{
+            availableWeapons = roleWeapon[role];
+        }
         const characterWeapon = [];
         const WeaponNumber = 1;
 
@@ -1263,37 +1269,38 @@ function submitName() {
             ra = "SSS"
         }
 
-    document.getElementById("charName").textContent = name;
-    document.getElementById("charAgi").textContent = agi;
-    document.getElementById("charLev").textContent = lev;
-    document.getElementById("charRole").textContent = role;
-    document.getElementById("charRace").textContent = race;
-    document.getElementById("charStrength").textContent = strength;
-    document.getElementById("charHealth").textContent = health;
-    document.getElementById("charMana").textContent = mana;
-    document.getElementById("charRank").textContent = ra;
-    document.getElementById("charGuild").textContent = guild;
-    document.getElementById("charRegion").textContent = region;
-    document.getElementById("charAge").textContent = age;
-    document.getElementById("charWeapon").textContent = characterWeapon;
-    document.getElementById("charDexterity").textContent = dex;
-    document.getElementById("charLuck").textContent = luck;
-    document.getElementById("charEndurance").textContent = endurance;
-    document.getElementById("charGender").textContent = gender;
+        document.getElementById("charName").textContent = name;
+        document.getElementById("charAgi").textContent = agi;
+        document.getElementById("charLev").textContent = lev;
+        document.getElementById("charRole").textContent = role;
+        document.getElementById("charRace").textContent = race;
+        document.getElementById("charStrength").textContent = strength;
+        document.getElementById("charHealth").textContent = health;
+        document.getElementById("charMana").textContent = mana;
+        document.getElementById("charRank").textContent = ra;
+        document.getElementById("charGuild").textContent = guild;
+        document.getElementById("charRegion").textContent = region;
+        document.getElementById("charAge").textContent = age;
+        document.getElementById("charWeapon").textContent = characterWeapon;
+        document.getElementById("charDexterity").textContent = dex;
+        document.getElementById("charLuck").textContent = luck;
+        document.getElementById("charEndurance").textContent = endurance;
+        document.getElementById("charGender").textContent = gender;
+        document.getElementById("charFaction").textContent = faction;
 
-    if (["Healer", "Paladin", "Saint"].includes(role)) {
-        const divinePower = getRandomNumber(50, 100);
-        document.getElementById("charDivinePower").textContent = divinePower;
-        document.getElementById("divinePower").style.display = "block";
-    }
+        if (["Healer", "Paladin", "Saint"].includes(role)) {
+            const divinePower = getRandomNumber(50, 100);
+            document.getElementById("charDivinePower").textContent = divinePower;
+            document.getElementById("divinePower").style.display = "block";
+        }
 
-    if (["Necromancer", "Unknown", "Death Knight", "Demon King"].includes(role) || race === "Demon") {
-        const darkEnergy = getRandomNumber(50, 100);
-        document.getElementById("charDarkEnergy").textContent = darkEnergy;
-        document.getElementById("darkEnergy").style.display = "block";
-    }
+        if (["Necromancer", "Unknown", "Death Knight", "Demon King"].includes(role) || race === "Demon") {
+            const darkEnergy = getRandomNumber(50, 100);
+            document.getElementById("charDarkEnergy").textContent = darkEnergy;
+            document.getElementById("darkEnergy").style.display = "block";
+        }
 
-    document.getElementById("characterDisplay").style.display = "block";
+        document.getElementById("characterDisplay").style.display = "block";
     }   
     else{
         alert("Please fill in required field.");

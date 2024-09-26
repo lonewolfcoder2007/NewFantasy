@@ -5,7 +5,7 @@
 }
 
 body {
-    background-image: linear-gradient(#000000, #0047AB);
+    background: linear-gradient(180deg, #000000, #0049AB);
     object-fit: fill;
     height: 100vh;
     display: flex;
