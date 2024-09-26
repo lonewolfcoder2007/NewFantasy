@@ -997,7 +997,6 @@ function submitName() {
         const lev = getRandomNumber(1, 100);
         const guild = getRandomElement(guilds);
         const region = getRandomElement(regions);
-        const faction = getRandomElement(charFaction);
         const characterSkills = [];
         const numberOfSkills = getRandomNumber(3, 5);
         const age = getRandomNumber(22, 60);
