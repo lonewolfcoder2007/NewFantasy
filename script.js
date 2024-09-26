@@ -942,23 +942,6 @@ function getRandomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// Function to handle role selection logic
-function getRoleBasedOnChance(race) {
-    const roleSelectionChance = Math.random() * 100;
-    let role;
-
-    if (roleSelectionChance < 1) {
-        return "Void Harvester";
-    } else if (roleSelectionChance > 98) {
-        return "Reality Bender";
-    } else {
-        do {
-            role = getRandomElement(roles);
-        } while (isInvalidRoleForRace(race, role));
-    }
-    return role;
-}
-
 // Check if a role is invalid for a given race
 function isInvalidRoleForRace(race, role) {
     return (
