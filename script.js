@@ -985,14 +985,23 @@ function submitName() {
     if (name) {
         const race = getRandomElement(races);
 
+        const roleSelectionChance = Math.random() * 100;
         let role;
-        getRoleBasedOnChance(race);
+
+        if (roleSelectionChance < 1) {
+            return "Void Harvester";
+        } else if (roleSelectionChance > 98) {
+            return "Reality Bender";
+        } else {
+            do {
+                role = getRandomElement(roles);
+            } while (isInvalidRoleForRace(race, role));
+        }
 
         document.getElementById("inputForm").style.display = "none";
 
         const strength = getRandomNumber(25, 100);
         const health = getRandomNumber(25, 100);
-        const mana = getRandomNumber(1, 100);
         const agi = getRandomNumber(1, 100);
         const lev = getRandomNumber(1, 100);
         const guild = getRandomElement(guilds);
@@ -1120,7 +1129,7 @@ function submitName() {
             titleList.appendChild(listItem);
         }
 
-        var availableWeapons;
+        var availableWeapons = roleWeapon[role];
         const characterWeapon = [];
         const WeaponNumber = 1;
 
