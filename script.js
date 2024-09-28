@@ -972,9 +972,9 @@ function submitName() {
         let role;
 
         if (roleSelectionChance < 1) {
-            return "Void Harvester";
+            role = "Void Harvester";
         } else if (roleSelectionChance > 98) {
-            return "Reality Bender";
+            role = "Reality Bender";
         } else {
             do {
                 role = getRandomElement(roles);
