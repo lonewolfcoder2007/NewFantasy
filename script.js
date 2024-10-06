@@ -1011,10 +1011,6 @@ function submitName() {
         const SSS_score = 1000;
         //End of band score
 
-        //Random score if rank = ???
-        var random_score = [];
-        random_score.push(F_score, E_score, D_score, C_score, B_score, A_score, S_score, SS_score, SSS_score);
-
         //Total band score for overall ranking
         const F_overall = 10;
         const E_overall = 50;
